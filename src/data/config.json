@@ -1,0 +1,77 @@
+{
+  "exclude": [
+    "^(node_modules|bower_components|\\.imdone|target|build|dist|logs)[\\/\\\\]?|\\.(git|svn|hg|npmignore)|\\~$|\\.(jpg|png|gif|swp|ttf|otf)$"
+  ],
+  "watcher": true,
+  "keepEmptyPriority": true,
+  "code": {
+    "include_lists": [
+      "TODO",
+      "DOING",
+      "DONE",
+      "PLANNING",
+      "FIXME",
+      "ARCHIVE",
+      "HACK",
+      "CHANGED",
+      "XXX",
+      "IDEA",
+      "NOTE",
+      "REVIEW",
+      "BACKLOG"
+    ]
+  },
+  "lists": [
+    {
+      "name": "BACKLOG",
+      "hidden": false
+    },
+    {
+      "name": "TODO",
+      "hidden": false
+    },
+    {
+      "name": "DOING",
+      "hidden": false
+    },
+    {
+      "name": "DONE",
+      "hidden": true
+    },
+    {
+      "name": "NOTE",
+      "hidden": true
+    }
+  ],
+  "marked": {
+    "gfm": true,
+    "tables": true,
+    "breaks": false,
+    "pedantic": false,
+    "smartLists": true,
+    "langPrefix": "language-"
+  },
+  "sync": {
+    "id": "5a184ca5f9f5ac05016e9459",
+    "name": "imdone/imdone-core",
+    "useImdoneioForPriority": true
+  },
+  "languages": {
+    ".cash": {
+      "name": "Cash",
+      "symbol": "$",
+      "block": {
+        "start": "<$",
+        "end": "$>",
+        "ignore": "$"
+      }
+    }
+  },
+  "meta": {
+    "gh": {
+      "urlTemplate": "https://github.com/imdone/imdone-core/issues/%s",
+      "titleTemplate": "View github issue %s",
+      "icon": "icon-octoface"
+    }
+  }
+}

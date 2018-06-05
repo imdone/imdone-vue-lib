@@ -1,13 +1,12 @@
 <template lang="pug">
-.card
+.card.list
   header.card-header
     p.card-header-title {{list.name}}
     a.card-header-icon(href='#' aria-label='more options')
       span.icon
         i.fas.fa-angle-down(aria-hidden='true')
-  .card-content
-    .list(data-list="list.name")
-      card(v-for="task in list.tasks" :task="task")
+  .card-content.tasks(:data-list="list.name")
+    card(v-for="task in list.tasks" :task="task" :key="task.id")
 </template>
 <script>
 import Card from '@/components/card'
@@ -20,12 +19,15 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .card {
+  .list {
+    height: 100%;
+    min-height: 100%;
     width: 340px;
-    height: 96%;
   }
-  .card-content {
-    height: 800px;
+  .tasks {
+    padding: 5px;
+    height: 90vh;
+    min-height: 90vh;
     overflow-y: auto;
   }
 </style>

@@ -8,6 +8,9 @@ function resolve (dir) {
 }
 
 module.exports = {
+  node: {
+    fs: 'empty'
+  },
   entry: {
     docs: './src/docs.js',
     ['imdone-vue-lib']: './src/lib.js'

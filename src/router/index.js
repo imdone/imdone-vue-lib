@@ -3,7 +3,9 @@ import Router from 'vue-router'
 import Hello from '@/components/hello'
 import Card from '@/components/card'
 import List from '@/components/list'
+import Board from '@/components/Board'
 import tasks from '@/data/imdone-export.json'
+import config from '@/data/config.json'
 import * as Task from 'imdone-core/lib/task'
 
 Vue.use(Router)
@@ -39,6 +41,14 @@ export default new Router({
       component: List,
       props: {
         list
+      }
+    },
+    {
+      path: '/board',
+      component: Board,
+      props: {
+        config,
+        tasks: tasks.map(task => new Task(task))
       }
     }
   ]
