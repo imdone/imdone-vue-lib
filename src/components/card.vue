@@ -36,7 +36,7 @@ export default {
     text-align: left;
     .task-text {
       font-size: 14px;
-
+      margin-bottom: 1.5em;
       h1,h2,h3,h4,h5,ul {
         margin: .2em 0;
       }

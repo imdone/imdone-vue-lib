@@ -24,6 +24,8 @@ export default {
   .list {
     max-height: 100%;
     width: 340px;
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
   .card-content {
     display: flex;

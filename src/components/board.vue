@@ -31,12 +31,13 @@ export default {
   margin: 10px;
   top: 0;
   right: 0;
-  bottom: 0;
+  bottom: 40px;
   left: 0;
   .columns {
+    max-height: 100vh;
     .column {
       min-height: 0px;
-      max-height: 94vh;
+      max-height: 100%;
       padding: 0;
       margin: 10px;
       display: flex;
