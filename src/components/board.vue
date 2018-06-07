@@ -1,8 +1,7 @@
 <template lang="pug">
 .board
   .columns
-    .column(v-for='list in lists' :key="list.name")
-      list(:list='list')
+    list.column(v-for='list in lists' :key="list.name" :list='list')
 </template>
 <script>
 import List from '@/components/list'
@@ -28,6 +27,21 @@ export default {
 </script>
 <style lang="scss">
 .board {
-  padding: 5px 0;
+  position: absolute;
+  margin: 10px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  .columns {
+    .column {
+      min-height: 0px;
+      max-height: 94vh;
+      padding: 0;
+      margin: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+  }
 }
 </style>

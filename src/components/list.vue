@@ -5,8 +5,10 @@
     a.card-header-icon(href='#' aria-label='more options')
       span.icon
         i.fas.fa-angle-down(aria-hidden='true')
-  .card-content.tasks(:data-list="list.name")
-    card(v-for="task in list.tasks" :task="task" :key="task.id")
+  .card-content
+    .overflow-container
+      .tasks(:data-list="list.name")
+        card(v-for="task in list.tasks" :task="task" :key="task.id")
 </template>
 <script>
 import Card from '@/components/card'
@@ -20,14 +22,20 @@ export default {
 </script>
 <style lang="scss" scoped>
   .list {
-    height: 100%;
-    min-height: 100%;
+    max-height: 100%;
     width: 340px;
   }
+  .card-content {
+    display: flex;
+    flex: 1;
+    min-height: 0px;
+    padding: 0;
+  }
+  .overflow-container {
+    flex: 1;
+    overflow: auto;
+  }
   .tasks {
-    padding: 5px;
-    height: 90vh;
-    min-height: 90vh;
-    overflow-y: auto;
+    padding: 1.5em;
   }
 </style>
