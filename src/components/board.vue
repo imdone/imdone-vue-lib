@@ -31,7 +31,7 @@ export default {
   margin: 10px;
   top: 0;
   right: 0;
-  bottom: 40px;
+  bottom: 0;
   left: 0;
   .columns {
     max-height: 100vh;
