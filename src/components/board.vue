@@ -34,8 +34,9 @@ export default {
   bottom: 0;
   left: 0;
   .columns {
-    max-height: 100vh;
+    max-height: 100%;
     .column {
+      max-width: 340px;
       min-height: 0px;
       max-height: 100%;
       padding: 0;

@@ -4,14 +4,18 @@ article.message.is-small.is-info
   //-   .task-text.has-text-left(v-html="text")
   .message-body
     .task-text.has-text-left(v-html="text")
-    .tags.imdone-tags
+    .tags.imdone-tags(v-if="tags.length > 0")
       .tag.is-success(v-for="tag in tags") {{tag}}
-    .tags.imdone-contexts
+    .tags.imdone-contexts(v-if="contexts.length > 0")
       .tag.is-info(v-for="context in contexts") {{context}}
+    .source
+      a(href="#") {{task.source.path}}
 </template>
 <script>
 import * as MarkdownIt from 'markdown-it'
 const md = new MarkdownIt()
+// DOING: set target="_blank" on anchors in task text +feature
+// TODO: programatically set source.path href action +feature
 export default {
   name: 'imdone-card',
   props: ['task'],
@@ -34,9 +38,12 @@ export default {
   .message-body {
     word-break: break-word;
     text-align: left;
+    .tags {
+      margin-bottom: 1em;
+    }
     .task-text {
       font-size: 14px;
-      margin-bottom: 1.5em;
+      margin-bottom: 1em;
       h1,h2,h3,h4,h5,ul {
         margin: .2em 0;
       }
