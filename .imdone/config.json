@@ -18,6 +18,7 @@
       "IDEA",
       "NOTE",
       "REVIEW",
+      "MARK",
       "BACKLOG"
     ]
   },
@@ -42,5 +43,10 @@
     "pedantic": false,
     "smartLists": true,
     "langPrefix": "language-"
+  },
+  "sync": {
+    "id": "5b1a98bb93668c26233ed889",
+    "name": "imdone/imdone-vue-lib",
+    "useImdoneioForPriority": true
   }
 }

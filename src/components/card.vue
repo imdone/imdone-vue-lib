@@ -14,8 +14,14 @@ article.message.is-small.is-info
 <script>
 import * as MarkdownIt from 'markdown-it'
 const md = new MarkdownIt()
-// DOING: set target="_blank" on anchors in task text +feature
-// TODO: programatically set source.path href action +feature
+// DOING: set target="_blank" on anchors in task text +feature id:0
+// Jesse
+// jesse@piascik.net
+// https://github.com/imdone/imdone-vue-lib/issues/1
+// TODO: programatically set source.path href action +feature id:1
+// Jesse
+// jesse@piascik.net
+// https://github.com/imdone/imdone-vue-lib/issues/2
 export default {
   name: 'imdone-card',
   props: ['task'],
