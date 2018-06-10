@@ -18,7 +18,8 @@
       "IDEA",
       "NOTE",
       "REVIEW",
-      "BACKLOG"
+      "BACKLOG",
+      "MARK"
     ]
   },
   "lists": [
@@ -42,5 +43,17 @@
     "pedantic": false,
     "smartLists": true,
     "langPrefix": "language-"
+  },
+  "sync": {
+    "id": "5b1a98bb93668c26233ed889",
+    "name": "imdone/imdone-vue-lib",
+    "useImdoneioForPriority": true
+  },
+  "meta": {
+    "gh": {
+      "urlTemplate": "https://github.com/imdone/imdone-vue-lib/issues/%s",
+      "titleTemplate": "View github issue %s",
+      "icon": "icon-octoface"
+    }
   }
 }
