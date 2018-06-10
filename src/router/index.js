@@ -18,7 +18,7 @@ tasks.forEach(task => {
 })
 const task = new Task(tasks[8], true)
 const list = {
-  name: 'TODO',
+  list: 'TODO',
   tasks: lists['TODO']
 }
 
@@ -39,9 +39,7 @@ export default new Router({
     {
       path: '/list',
       component: List,
-      props: {
-        list
-      }
+      props: list
     },
     {
       path: '/board',

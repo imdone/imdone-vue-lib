@@ -47,20 +47,22 @@ export default {
 <style lang="scss">
 .board {
   position: absolute;
-  margin: 10px;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
+  padding: 20px;
+  overflow-x: auto;
   .columns {
     max-height: 100%;
+    height: 100%;
+    width: max-content;
     .column {
-      max-width: 340px;
       min-height: 0px;
-      max-height: 100%;
       padding: 0;
-      margin: 10px;
+      margin: 0 10px;
       display: flex;
+      flex: 0 0 340px;
       flex-direction: column;
     }
   }
