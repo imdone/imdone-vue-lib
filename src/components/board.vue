@@ -23,7 +23,10 @@ export default {
     }
   },
   computed: {
-    // DOING:30 This should be given to the component and should come from the imdone.io service
+    // DOING: This should be given to the component and should come from the imdone.io service id:3
+    // Jesse
+    // jesse@piascik.net
+    // https://github.com/imdone/imdone-vue-lib/issues/5
     lists: function () {
       if (this.listsOfTasks.length > 1) return this.listsOfTasks
       const listsMap = new Map()
