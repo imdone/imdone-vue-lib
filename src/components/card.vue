@@ -14,8 +14,8 @@ article.message.is-small.is-info
 <script>
 import * as MarkdownIt from 'markdown-it'
 const md = new MarkdownIt()
-// DOING: set target="_blank" on anchors in task text +feature
-// TODO: programatically set source.path href action +feature
+// TODO:0 set target="_blank" on anchors in task text +feature
+// TODO:20 programatically set source.path href action +feature
 export default {
   name: 'imdone-card',
   props: ['task'],

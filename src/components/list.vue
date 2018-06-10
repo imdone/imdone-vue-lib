@@ -1,23 +1,35 @@
 <template lang="pug">
 .card.list
   header.card-header
-    p.card-header-title {{list.name}}
+    p.card-header-title {{list}}
     a.card-header-icon(href='#' aria-label='more options')
       span.icon
         i.fas.fa-angle-down(aria-hidden='true')
   .card-content
     .overflow-container
-      .tasks(:data-list="list.name")
-        card(v-for="task in list.tasks" :task="task" :key="task.id")
+      draggable.tasks(:data-list="list" v-model="sortedTasks" :options="{group:'cards'}")
+        card(v-for="task in tasks" :task="task" :key="task.id")
 </template>
 <script>
+import Draggable from 'vuedraggable'
 import Card from '@/components/card'
 export default {
   name: 'imdone-list',
   components: {
-    Card
+    Card,
+    Draggable
   },
-  props: ['list']
+  props: ['list', 'tasks'],
+  computed: {
+    sortedTasks: {
+      get () {
+        return this.tasks
+      },
+      set (value) {
+        this.$emit('update-list', {name: this.list, tasks: value})
+      }
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
