@@ -7,8 +7,8 @@
         i.fas.fa-angle-down(aria-hidden='true')
   .card-content
     .overflow-container
-      draggable.tasks(:data-list="list" v-model="sortedTasks" :options="{group:'cards'}")
-        card(v-for="task in tasks" :task="task" :key="task.id")
+      draggable.tasks(:data-list="list" v-model="sortedTasks" :options="{group:'cards'}" @end="onEnd")
+        card(v-for="task in tasks" :task="task" :key="task.id" :data-id="task.id")
 </template>
 <script>
 import Draggable from 'vuedraggable'
@@ -28,6 +28,15 @@ export default {
       set (value) {
         this.$emit('update-list', {name: this.list, tasks: value})
       }
+    }
+  },
+  methods: {
+    onEnd ({item, to, from, newIndex, oldIndex}) {
+      const newList = to.dataset.list
+      const oldList = from.dataset.list
+      const taskId = item.dataset.id
+      // TODO: Listen for the update-task event in parent component and modify file using github edit api
+      this.$emit('update-task', {newList, oldList, newIndex, oldIndex, taskId})
     }
   }
 }
