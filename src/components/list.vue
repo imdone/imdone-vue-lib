@@ -35,10 +35,6 @@ export default {
       const newList = to.dataset.list
       const oldList = from.dataset.list
       const taskId = item.dataset.id
-      // TODO: Listen for the update-task event in parent component and modify file using github edit api id:4
-      // Jesse
-      // jesse@piascik.net
-      // https://github.com/imdone/imdone-vue-lib/issues/7
       this.$emit('update-task', {newList, oldList, newIndex, oldIndex, taskId})
     }
   }

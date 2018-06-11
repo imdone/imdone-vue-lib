@@ -22,6 +22,24 @@ const list = {
   tasks: lists['TODO']
 }
 
+function listsOfTasks () {
+  const listsOfTasks = []
+  const listsMap = new Map()
+  config.lists.forEach(list => {
+    list.tasks = []
+    listsMap.set(list.name, list)
+  })
+  tasks.forEach((task) => {
+    const name = task.list
+    if (!listsMap.get(name)) listsMap.set(name, {name, hidden: false, tasks: []})
+    listsMap.get(name).tasks.push(new Task(task))
+  })
+  listsMap.forEach((list, name) => {
+    listsOfTasks.push(list)
+  })
+  return listsOfTasks
+}
+
 export default new Router({
   routes: [
     {
@@ -46,7 +64,7 @@ export default new Router({
       component: Board,
       props: {
         config,
-        tasks: tasks.map(task => new Task(task))
+        tasks: listsOfTasks()
       }
     }
   ]

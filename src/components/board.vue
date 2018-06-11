@@ -1,7 +1,7 @@
 <template lang="pug">
 .board
   .columns
-    list.column(v-for='list in lists' :key="list.name" :list='list.name' :tasks="list.tasks" v-on:update-list="updateList")
+    list.column(v-for='list in listsOfTasks' :key="list.name" :list='list.name' :tasks="list.tasks" v-on:update-list="updateList" v-on:update-task="updateTask")
 </template>
 <script>
 import List from '@/components/list'
@@ -14,35 +14,22 @@ export default {
   props: ['tasks', 'config'],
   data: function () {
     return {
-      listsOfTasks: []
+      listsOfTasks: this.tasks
     }
   },
   methods: {
     updateList: function ({name, tasks}) {
       this.listsOfTasks.find(list => list.name === name).tasks = tasks
-    }
-  },
-  computed: {
-    // DOING: This should be given to the component and should come from the imdone.io service id:3
-    // Jesse
-    // jesse@piascik.net
-    // https://github.com/imdone/imdone-vue-lib/issues/5
-    lists: function () {
-      if (this.listsOfTasks.length > 1) return this.listsOfTasks
-      const listsMap = new Map()
-      this.config.lists.forEach(list => {
-        list.tasks = []
-        listsMap.set(list.name, list)
-      })
-      this.tasks.forEach((task) => {
-        const name = task.list
-        if (!listsMap.get(name)) listsMap.set(name, {name, hidden: false, tasks: []})
-        listsMap.get(name).tasks.push(task)
-      })
-      listsMap.forEach((list, name) => {
-        this.listsOfTasks.push(list)
-      })
-      return this.listsOfTasks
+    },
+    updateTask: function ({newList, oldList, newIndex, oldIndex, taskId}) {
+      // TODO: Listen for the update-task event in parent component and modify file using github edit api id:4
+      // Jesse
+      // jesse@piascik.net
+      // https://github.com/imdone/imdone-vue-lib/issues/7
+      const list = this.listsOfTasks.find(list => list.name === newList)
+      const task = list.tasks.find(task => task.id === taskId)
+      task.list = newList
+      console.log(task)
     }
   }
 }
