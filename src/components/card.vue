@@ -13,11 +13,8 @@ article.message.is-small.is-info
 </template>
 <script>
 import * as MarkdownIt from 'markdown-it'
+import * as cheerio from 'cheerio'
 const md = new MarkdownIt()
-// DOING: set target="_blank" on anchors in task text +feature id:0
-// Jesse
-// jesse@piascik.net
-// https://github.com/imdone/imdone-vue-lib/issues/1
 // TODO: programatically set source.path href action +feature id:1
 // Jesse
 // jesse@piascik.net
@@ -27,7 +24,10 @@ export default {
   props: ['task'],
   computed: {
     text: function () {
-      return md.render(this.task.getText({stripMeta: true, sanitize: true, stripTags: true, stripContext: true}))
+      const html = md.render(this.task.getText({stripMeta: true, sanitize: true, stripTags: true, stripContext: true}))
+      const $ = cheerio.load(html)
+      $('a').attr('target', '_blank')
+      return $.html()
     },
     tags: function () {
       return this.task.allTags

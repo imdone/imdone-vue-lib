@@ -1,0 +1,238 @@
+[
+  {
+    "frontMatter": {
+      "tags": [],
+      "context": [],
+      "meta": {}
+    },
+    "rawTask": "TODO: Listen for the update-task event in parent component and modify file using github edit api id:4",
+    "text": " Listen for the update-task event in parent component and modify file using github edit api id:4",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 26,
+    "id": "f2c56bf61efeb0b4f12bde8aaabea38984c6b339",
+    "repoId": "/Users/jesse/projects/imdone-vue-lib",
+    "source": {
+      "path": "src/components/board.vue",
+      "id": "src/components/board.vue",
+      "repoId": "/Users/jesse/projects/imdone-vue-lib",
+      "type": "File",
+      "ext": "vue",
+      "lang": "vue component",
+      "modified": false,
+      "modifiedTime": "2018-06-11T18:40:40.904Z"
+    },
+    "type": "CODE",
+    "tags": [],
+    "context": [],
+    "meta": {
+      "id": [
+        "4"
+      ]
+    },
+    "inCodeBlock": false,
+    "singleLineBlockComment": false,
+    "description": [
+      "Jesse",
+      "jesse@piascik.net",
+      "https://github.com/imdone/imdone-vue-lib/issues/7"
+    ],
+    "rawDescription": [
+      "      // Jesse",
+      "      // jesse@piascik.net",
+      "      // https://github.com/imdone/imdone-vue-lib/issues/7"
+    ],
+    "commentStartOnLine": 6,
+    "originalDescriptionLength": 3,
+    "descriptionStartsWith": "//",
+    "originalList": "TODO",
+    "allTags": [],
+    "allContext": [],
+    "allMeta": {
+      "id": [
+        "4"
+      ]
+    }
+  },
+  {
+    "frontMatter": {
+      "tags": [],
+      "context": [],
+      "meta": {}
+    },
+    "rawTask": "DOING: set target=\"_blank\" on anchors in task text +feature id:0",
+    "text": " set target=\"_blank\" on anchors in task text +feature id:0",
+    "list": "DOING",
+    "order": "",
+    "hasColon": true,
+    "line": 17,
+    "id": "3a649693a48c8e5c4f311564276d2592add49130",
+    "repoId": "/Users/jesse/projects/imdone-vue-lib",
+    "source": {
+      "path": "src/components/card.vue",
+      "id": "src/components/card.vue",
+      "repoId": "/Users/jesse/projects/imdone-vue-lib",
+      "type": "File",
+      "ext": "vue",
+      "lang": "vue component",
+      "modified": false,
+      "modifiedTime": "2018-06-10T21:20:51.242Z"
+    },
+    "type": "CODE",
+    "tags": [
+      "feature"
+    ],
+    "context": [],
+    "meta": {
+      "id": [
+        "0"
+      ]
+    },
+    "inCodeBlock": false,
+    "singleLineBlockComment": false,
+    "description": [
+      "Jesse",
+      "jesse@piascik.net",
+      "https://github.com/imdone/imdone-vue-lib/issues/1"
+    ],
+    "rawDescription": [
+      "// Jesse",
+      "// jesse@piascik.net",
+      "// https://github.com/imdone/imdone-vue-lib/issues/1"
+    ],
+    "commentStartOnLine": 0,
+    "originalDescriptionLength": 3,
+    "descriptionStartsWith": "//",
+    "originalList": "DOING",
+    "allTags": [
+      "feature"
+    ],
+    "allContext": [],
+    "allMeta": {
+      "id": [
+        "0"
+      ]
+    }
+  },
+  {
+    "frontMatter": {
+      "tags": [],
+      "context": [],
+      "meta": {}
+    },
+    "rawTask": "TODO: programatically set source.path href action +feature id:1",
+    "text": " programatically set source.path href action +feature id:1",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 21,
+    "id": "752b77fb445f31a89757014e009cd759ebb49ffa",
+    "repoId": "/Users/jesse/projects/imdone-vue-lib",
+    "source": {
+      "path": "src/components/card.vue",
+      "id": "src/components/card.vue",
+      "repoId": "/Users/jesse/projects/imdone-vue-lib",
+      "type": "File",
+      "ext": "vue",
+      "lang": "vue component",
+      "modified": false,
+      "modifiedTime": "2018-06-10T21:20:51.242Z"
+    },
+    "type": "CODE",
+    "tags": [
+      "feature"
+    ],
+    "context": [],
+    "meta": {
+      "id": [
+        "1"
+      ]
+    },
+    "inCodeBlock": false,
+    "singleLineBlockComment": false,
+    "description": [
+      "Jesse",
+      "jesse@piascik.net",
+      "https://github.com/imdone/imdone-vue-lib/issues/2"
+    ],
+    "rawDescription": [
+      "// Jesse",
+      "// jesse@piascik.net",
+      "// https://github.com/imdone/imdone-vue-lib/issues/2"
+    ],
+    "commentStartOnLine": 0,
+    "originalDescriptionLength": 3,
+    "descriptionStartsWith": "//",
+    "originalList": "TODO",
+    "allTags": [
+      "feature"
+    ],
+    "allContext": [],
+    "allMeta": {
+      "id": [
+        "1"
+      ]
+    }
+  },
+  {
+    "frontMatter": {
+      "tags": [],
+      "context": [],
+      "meta": {}
+    },
+    "rawTask": "TODO: Wrap this in [dangvanthanh/vue-split-pane: Adjustable split pane using Vue.js](https://github.com/dangvanthanh/vue-split-pane) +feature id:2",
+    "text": " Wrap this in [dangvanthanh/vue-split-pane: Adjustable split pane using Vue.js](https://github.com/dangvanthanh/vue-split-pane) +feature id:2",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 5,
+    "id": "914e829d5bc323561a35ce895732961e15c9d9e0",
+    "repoId": "/Users/jesse/projects/imdone-vue-lib",
+    "source": {
+      "path": "src/components/detail.vue",
+      "id": "src/components/detail.vue",
+      "repoId": "/Users/jesse/projects/imdone-vue-lib",
+      "type": "File",
+      "ext": "vue",
+      "lang": "vue component",
+      "modified": false,
+      "modifiedTime": "2018-06-11T15:01:52.549Z"
+    },
+    "type": "CODE",
+    "tags": [
+      "feature"
+    ],
+    "context": [],
+    "meta": {
+      "id": [
+        "2"
+      ]
+    },
+    "inCodeBlock": false,
+    "singleLineBlockComment": false,
+    "description": [
+      "Jesse",
+      "jesse@piascik.net",
+      "https://github.com/imdone/imdone-vue-lib/issues/4"
+    ],
+    "rawDescription": [
+      "// Jesse",
+      "// jesse@piascik.net",
+      "// https://github.com/imdone/imdone-vue-lib/issues/4"
+    ],
+    "commentStartOnLine": 0,
+    "originalDescriptionLength": 3,
+    "descriptionStartsWith": "//",
+    "originalList": "TODO",
+    "allTags": [
+      "feature"
+    ],
+    "allContext": [],
+    "allMeta": {
+      "id": [
+        "2"
+      ]
+    }
+  }
+]
