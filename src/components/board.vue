@@ -11,7 +11,7 @@ export default {
   components: {
     List
   },
-  props: ['tasks', 'config'],
+  props: ['tasks', 'config', 'allowUpdates'],
   data: function () {
     return {
       listsOfTasks: this.tasks
@@ -19,6 +19,7 @@ export default {
   },
   methods: {
     updateList: function ({name, tasks}) {
+      if (!this.allowUpdates) return
       this.listsOfTasks.find(list => list.name === name).tasks = tasks
     },
     updateTask: function ({newList, oldList, newIndex, oldIndex, taskId}) {
@@ -26,6 +27,16 @@ export default {
       // Jesse
       // jesse@piascik.net
       // https://github.com/imdone/imdone-vue-lib/issues/7
+      if (!this.allowUpdates) {
+        this.$toast.open({
+          message: 'Your don\'t have permission to update this board.',
+          type: 'is-warning',
+          position: 'is-top',
+          queue: false,
+          duration: 5000
+        })
+        return
+      }
       const list = this.listsOfTasks.find(list => list.name === newList)
       const task = list.tasks.find(task => task.id === taskId)
       task.list = newList

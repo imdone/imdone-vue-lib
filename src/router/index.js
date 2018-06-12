@@ -63,6 +63,7 @@ export default new Router({
       path: '/board',
       component: Board,
       props: {
+        allowUpdates: true,
         config,
         tasks: listsOfTasks()
       }
