@@ -1,7 +1,12 @@
 <template lang="pug">
-.board
-  .columns
-    list.column(v-for='list in listsOfTasks' :key="list.name" :list='list.name' :tasks="list.tasks" v-on:update-list="updateList" v-on:update-task="updateTask")
+.columns
+  .column
+    .board
+      .columns
+        list.column(v-for='list in listsOfTasks' :key="list.name" :list='list.name' :tasks="list.tasks" v-on:update-list="updateList" v-on:update-task="updateTask")
+  .column
+    p detail view goes here
+    p when detail view is open add "show-detail" class to .board
 </template>
 <script>
 import List from '@/components/list'
@@ -47,11 +52,8 @@ export default {
 </script>
 <style lang="scss">
 .board {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  height: 100vh;
+  width: 70vw;
   padding: 20px;
   overflow-x: auto;
   .columns {

@@ -4,8 +4,8 @@ import Hello from '@/components/hello'
 import Card from '@/components/card'
 import List from '@/components/list'
 import Board from '@/components/Board'
-import tasks from '@/data/imdone-vue-lib/imdone-export.json'
-import config from '@/data/imdone-vue-lib/config.json'
+import tasks from '@/data/imdone-export.json'
+import config from '@/data/config.json'
 import * as Task from 'imdone-core/lib/task'
 
 Vue.use(Router)
