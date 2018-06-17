@@ -3,15 +3,13 @@
   .column(:class="{'is-two-thirds': selectedTask}")
     .board
       .columns
-        list.column(v-for='list in listsOfTasks' :key="list.name" :list='list.name' :tasks="list.tasks" v-on:update-list="updateList" v-on:update-task="updateTask" v-on:show-detail="showDetail")
+        list.column(v-for='list in listsOfTasks' :key="list.name" :list='list.name' :tasks="list.tasks" :selectedTask="selectedTask" v-on:update-list="updateList" v-on:update-task="updateTask" v-on:show-detail="showDetail")
   .column.is-one-third.detail(v-if="selectedTask")
     detail(:task="selectedTask")
 </template>
 <script>
 import List from '@/components/list'
 import Detail from '@/components/detail'
-import Task from 'imdone-core/lib/task'
-// import * as _ from 'lodash'
 export default {
   name: 'imdone-board',
   components: {List, Detail},
@@ -48,7 +46,7 @@ export default {
       console.log(task)
     },
     showDetail (task) {
-      this.selectedTask = new Task(task)
+      this.selectedTask = task
     }
   }
 }

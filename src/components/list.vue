@@ -9,7 +9,7 @@
   .card-content
     .overflow-container
       draggable.tasks(:data-list="list" v-model="sortedTasks" :options="{group:'cards'}" @end="onEnd")
-        card(v-for="task in tasks" :task="task" :key="task.id" :data-id="task.id" v-on:show-detail="showDetail")
+        card(v-for="task in tasks" :selectedTask="selectedTask" :task="task" :key="task.id" :data-id="task.id" v-on:show-detail="showDetail")
 </template>
 <script>
 import Draggable from 'vuedraggable'
@@ -20,7 +20,7 @@ export default {
     Card,
     Draggable
   },
-  props: ['list', 'tasks'],
+  props: ['list', 'tasks', 'selectedTask'],
   computed: {
     sortedTasks: {
       get () {

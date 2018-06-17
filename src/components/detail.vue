@@ -77,7 +77,6 @@ export default {
 <style lang="scss" scoped>
 .panel {
   margin: .75rem .75rem .74rem 0;
-  overflow-y: auto;
 }
 .description {
   ul {

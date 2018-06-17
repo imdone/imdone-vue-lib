@@ -1,5 +1,5 @@
 <template lang="pug">
-article.message.is-small.is-info
+article.message.is-small(:class="{'is-primary': selected, 'is-info': !selected}")
   //- .message-header
   //-   .task-text.has-text-left(v-html="text")
   .message-header
@@ -19,6 +19,8 @@ article.message.is-small.is-info
 <script>
 import * as MarkdownIt from 'markdown-it'
 import * as cheerio from 'cheerio'
+// import Task from 'imdone-core/lib/task'
+
 const md = new MarkdownIt()
 
 // TODO: programatically set source.path href action +feature id:1
@@ -27,19 +29,22 @@ const md = new MarkdownIt()
 // https://github.com/imdone/imdone-vue-lib/issues/2
 export default {
   name: 'imdone-card',
-  props: ['task'],
+  props: ['task', 'selectedTask'],
   computed: {
-    text: function () {
+    text () {
       const html = md.render(this.task.getText({stripMeta: true, sanitize: true, stripTags: true, stripContext: true}))
       const $ = cheerio.load(html)
       $('a').attr('target', '_blank')
       return $.html()
     },
-    tags: function () {
+    tags () {
       return this.task.allTags
     },
-    contexts: function () {
+    contexts () {
       return this.task.allContext
+    },
+    selected () {
+      return (this.selectedTask && this.selectedTask.id === this.task.id)
     }
   },
   methods: {
