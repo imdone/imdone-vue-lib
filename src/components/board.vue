@@ -1,33 +1,33 @@
 <template lang="pug">
 .columns
-  .column
+  .column(:class="{'is-two-thirds': selectedTask}")
     .board
       .columns
-        list.column(v-for='list in listsOfTasks' :key="list.name" :list='list.name' :tasks="list.tasks" v-on:update-list="updateList" v-on:update-task="updateTask")
-  .column
-    p detail view goes here
-    p when detail view is open add "show-detail" class to .board
+        list.column(v-for='list in listsOfTasks' :key="list.name" :list='list.name' :tasks="list.tasks" v-on:update-list="updateList" v-on:update-task="updateTask" v-on:show-detail="showDetail")
+  .column.is-one-third.detail(v-if="selectedTask")
+    detail(:task="selectedTask")
 </template>
 <script>
 import List from '@/components/list'
+import Detail from '@/components/detail'
+import Task from 'imdone-core/lib/task'
 // import * as _ from 'lodash'
 export default {
   name: 'imdone-board',
-  components: {
-    List
-  },
+  components: {List, Detail},
   props: ['tasks', 'config', 'allowUpdates'],
   data: function () {
     return {
-      listsOfTasks: this.tasks
+      listsOfTasks: this.tasks,
+      selectedTask: null
     }
   },
   methods: {
-    updateList: function ({name, tasks}) {
+    updateList ({name, tasks}) {
       if (!this.allowUpdates) return
       this.listsOfTasks.find(list => list.name === name).tasks = tasks
     },
-    updateTask: function ({newList, oldList, newIndex, oldIndex, taskId}) {
+    updateTask ({newList, oldList, newIndex, oldIndex, taskId}) {
       // TODO: Listen for the update-task event in parent component and modify file using github edit api id:4
       // Jesse
       // jesse@piascik.net
@@ -46,14 +46,21 @@ export default {
       const task = list.tasks.find(task => task.id === taskId)
       task.list = newList
       console.log(task)
+    },
+    showDetail (task) {
+      this.selectedTask = new Task(task)
     }
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.detail {
+  border-left: 1px solid;
+  overflow-y: auto;
+}
 .board {
   height: 100vh;
-  width: 70vw;
+  width: 100%;
   padding: 20px;
   overflow-x: auto;
   .columns {

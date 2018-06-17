@@ -3,7 +3,8 @@ import Router from 'vue-router'
 import Hello from '@/components/hello'
 import Card from '@/components/card'
 import List from '@/components/list'
-import Board from '@/components/Board'
+import Board from '@/components/board'
+import Detail from '@/components/detail'
 import tasks from '@/data/imdone-export.json'
 import config from '@/data/config.json'
 import * as Task from 'imdone-core/lib/task'
@@ -16,7 +17,7 @@ tasks.forEach(task => {
   if (!lists[list]) lists[list] = []
   lists[list].push(new Task(task, true))
 })
-const task = new Task(tasks[3], true)
+const task = new Task(tasks[7], true)
 const list = {
   list: 'TODO',
   tasks: lists['TODO']
@@ -37,7 +38,6 @@ function listsOfTasks () {
   listsMap.forEach((list, name) => {
     listsOfTasks.push(list)
   })
-  debugger
   return listsOfTasks
 }
 
@@ -68,6 +68,11 @@ export default new Router({
         config,
         tasks: listsOfTasks()
       }
+    },
+    {
+      path: '/detail',
+      component: Detail,
+      props: {task}
     }
   ]
 })

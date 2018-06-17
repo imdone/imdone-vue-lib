@@ -2,6 +2,11 @@
 article.message.is-small.is-info
   //- .message-header
   //-   .task-text.has-text-left(v-html="text")
+  .message-header
+    .columns.card-actions
+      .column
+        a(v-on:click="showDetail")
+          b-icon(pack="fa" icon="ellipsis-h" size="is-small")
   .message-body
     .task-text.has-text-left(v-html="text")
     .tags.imdone-tags(v-if="tags.length > 0")
@@ -36,12 +41,24 @@ export default {
     contexts: function () {
       return this.task.allContext
     }
+  },
+  methods: {
+    showDetail () {
+      this.$emit('show-detail', this.task)
+    }
   }
 }
 </script>
 <style lang="scss">
 .message {
   max-width: 300px;
+  .message-header {
+    .card-actions {
+      a {
+        text-decoration: none;
+      }
+    }
+  }
   .message-body {
     word-break: break-word;
     text-align: left;

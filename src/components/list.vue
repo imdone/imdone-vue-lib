@@ -2,13 +2,14 @@
 .card.list
   header.card-header
     p.card-header-title {{list}}
-    a.card-header-icon(href='#' aria-label='more options')
-      span.icon
-        i.fas.fa-angle-down(aria-hidden='true')
+    //- a.card-header-icon(href='#' aria-label='more options')
+    //-   span.icon
+    //-     b-icon(pack="fa" icon="angle-up" size="is-small")
+    //-     b-icon(pack="fa" icon="angle-down" size="is-small" aria-hidden='true')
   .card-content
     .overflow-container
       draggable.tasks(:data-list="list" v-model="sortedTasks" :options="{group:'cards'}" @end="onEnd")
-        card(v-for="task in tasks" :task="task" :key="task.id" :data-id="task.id")
+        card(v-for="task in tasks" :task="task" :key="task.id" :data-id="task.id" v-on:show-detail="showDetail")
 </template>
 <script>
 import Draggable from 'vuedraggable'
@@ -36,6 +37,9 @@ export default {
       const oldList = from.dataset.list
       const taskId = item.dataset.id
       this.$emit('update-task', {newList, oldList, newIndex, oldIndex, taskId})
+    },
+    showDetail (task) {
+      this.$emit('show-detail', task)
     }
   }
 }
