@@ -1,5 +1,5 @@
 <template lang="pug">
-article.message.is-small(:class="{'is-primary': selected, 'is-info': !selected}")
+article.message.is-small(:class="{'is-success': selected, 'is-info': !selected}")
   //- .message-header
   //-   .task-text.has-text-left(v-html="text")
   .message-header
@@ -14,7 +14,7 @@ article.message.is-small(:class="{'is-primary': selected, 'is-info': !selected}"
     .tags.imdone-contexts(v-if="contexts.length > 0")
       .tag.is-info(v-for="context in contexts") {{context}}
     .source
-      a(href="#") {{task.source.path}}
+      a(href="#") {{task.source.path}}:{{task.line}}
 </template>
 <script>
 import * as MarkdownIt from 'markdown-it'

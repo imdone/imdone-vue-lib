@@ -1,10 +1,10 @@
 <template lang="pug">
 .columns
-  .column(:class="{'is-two-thirds': selectedTask}")
+  .column.board-wrapper(:class="{'is-two-thirds': selectedTask}")
     .board
       .columns
         list.column(v-for='list in listsOfTasks' :key="list.name" :list='list.name' :tasks="list.tasks" :selectedTask="selectedTask" v-on:update-list="updateList" v-on:update-task="updateTask" v-on:show-detail="showDetail")
-  .column.is-one-third.detail(v-if="selectedTask")
+  .column.is-one-third(v-if="selectedTask")
     detail(:task="selectedTask")
 </template>
 <script>
@@ -52,9 +52,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.detail {
-  border-left: 1px solid;
-  overflow-y: auto;
+.board-wrapper {
+  border-right: 1px solid #dbdbdb;
+  padding-right: 0;
 }
 .board {
   height: 100vh;

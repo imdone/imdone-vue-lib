@@ -1,28 +1,36 @@
 <template lang="pug">
-  .panel.is-size-6.description
-    .panel-heading.has-text-left.is-size-5(v-html="text")
-    .panel-block
-      .container
-        .columns
-          .column.is-4.has-text-left Author
-          .column.is-8.has-text-left {{blame.name}} - {{blame.email}}
-        .columns
-          .column.is-4.has-text-left Description
-          .column.is-8.has-text-left(v-html="description")
-        .columns
-          .column.is-4.has-text-left Tags
-          .column.is-8.has-text-left
-            .tags.imdone-tags(v-if="tags.length > 0")
-              .tag.is-success(v-for="tag in tags") {{tag}}
-        .columns
-          .column.is-4.has-text-left Context
-          .column.is-8.has-text-left
-            .tags.imdone-contexts(v-if="contexts.length > 0")
-              .tag.is-info(v-for="context in contexts") {{context}}
-    .panel-heading.has-text-left.is-size-5 Metadata
-    .panel-block
-      .container
-        b-table(:data="metaData" :columns="columns")
+.detail
+  .overflow-container
+    .panel.is-size-6.description
+      .panel-heading.has-text-left.is-size-5.has-text-weight-bold(v-html="text")
+      .panel-block
+        .container
+          .columns
+            .column.is-4.has-text-left.has-text-weight-bold List
+            .column.is-8.has-text-left {{task.list}}
+          .columns
+            .column.is-4.has-text-left.has-text-weight-bold Description
+            .column.is-8.has-text-left(v-html="description")
+          .columns
+            .column.is-4.has-text-left.has-text-weight-bold Author
+            .column.is-8.has-text-left {{blame.name}} - {{blame.email}}
+          .columns(v-if="tags.length > 0")
+            .column.is-4.has-text-left.has-text-weight-bold Tags
+            .column.is-8.has-text-left
+              .tags.imdone-tags
+                .tag.is-success(v-for="tag in tags") {{tag}}
+          .columns(v-if="contexts.length > 0")
+            .column.is-4.has-text-left.has-text-weight-bold Context
+            .column.is-8.has-text-left
+              .tags.imdone-contexts
+                .tag.is-info(v-for="context in contexts") {{context}}
+          .columns
+            .column.is-4.has-text-left.has-text-weight-bold File
+            .column.is-8.has-text-left {{task.source.path}}:{{task.line}}
+      .panel-block
+        .container
+          h2.has-text-left.is-size-5.has-text-weight-bold Metadata
+          b-table(:data="metaData" :columns="columns")
 </template>
 <script>
 import * as MarkdownIt from 'markdown-it'
@@ -75,6 +83,16 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.detail {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  max-height: 100vh;
+}
+.overflow-container {
+  flex: 1;
+  overflow-y: auto;
+}
 .panel {
   margin: .75rem .75rem .74rem 0;
 }
