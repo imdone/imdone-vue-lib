@@ -1,11 +1,9 @@
 <template lang="pug">
-.columns
-  .column.board-wrapper(:class="{'is-two-thirds': selectedTask}")
-    .board
-      .columns
-        list.column(v-for='list in listsOfTasks' :key="list.name" :list='list.name' :tasks="list.tasks" :selectedTask="selectedTask" v-on:update-list="updateList" v-on:update-task="updateTask" v-on:show-detail="showDetail")
-  .column.is-one-third(v-if="selectedTask")
-    detail(:task="selectedTask")
+.board-wrapper
+  .board(:class="{'has-detail': selectedTask}")
+    .columns.is-mobile
+      list.column(v-for='list in listsOfTasks' :key="list.name" :list='list.name' :tasks="list.tasks" :selectedTask="selectedTask" v-on:update-list="updateList" v-on:update-task="updateTask" v-on:show-detail="showDetail")
+  detail.detail(v-if="selectedTask" :task="selectedTask" v-on:close-detail="closeDetail")
 </template>
 <script>
 import List from '@/components/list'
@@ -47,20 +45,34 @@ export default {
     },
     showDetail (task) {
       this.selectedTask = task
+    },
+    closeDetail () {
+      this.selectedTask = null
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-.board-wrapper {
-  border-right: 1px solid #dbdbdb;
-  padding-right: 0;
+.detail {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 30vw;
+  left: 70vw;
 }
 .board {
-  height: 100vh;
-  width: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
   padding: 20px;
   overflow-x: auto;
+  &.has-detail {
+    border-right: 1px solid #dbdbdb;
+    left: 0;
+    right: 30vw;
+  }
   .columns {
     max-height: 100%;
     height: 100%;

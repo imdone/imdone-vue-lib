@@ -8,7 +8,7 @@ article.message.is-small(:class="{'is-success': selected, 'is-info': !selected}"
         a(v-on:click="showDetail")
           b-icon(pack="fa" icon="ellipsis-h" size="is-small")
   .message-body
-    .task-text.has-text-left(v-html="text")
+    .task-text.is-size-7.has-text-left(v-html="text")
     .tags.imdone-tags(v-if="tags.length > 0")
       .tag.is-success(v-for="tag in tags") {{tag}}
     .tags.imdone-contexts(v-if="contexts.length > 0")
@@ -71,7 +71,6 @@ export default {
       margin-bottom: 1em;
     }
     .task-text {
-      font-size: 14px;
       margin-bottom: 1em;
       h1,h2,h3,h4,h5,ul {
         margin: .2em 0;

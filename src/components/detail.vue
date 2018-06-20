@@ -2,35 +2,39 @@
 .detail
   .overflow-container
     .panel.is-size-6.description
-      .panel-heading.has-text-left.is-size-5.has-text-weight-bold(v-html="text")
-      .panel-block
+      .panel-heading.has-text-left.has-text-weight-bold
+        .columns
+          .column.is-11(v-html="text")
+          .column.is-1
+            button(class="delete" aria-label="delete" v-on:click="close")
+      .panel-block.is-size-7
         .container
           .columns
-            .column.is-4.has-text-left.has-text-weight-bold List
-            .column.is-8.has-text-left {{task.list}}
+            .column.is-3.has-text-left.has-text-weight-bold List
+            .column.is-9.has-text-left {{task.list}}
           .columns
-            .column.is-4.has-text-left.has-text-weight-bold Description
-            .column.is-8.has-text-left(v-html="description")
+            .column.is-3.has-text-left.has-text-weight-bold Description
+            .column.is-9.has-text-left(v-html="description")
           .columns
-            .column.is-4.has-text-left.has-text-weight-bold Author
-            .column.is-8.has-text-left {{blame.name}} - {{blame.email}}
+            .column.is-3.has-text-left.has-text-weight-bold Author
+            .column.is-9.has-text-left {{blame.name}} - {{blame.email}}
           .columns(v-if="tags.length > 0")
-            .column.is-4.has-text-left.has-text-weight-bold Tags
-            .column.is-8.has-text-left
+            .column.is-3.has-text-left.has-text-weight-bold Tags
+            .column.is-9.has-text-left
               .tags.imdone-tags
                 .tag.is-success(v-for="tag in tags") {{tag}}
           .columns(v-if="contexts.length > 0")
-            .column.is-4.has-text-left.has-text-weight-bold Context
-            .column.is-8.has-text-left
+            .column.is-3.has-text-left.has-text-weight-bold Context
+            .column.is-9.has-text-left
               .tags.imdone-contexts
                 .tag.is-info(v-for="context in contexts") {{context}}
           .columns
-            .column.is-4.has-text-left.has-text-weight-bold File
-            .column.is-8.has-text-left {{task.source.path}}:{{task.line}}
+            .column.is-3.has-text-left.has-text-weight-bold File
+            .column.is-9.has-text-left {{task.source.path}}:{{task.line}}
       .panel-block
         .container
-          h2.has-text-left.is-size-5.has-text-weight-bold Metadata
-          b-table(:data="metaData" :columns="columns")
+          h2.has-text-left.has-text-weight-bold Metadata
+          b-table.is-size-7(:data="metaData" :columns="columns")
 </template>
 <script>
 import * as MarkdownIt from 'markdown-it'
@@ -40,6 +44,11 @@ const md = new MarkdownIt()
 export default {
   name: 'imdone-detail',
   props: ['task', 'repoURL'],
+  methods: {
+    close () {
+      this.$emit('close-detail')
+    }
+  },
   computed: {
     blame: function () {
       return this.task.blame || {name: 'Anonymous', email: 'anonymous-user@anon.com'}
@@ -94,7 +103,7 @@ export default {
   overflow-y: auto;
 }
 .panel {
-  margin: .75rem .75rem .74rem 0;
+  margin: .75rem;
 }
 .description {
   ul {
