@@ -23,6 +23,7 @@
     "cheerio": "^1.0.0-rc.2",
     "imdone-core": "^1.5.2",
     "markdown-it": "^8.4.1",
+    "markdown-it-checkbox": "^1.1.0",
     "vue": "^2.3.3",
     "vue-router": "^2.6.0",
     "vuedraggable": "^2.16.0"

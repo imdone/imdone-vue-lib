@@ -14,7 +14,7 @@
             .column.is-9.has-text-left {{task.list}}
           .columns
             .column.is-3.has-text-left.has-text-weight-bold Description
-            .column.is-9.has-text-left(v-html="description")
+            .column.is-9.has-text-left.description(v-html="description")
           .columns
             .column.is-3.has-text-left.has-text-weight-bold Author
             .column.is-9.has-text-left {{blame.name}} - {{blame.email}}
@@ -39,7 +39,9 @@
 <script>
 import * as MarkdownIt from 'markdown-it'
 import * as cheerio from 'cheerio'
+import * as checkbox from 'markdown-it-checkbox'
 const md = new MarkdownIt()
+md.use(checkbox)
 
 export default {
   name: 'imdone-detail',
@@ -66,7 +68,11 @@ export default {
       return this.task.allContext
     },
     description: function () {
-      return md.render(this.task.description.join('\n'))
+      const html = md.render(this.task.description.join('\n'))
+      const $ = cheerio.load(html)
+      $('input[type=checkbox]').closest('li').css('list-style', 'none')
+      $('input[type=checkbox]').attr('disabled', 'true')
+      return $.html()
     },
     metaData: function () {
       const meta = []
@@ -91,23 +97,30 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .detail {
   display: flex;
   flex: 1;
   min-height: 0;
   max-height: 100vh;
-}
-.overflow-container {
-  flex: 1;
-  overflow-y: auto;
-}
-.panel {
-  margin: .75rem;
-}
-.description {
-  ul {
-    list-style: disc;
+  .overflow-container {
+    flex: 1;
+    overflow-y: auto;
+  }
+  .panel {
+    margin: .75rem;
+  }
+  .description {
+    h1 { font-size: 2em; }
+    h2 { font-size: 1.5em; }
+    h3 { font-size: 1.17em; }
+    h4 { font-size: 1.12em; }
+    h5 { font-size: .83em; }
+    h6 { font-size: .75em; }
+    ul {
+      list-style: disc;
+    }
   }
 }
+
 </style>
