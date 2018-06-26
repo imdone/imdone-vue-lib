@@ -40,11 +40,15 @@
 import * as MarkdownIt from 'markdown-it'
 import * as cheerio from 'cheerio'
 import * as checkbox from 'markdown-it-checkbox'
+import Buefy from 'buefy'
 const md = new MarkdownIt()
 md.use(checkbox)
 
 export default {
   name: 'imdone-detail',
+  components: {
+    'b-table': Buefy.Table
+  },
   props: ['task', 'repoURL'],
   methods: {
     close () {
@@ -68,7 +72,7 @@ export default {
       return this.task.allContext
     },
     description: function () {
-      const html = md.render(this.task.description.join('\n'))
+      const html = md.render(this.task.description.join('\n\n'))
       const $ = cheerio.load(html)
       $('input[type=checkbox]').closest('li').css('list-style', 'none')
       $('input[type=checkbox]').attr('disabled', 'true')

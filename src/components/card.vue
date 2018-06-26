@@ -1,5 +1,5 @@
 <template lang="pug">
-article.message.is-small(:class="{'is-success': selected, 'is-info': !selected}")
+article.message(:class="{'is-success': selected, 'is-info': !selected}")
   //- .message-header
   //-   .task-text.has-text-left(v-html="text")
   .message-header
@@ -7,8 +7,8 @@ article.message.is-small(:class="{'is-success': selected, 'is-info': !selected}"
       .column
         a(v-on:click="showDetail")
           b-icon(pack="fa" icon="ellipsis-h" size="is-small")
-  .message-body
-    .task-text.is-size-7.has-text-left(v-html="text")
+  .message-body.is-size-7
+    .task-text.has-text-left(v-html="text")
     .tags.imdone-tags(v-if="tags.length > 0")
       .tag.is-success(v-for="tag in tags") {{tag}}
     .tags.imdone-contexts(v-if="contexts.length > 0")
@@ -19,6 +19,7 @@ article.message.is-small(:class="{'is-success': selected, 'is-info': !selected}"
 <script>
 import * as MarkdownIt from 'markdown-it'
 import * as cheerio from 'cheerio'
+import Buefy from 'buefy'
 // import Task from 'imdone-core/lib/task'
 
 const md = new MarkdownIt()
@@ -30,6 +31,9 @@ const md = new MarkdownIt()
 export default {
   name: 'imdone-card',
   props: ['task', 'selectedTask'],
+  components: {
+    'b-icon': Buefy.Icon
+  },
   computed: {
     text () {
       const html = md.render(this.task.getText({stripMeta: true, sanitize: true, stripTags: true, stripContext: true}))
@@ -54,9 +58,12 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .message {
   max-width: 300px;
+  a {
+    text-decoration: none;
+  }
   .message-header {
     .card-actions {
       a {

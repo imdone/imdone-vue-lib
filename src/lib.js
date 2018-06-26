@@ -1,4 +1,3 @@
-import imdoneVueLib from './components/hello'
 import './styles/lib.scss'
-
-export default imdoneVueLib
+import Board from './components/board'
+export default Board

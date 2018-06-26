@@ -52,7 +52,14 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
+html {
+  font-size: 18px;
+}
+.board-wrapper {
+  @import "../../node_modules/bulma/bulma.sass";
+}
+
 .detail {
   position: absolute;
   top: 0;
@@ -82,7 +89,6 @@ export default {
       padding: 0;
       margin: 0 10px;
       display: flex;
-      flex: 0 0 340px;
       flex-direction: column;
     }
   }
