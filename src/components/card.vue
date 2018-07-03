@@ -24,10 +24,6 @@ import Buefy from 'buefy'
 
 const md = new MarkdownIt()
 
-// TODO: programatically set source.path href action +feature id:1
-// Jesse
-// jesse@piascik.net
-// https://github.com/imdone/imdone-vue-lib/issues/2
 export default {
   name: 'imdone-card',
   props: ['task', 'selectedTask'],
@@ -54,6 +50,9 @@ export default {
   methods: {
     showDetail () {
       this.$emit('show-detail', this.task)
+    },
+    emitFileLink () {
+      this.$emit('file-link', this.task)
     }
   }
 }

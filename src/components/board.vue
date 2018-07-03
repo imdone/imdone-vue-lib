@@ -2,7 +2,9 @@
 .board-wrapper
   .board(:class="{'has-detail': selectedTask}")
     .columns.is-mobile
-      list.column(v-for='list in listsOfTasks' :key="list.name" :list='list.name' :tasks="list.tasks" :selectedTask="selectedTask" v-on:update-list="updateList" v-on:update-task="updateTask" v-on:show-detail="showDetail")
+      list.column(v-for='list in listsOfTasks' :key="list.name" :list='list.name' :tasks="list.tasks" :selectedTask="selectedTask"
+        v-on:update-list="updateList" v-on:update-task="updateTask"
+        v-on:show-detail="showDetail" v-on:file-link="fileLink")
   detail.detail(v-if="selectedTask" :task="selectedTask" v-on:close-detail="closeDetail")
 </template>
 <script>
@@ -11,7 +13,7 @@ import Detail from '@/components/detail'
 export default {
   name: 'imdone-board',
   components: {List, Detail},
-  props: ['tasks', 'config', 'allowUpdates'],
+  props: ['tasks', 'config', 'allowUpdates', 'repoURL'],
   data: function () {
     return {
       listsOfTasks: this.tasks,
@@ -48,6 +50,9 @@ export default {
     },
     closeDetail () {
       this.selectedTask = null
+    },
+    fileLink () {
+      debugger
     }
   }
 }
