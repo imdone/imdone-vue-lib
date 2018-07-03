@@ -43,6 +43,7 @@ export default {
       const list = this.listsOfTasks.find(list => list.name === newList)
       const task = list.tasks.find(task => task.id === taskId)
       task.list = newList
+      this.$emit('update-task', this.listsOfTasks)
       console.log(task)
     },
     showDetail (task) {
