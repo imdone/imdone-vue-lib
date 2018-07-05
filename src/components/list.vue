@@ -37,7 +37,7 @@ export default {
       const newList = to.dataset.list
       const oldList = from.dataset.list
       const taskId = item.dataset.id
-      this.$emit('update-task', {newList, oldList, newIndex, oldIndex, taskId})
+      this.$emit('update-task-order', {newList, oldList, newIndex, oldIndex, taskId})
     },
     showDetail (task) {
       this.$emit('show-detail', task)

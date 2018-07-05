@@ -1,12 +1,12 @@
 <template lang="pug">
-article.message(:class="{'is-success': selected, 'is-info': !selected}")
+article.message(:class="{'is-success': selected, 'is-info': !selected}" v-on:click="showDetail")
   //- .message-header
   //-   .task-text.has-text-left(v-html="text")
   .message-header
     .columns.card-actions
       .column
-        a(v-on:click="showDetail")
-          b-icon(pack="fa" icon="ellipsis-h" size="is-small")
+        //- a(v-on:click="showDetail")
+        //-   b-icon(pack="fa" icon="ellipsis-h" size="is-small")
   .message-body.is-size-7
     .task-text.has-text-left(v-html="text")
     .tags.imdone-tags(v-if="tags.length > 0")

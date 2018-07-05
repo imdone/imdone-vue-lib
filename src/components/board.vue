@@ -3,7 +3,7 @@
   .board(:class="{'has-detail': selectedTask}")
     .columns.is-mobile
       list.column(v-for='list in listsOfTasks' :key="list.name" :list='list.name' :tasks="list.tasks" :selectedTask="selectedTask"
-        v-on:update-list="updateList" v-on:update-task="updateTask"
+        v-on:update-list="updateList" v-on:update-task-order="updateTaskOrder"
         v-on:show-detail="showDetail" v-on:file-link="fileLink")
   detail.detail(v-if="selectedTask" :task="selectedTask" v-on:close-detail="closeDetail")
 </template>
@@ -25,7 +25,7 @@ export default {
       if (!this.allowUpdates) return
       this.listsOfTasks.find(list => list.name === name).tasks = tasks
     },
-    updateTask ({newList, oldList, newIndex, oldIndex, taskId}) {
+    updateTaskOrder ({newList, oldList, newIndex, oldIndex, taskId}) {
       // TODO: Listen for the update-task event in parent component and modify file using github edit api id:4
       // Jesse
       // jesse@piascik.net
@@ -43,7 +43,7 @@ export default {
       const list = this.listsOfTasks.find(list => list.name === newList)
       const task = list.tasks.find(task => task.id === taskId)
       task.list = newList
-      this.$emit('update-task', this.listsOfTasks)
+      this.$emit('update-task-order', {task, tasks: this.listsOfTasks})
       console.log(task)
     },
     showDetail (task) {
