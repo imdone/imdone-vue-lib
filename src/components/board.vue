@@ -2,7 +2,7 @@
 .board-wrapper
   .board(:class="{'has-detail': selectedTask}")
     .columns.is-mobile
-      list.column(v-for='list in listsOfTasks' :key="list.name" :list='list.name' :tasks="list.tasks" :selectedTask="selectedTask"
+      list.column(v-for='list in listsOfTasks' :key="list.name" :list='list.name' :tasks="list.tasks" :selectedTask="selectedTask" :repoURL="repoURL"
         v-on:update-list="updateList" v-on:update-task-order="updateTaskOrder"
         v-on:show-detail="showDetail" v-on:file-link="fileLink")
   detail.detail(v-if="selectedTask" :task="selectedTask" v-on:close-detail="closeDetail")

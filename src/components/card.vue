@@ -14,7 +14,7 @@ article.message(:class="{'is-success': selected, 'is-info': !selected}" v-on:cli
     .tags.imdone-contexts(v-if="contexts.length > 0")
       .tag.is-info(v-for="context in contexts") {{context}}
     .source
-      a(href="#") {{task.source.path}}:{{task.line}}
+      a(:href="fileLink" target="_blank") {{task.source.path}}:{{task.line}}
 </template>
 <script>
 import * as MarkdownIt from 'markdown-it'
@@ -26,7 +26,7 @@ const md = new MarkdownIt()
 
 export default {
   name: 'imdone-card',
-  props: ['task', 'selectedTask'],
+  props: ['task', 'selectedTask', 'repoURL'],
   components: {
     'b-icon': Buefy.Icon
   },
@@ -45,6 +45,9 @@ export default {
     },
     selected () {
       return (this.selectedTask && this.selectedTask.id === this.task.id)
+    },
+    fileLink () {
+      return `${this.repoURL}${this.task.source.path}#L${this.task.line}`
     }
   },
   methods: {
