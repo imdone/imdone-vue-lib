@@ -1,18 +1,21 @@
 <template lang="pug">
 .board-wrapper
   .board(:class="{'has-detail': selectedTask}")
-    .columns.is-mobile
+    draggable.columns.is-mobile(v-model="listsOfTasks" @end="updateListOrder")
       list.column(v-for='list in listsOfTasks' :key="list.name" :list='list.name' :tasks="list.tasks" :selectedTask="selectedTask" :repoURL="repoURL"
         v-on:update-list="updateList" v-on:update-task-order="updateTaskOrder"
         v-on:show-detail="showDetail" v-on:file-link="fileLink")
   detail.detail(v-if="selectedTask" :task="selectedTask" v-on:close-detail="closeDetail")
 </template>
 <script>
+import Draggable from 'vuedraggable'
 import List from '@/components/list'
 import Detail from '@/components/detail'
+import _ from 'lodash'
+
 export default {
   name: 'imdone-board',
-  components: {List, Detail},
+  components: {List, Detail, Draggable},
   props: ['tasks', 'config', 'allowUpdates', 'repoURL'],
   data: function () {
     return {
@@ -24,6 +27,11 @@ export default {
     updateList ({name, tasks}) {
       if (!this.allowUpdates) return
       this.listsOfTasks.find(list => list.name === name).tasks = tasks
+    },
+    updateListOrder () {
+      const config = _.cloneDeep(this.config)
+      config.lists = this.listsOfTasks.map(({name, hidden, ignore}) => ({name, hidden, ignore}))
+      this.$emit('update-config', config)
     },
     updateTaskOrder ({newList, oldList, newIndex, oldIndex, taskId}) {
       // TODO: Listen for the update-task event in parent component and modify file using github edit api id:4
