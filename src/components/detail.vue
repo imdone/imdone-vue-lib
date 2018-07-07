@@ -17,7 +17,7 @@
             .column.is-9.has-text-left.description(v-html="description")
           .columns
             .column.is-3.has-text-left.has-text-weight-bold Author
-            .column.is-9.has-text-left {{blame.name}} - {{blame.email}}
+            .column.is-9.has-text-left {{blame.name}} - #[a(:href="authorEmail" target="_blank") {{blame.email}}]
           .columns(v-if="tags.length > 0")
             .column.is-3.has-text-left.has-text-weight-bold Tags
             .column.is-9.has-text-left
@@ -30,7 +30,8 @@
                 .tag.is-info(v-for="context in contexts") {{context}}
           .columns
             .column.is-3.has-text-left.has-text-weight-bold File
-            .column.is-9.has-text-left {{task.source.path}}:{{task.line}}
+            .column.is-9.has-text-left
+              a(:href="fileURL" target="_blank") {{task.source.path}}:{{task.line}}
       .panel-block
         .container
           h2.has-text-left.has-text-weight-bold Metadata
@@ -41,7 +42,7 @@ import * as MarkdownIt from 'markdown-it'
 import * as cheerio from 'cheerio'
 import * as checkbox from 'markdown-it-checkbox'
 import Buefy from 'buefy'
-const md = new MarkdownIt()
+const md = new MarkdownIt({html: true, breaks: true})
 md.use(checkbox)
 
 export default {
@@ -56,8 +57,14 @@ export default {
     }
   },
   computed: {
+    fileURL: function () {
+      return `${this.repoURL}${this.task.source.path}#L${this.task.line}`
+    },
     blame: function () {
       return this.task.blame || {name: 'Anonymous', email: 'anonymous-user@anon.com'}
+    },
+    authorEmail: function () {
+      return `mailto:${this.blame.email}`
     },
     text: function () {
       const html = md.render(this.task.getText({stripMeta: true, sanitize: true, stripTags: true, stripContext: true}))
@@ -72,8 +79,13 @@ export default {
       return this.task.allContext
     },
     description: function () {
-      const html = md.render(this.task.description.join('\n\n'))
+      const regex = /((http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?)/
+      const description = this.task.description.join('\n').replace(regex, '<a href="$1">$1</a>')
+      const html = md.render(description)
       const $ = cheerio.load(html)
+      $('a').each(function () {
+        $(this).attr('target', '_blank')
+      })
       $('input[type=checkbox]').closest('li').css('list-style', 'none')
       $('input[type=checkbox]').attr('disabled', 'true')
       return $.html()
