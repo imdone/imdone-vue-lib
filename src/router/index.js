@@ -64,6 +64,7 @@ export default new Router({
       path: '/board',
       component: Board,
       props: {
+        repoURL: '',
         allowUpdates: true,
         config,
         tasks: listsOfTasks()

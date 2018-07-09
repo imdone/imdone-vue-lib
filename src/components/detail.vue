@@ -5,7 +5,7 @@
       .panel-heading.has-text-left.has-text-weight-bold
         .columns
           .column.is-11(v-html="text")
-          .column.is-1
+          .column.is-1.delete-column
             button(class="delete" aria-label="delete" v-on:click="close")
       .panel-block.is-size-7
         .container
@@ -14,7 +14,7 @@
             .column.is-9.has-text-left {{task.list}}
           .columns
             .column.is-3.has-text-left.has-text-weight-bold Description
-            .column.is-9.has-text-left.description(v-html="description")
+            .column.is-9.has-text-left.description.break-word(v-html="description")
           .columns
             .column.is-3.has-text-left.has-text-weight-bold Author
             .column.is-9.has-text-left {{blame.name}} - #[a(:href="authorEmail" target="_blank") {{blame.email}}]
@@ -30,7 +30,7 @@
                 .tag.is-info(v-for="context in contexts") {{context}}
           .columns
             .column.is-3.has-text-left.has-text-weight-bold File
-            .column.is-9.has-text-left
+            .column.is-9.has-text-left.break-word
               a(:href="fileURL" target="_blank") {{task.source.path}}:{{task.line}}
       .panel-block
         .container
@@ -119,6 +119,9 @@ export default {
   flex: 1;
   min-height: 0;
   max-height: 100vh;
+  .break-word {
+    word-break: break-word
+  }
   .overflow-container {
     flex: 1;
     overflow-y: auto;
@@ -126,11 +129,14 @@ export default {
   .panel {
     margin: .75rem;
   }
+  .delete-column {
+    padding-top: .9em;
+  }
   .description {
     h1 { font-size: 2em; }
-    h2 { font-size: 1.5em; }
-    h3 { font-size: 1.17em; }
-    h4 { font-size: 1.12em; }
+    h2 { font-size: 1.17em; }
+    h3 { font-size: 1.12em; }
+    h4 { font-size: 1em; }
     h5 { font-size: .83em; }
     h6 { font-size: .75em; }
     ul {

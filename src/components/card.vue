@@ -3,10 +3,13 @@ article.message(:class="{'is-success': selected, 'is-info': !selected}" v-on:cli
   //- .message-header
   //-   .task-text.has-text-left(v-html="text")
   .message-header
-    .columns.card-actions
-      .column
-        //- a(v-on:click="showDetail")
-        //-   b-icon(pack="fa" icon="ellipsis-h" size="is-small")
+    .card-actions
+      .level
+        .level-left
+        .level-right
+          .level-item
+            a(:href="fileEditLink" target="_blank")
+             b-icon(pack="fa" icon="pencil-square" size="is-small")
   .message-body.is-size-7
     .task-text.has-text-left(v-html="text")
     .tags.imdone-tags(v-if="tags.length > 0")
@@ -48,6 +51,10 @@ export default {
     },
     fileLink () {
       return `${this.repoURL}${this.task.source.path}#L${this.task.line}`
+    },
+    fileEditLink () {
+      const repoEditURL = this.repoURL.replace('/blob/', '/edit/')
+      return `${repoEditURL}${this.task.source.path}#L${this.task.line}`
     }
   },
   methods: {
@@ -68,6 +75,7 @@ export default {
   }
   .message-header {
     .card-actions {
+      width: 100%;
       a {
         text-decoration: none;
       }

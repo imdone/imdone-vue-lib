@@ -72,6 +72,9 @@ html {
 }
 .board-wrapper {
   @import "../../node_modules/bulma/bulma.sass";
+  .icon {
+    margin: 0px;
+  }
 }
 
 .detail {
