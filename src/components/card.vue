@@ -2,15 +2,14 @@
 article.message(:class="{'is-success': selected, 'is-info': !selected}" v-on:click="showDetail")
   //- .message-header
   //-   .task-text.has-text-left(v-html="text")
-  .message-header
-    .card-actions
+  .message-body.is-size-7
+    .card-actions.is-size-6
       .level
         .level-left
         .level-right
           .level-item
             a(:href="fileEditLink" target="_blank")
-             b-icon(pack="fa" icon="pencil-square" size="is-small")
-  .message-body.is-size-7
+             b-icon(pack="fa" icon="pencil" size="is-small")
     .task-text.has-text-left(v-html="text")
     .tags.imdone-tags(v-if="tags.length > 0")
       .tag.is-success(v-for="tag in tags") {{tag}}
@@ -73,12 +72,10 @@ export default {
   a {
     text-decoration: none;
   }
-  .message-header {
-    .card-actions {
-      width: 100%;
-      a {
-        text-decoration: none;
-      }
+  .card-actions {
+    width: 100%;
+    a {
+      text-decoration: none;
     }
   }
   .message-body {
