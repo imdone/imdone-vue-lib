@@ -1,29 +1,74 @@
 <template lang="pug">
 .board-wrapper
   .board(:class="{'has-detail': selectedTask}")
-    draggable.columns.is-mobile(v-model="listsOfTasks" @end="updateListOrder")
-      list.column(v-for='list in listsOfTasks' :key="list.name" :list='list.name' :tasks="list.tasks" :selectedTask="selectedTask" :repoURL="repoURL"
+    draggable.columns.is-mobile(v-model="listsOfTasks" @end="updateListOrder" :options="draggableOpts")
+      list.column.imdone-list(v-for='list in listsOfTasks' :key="list.name" :list='list.name' :tasks="list.tasks" :selectedTask="selectedTask" :repoURL="repoURL"
         v-on:update-list="updateList" v-on:update-task-order="updateTaskOrder"
-        v-on:show-detail="showDetail" v-on:file-link="fileLink")
+        v-on:show-detail="showDetail" v-on:file-link="fileLink"
+        v-on:delete-list="deleteList")
+      .column.new-list(slot="footer")
+        button.button.is-white(v-if="!addListFormShown" @click="showAddListForm")
+          b-icon(pack="fa" icon="plus" size="is-small")
+          | &nbsp;&nbsp;Add another list
+        .card(v-if="addListFormShown")
+          .card-content
+            .control
+              input.input(type="text" v-model="newListName" ref="newListInput" @keyup.enter="addList" @keyup.esc="hideAddListForm")
+            .control
+              button.button.is-success.is-small.add-list-btn(@click="addList") Add List
+              a(@click="hideAddListForm")
+                b-icon(pack="fa" icon="times" size="is-small")
   detail.detail(v-if="selectedTask" :task="selectedTask" :repoURL="repoURL" v-on:close-detail="closeDetail")
 </template>
 <script>
 import Draggable from 'vuedraggable'
+import Buefy from 'buefy'
 import List from '@/components/list'
 import Detail from '@/components/detail'
 import _ from 'lodash'
 
 export default {
   name: 'imdone-board',
-  components: {List, Detail, Draggable},
+  components: {List, Detail, Draggable, 'b-icon': Buefy.Icon},
   props: ['tasks', 'config', 'allowUpdates', 'repoURL'],
   data: function () {
     return {
       listsOfTasks: this.tasks,
-      selectedTask: null
+      selectedTask: null,
+      addListFormShown: false,
+      newListName: null,
+      draggableOpts: {
+        group: {
+          name: 'lists',
+          pull: false
+        },
+        draggable: '.imdone-list'
+      }
     }
   },
   methods: {
+    showAddListForm () {
+      this.addListFormShown = true
+      this.$nextTick(() => this.$refs.newListInput.focus())
+    },
+    hideAddListForm () {
+      this.addListFormShown = false
+    },
+    deleteList (name) {
+      this.config.lists = this.config.lists.filter(list => list.name !== name)
+      this.listsOfTasks = this.listsOfTasks.filter(list => list.name !== name)
+      this.$emit('update-config', this.config)
+    },
+    addList () {
+      if (!this.newListName) return
+      const config = this.config
+      if (_.find(config.lists, {name: this.newListName})) return
+      config.lists.push({name: `${this.newListName}`, hidden: false})
+      this.listsOfTasks.push({name: `${this.newListName}`, hidden: false, tasks: []})
+      this.$emit('update-config', config)
+      this.newListName = null
+      this.hideAddListForm()
+    },
     updateList ({name, tasks}) {
       if (!this.allowUpdates) return
       this.listsOfTasks.find(list => list.name === name).tasks = tasks
@@ -107,6 +152,18 @@ html {
       margin: 0 10px;
       display: flex;
       flex-direction: column;
+      &.new-list {
+        width: 340px;
+        .card-content {
+          padding: .25em;
+          .control {
+            padding: .25em;
+            .add-list-btn {
+              margin-right: 1em;
+            }
+          }
+        }
+      }
     }
   }
 }

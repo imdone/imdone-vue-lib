@@ -2,10 +2,8 @@
 .card.list
   header.card-header
     p.card-header-title {{list}}
-    //- a.card-header-icon(href='#' aria-label='more options')
-    //-   span.icon
-    //-     b-icon(pack="fa" icon="angle-up" size="is-small")
-    //-     b-icon(pack="fa" icon="angle-down" size="is-small" aria-hidden='true')
+    a.card-header-icon(@click="deleteList" v-if="sortedTasks.length === 0")
+      b-icon(pack="fa" icon="trash" size="is-small")
   .card-content
     .overflow-container
       draggable.tasks(:data-list="list" v-model="sortedTasks" :options="{group:'cards'}" @end="onEnd")
@@ -13,13 +11,15 @@
           v-on:show-detail="showDetail" v-on:file-link="fileLink")
 </template>
 <script>
+import Buefy from 'buefy'
 import Draggable from 'vuedraggable'
 import Card from '@/components/card'
 export default {
   name: 'imdone-list',
   components: {
     Card,
-    Draggable
+    Draggable,
+    'b-icon': Buefy.Icon
   },
   props: ['list', 'tasks', 'selectedTask', 'repoURL'],
   computed: {
@@ -43,7 +43,10 @@ export default {
       this.$emit('show-detail', task)
     },
     fileLink (task) {
-      this.emit('file-link', task)
+      this.$emit('file-link', task)
+    },
+    deleteList () {
+      this.$emit('delete-list', this.list)
     }
   }
 }
