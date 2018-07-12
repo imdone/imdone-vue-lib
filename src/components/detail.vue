@@ -42,6 +42,8 @@ import * as MarkdownIt from 'markdown-it'
 import * as cheerio from 'cheerio'
 import * as checkbox from 'markdown-it-checkbox'
 import Buefy from 'buefy'
+import * as _ from 'lodash'
+
 const md = new MarkdownIt({html: true, breaks: true})
 md.use(checkbox)
 
@@ -79,9 +81,11 @@ export default {
       return this.task.allContext
     },
     description: function () {
+      const description = _.clone(this.task.description)
+      const text = this.task.getText({stripMeta: true, sanitize: true, stripTags: true, stripContext: true})
       const regex = /((http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?)/
-      const description = this.task.description.join('\n').replace(regex, '<a href="$1">$1</a>')
-      const html = md.render(description)
+      const descriptionMD = `${text} ${description.join('\n')}`.replace(regex, '<a href="$1">$1</a>')
+      const html = md.render(descriptionMD)
       const $ = cheerio.load(html)
       $('a').each(function () {
         $(this).attr('target', '_blank')

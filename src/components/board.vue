@@ -6,7 +6,7 @@
         v-on:update-list="updateList" v-on:update-task-order="updateTaskOrder"
         v-on:show-detail="showDetail" v-on:file-link="fileLink"
         v-on:delete-list="deleteList")
-      .column.new-list(slot="footer")
+      .column.new-list(slot="footer" v-if="allowUpdates")
         button.button.is-white(v-if="!addListFormShown" @click="showAddListForm")
           b-icon(pack="fa" icon="plus" size="is-small")
           | &nbsp;&nbsp;Add another list
@@ -48,6 +48,7 @@ export default {
   },
   methods: {
     showAddListForm () {
+      if (!this.allowUpdates) return this.emitUpdateError('show add')
       this.addListFormShown = true
       this.$nextTick(() => this.$refs.newListInput.focus())
     },
@@ -55,12 +56,21 @@ export default {
       this.addListFormShown = false
     },
     deleteList (name) {
+      if (!this.allowUpdates) return this.emitUpdateError('delete list')
       this.config.lists = this.config.lists.filter(list => list.name !== name)
       this.listsOfTasks = this.listsOfTasks.filter(list => list.name !== name)
       this.$emit('update-config', this.config)
     },
     addList () {
+      if (!this.allowUpdates) return this.emitUpdateError('add list')
       if (!this.newListName) return
+      if (!/^([A-Z]+[A-Z-_]+?)$/.test(this.newListName)) {
+        this.$nextTick(() => {
+          this.$refs.newListInput.focus()
+          this.$refs.newListInput.select()
+        })
+        return this.$emit('list-name-error')
+      }
       const config = this.config
       if (_.find(config.lists, {name: this.newListName})) return
       config.lists.push({name: `${this.newListName}`, hidden: false})
@@ -74,25 +84,20 @@ export default {
       this.listsOfTasks.find(list => list.name === name).tasks = tasks
     },
     updateListOrder () {
+      if (!this.allowUpdates) return this.emitUpdateError('list order')
       const config = _.cloneDeep(this.config)
       config.lists = this.listsOfTasks.map(({name, hidden, ignore}) => ({name, hidden, ignore}))
       this.$emit('update-config', config)
+    },
+    emitUpdateError (error) {
+      this.$emit('update-error', error)
     },
     updateTaskOrder ({newList, oldList, newIndex, oldIndex, taskId}) {
       // TODO: Listen for the update-task event in parent component and modify file using github edit api id:4
       // Jesse
       // jesse@piascik.net
       // https://github.com/imdone/imdone-vue-lib/issues/7
-      if (!this.allowUpdates) {
-        this.$toast.open({
-          message: 'Your don\'t have permission to update this board.',
-          type: 'is-warning',
-          position: 'is-top',
-          queue: false,
-          duration: 5000
-        })
-        return
-      }
+      if (!this.allowUpdates) return this.emitUpdateError('task order')
       const list = this.listsOfTasks.find(list => list.name === newList)
       const task = list.tasks.find(task => task.id === taskId)
       task.list = newList

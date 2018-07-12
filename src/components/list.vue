@@ -4,6 +4,8 @@
     p.card-header-title {{list}}
     a.card-header-icon(@click="deleteList" v-if="sortedTasks.length === 0")
       b-icon(pack="fa" icon="trash" size="is-small")
+    .card-header-icon(v-if="sortedTasks.length > 0")
+      .tag.is-info {{sortedTasks.length}}
   .card-content
     .overflow-container
       draggable.tasks(:data-list="list" v-model="sortedTasks" :options="{group:'cards'}" @end="onEnd")
