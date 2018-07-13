@@ -10,6 +10,9 @@ article.message(:class="{'is-success': selected, 'is-info': !selected}" v-on:cli
           .level-item
             a(:href="fileEditLink" target="_blank")
              b-icon(pack="fa" icon="pencil" size="is-small")
+          .level-item
+            img.gravatar(v-if="task.blame && task.blame.email" :src="gravatarURL" :title="name")
+            b-icon(v-else pack="fa" icon="user" size="is-small" title="No author found")
     .task-text.has-text-left(v-html="text")
     .tags.imdone-tags(v-if="tags.length > 0")
       .tag.is-success(v-for="tag in tags") {{tag}}
@@ -21,6 +24,7 @@ article.message(:class="{'is-success': selected, 'is-info': !selected}" v-on:cli
 <script>
 import * as MarkdownIt from 'markdown-it'
 import * as cheerio from 'cheerio'
+import * as gravatar from 'gravatar'
 import Buefy from 'buefy'
 // import Task from 'imdone-core/lib/task'
 
@@ -39,6 +43,10 @@ export default {
       $('a').attr('target', '_blank')
       return $.html()
     },
+    name () {
+      if (!this.task.blame || !this.task.blame.name) return 'no author found'
+      return this.task.blame.name
+    },
     tags () {
       return this.task.allTags
     },
@@ -54,6 +62,10 @@ export default {
     fileEditLink () {
       const repoEditURL = this.repoURL.replace('/blob/', '/edit/')
       return `${repoEditURL}${this.task.source.path}#L${this.task.line}`
+    },
+    gravatarURL () {
+      if (!this.task.blame) return `https://www.gravatar.com/avatar`
+      return gravatar.url(this.task.blame.email, {protocol: 'https', s: '25'})
     }
   },
   methods: {
@@ -67,6 +79,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+img.gravatar {
+  border-radius: 50%;
+  width: 25px;
+}
 .message {
   max-width: 300px;
   a {

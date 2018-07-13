@@ -15,7 +15,7 @@
           .columns
             .column.is-3.has-text-left.has-text-weight-bold Description
             .column.is-9.has-text-left.description.break-word(v-html="description")
-          .columns
+          .columns(v-if="blame")
             .column.is-3.has-text-left.has-text-weight-bold Author
             .column.is-9.has-text-left {{blame.name}} - #[a(:href="authorEmail" target="_blank") {{blame.email}}]
           .columns(v-if="tags.length > 0")
@@ -63,7 +63,7 @@ export default {
       return `${this.repoURL}${this.task.source.path}#L${this.task.line}`
     },
     blame: function () {
-      return this.task.blame || {name: 'Anonymous', email: 'anonymous-user@anon.com'}
+      return this.task.blame
     },
     authorEmail: function () {
       return `mailto:${this.blame.email}`
