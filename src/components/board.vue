@@ -3,8 +3,10 @@
   .board(:class="{'has-detail': selectedTask}")
     draggable.columns.is-mobile(v-model="listsOfTasks" @end="updateListOrder" :options="draggableOpts")
       list.column.imdone-list(v-for='list in listsOfTasks' :key="list.name" :list='list.name' :tasks="list.tasks" :selectedTask="selectedTask" :repoURL="repoURL"
-        v-on:update-list="updateList" v-on:update-task-order="updateTaskOrder"
-        v-on:show-detail="showDetail" v-on:file-link="fileLink"
+        v-on:update-list="updateList"
+        v-on:update-task-order="updateTaskOrder"
+        v-on:show-detail="showDetail"
+        v-on:file-link="fileLink"
         v-on:delete-list="deleteList")
       .column.new-list(slot="footer" v-if="allowUpdates")
         button.button.is-white(v-if="!addListFormShown" @click="showAddListForm")
@@ -30,11 +32,9 @@ import _ from 'lodash'
 export default {
   name: 'imdone-board',
   components: {List, Detail, Draggable, 'b-icon': Buefy.Icon},
-  props: ['tasks', 'config', 'allowUpdates', 'repoURL'],
+  props: ['tasks', 'config', 'allowUpdates', 'repoURL', 'selectedTask'],
   data: function () {
     return {
-      listsOfTasks: this.tasks,
-      selectedTask: null,
       addListFormShown: false,
       newListName: null,
       draggableOpts: {
@@ -43,6 +43,16 @@ export default {
           pull: false
         },
         draggable: '.imdone-list'
+      }
+    }
+  },
+  computed: {
+    listsOfTasks: {
+      get () {
+        return this.tasks
+      },
+      set (value) {
+        this.$emit('update-tasks', value)
       }
     }
   },
@@ -57,9 +67,7 @@ export default {
     },
     deleteList (name) {
       if (!this.allowUpdates) return this.emitUpdateError('delete list')
-      this.config.lists = this.config.lists.filter(list => list.name !== name)
-      this.listsOfTasks = this.listsOfTasks.filter(list => list.name !== name)
-      this.$emit('update-config', this.config)
+      this.$emit('delete-list', name)
     },
     addList () {
       if (!this.allowUpdates) return this.emitUpdateError('add list')
@@ -73,21 +81,19 @@ export default {
       }
       const config = this.config
       if (_.find(config.lists, {name: this.newListName})) return
-      config.lists.push({name: `${this.newListName}`, hidden: false})
-      this.listsOfTasks.push({name: `${this.newListName}`, hidden: false, tasks: []})
-      this.$emit('update-config', config)
+      this.$emit('add-list', `${this.newListName}`)
       this.newListName = null
       this.hideAddListForm()
     },
     updateList ({name, tasks}) {
       if (!this.allowUpdates) return
-      this.listsOfTasks.find(list => list.name === name).tasks = tasks
+      this.$emit('update-list', {name, tasks})
     },
     updateListOrder () {
       if (!this.allowUpdates) return this.emitUpdateError('list order')
-      const config = _.cloneDeep(this.config)
+      const config = _.clone(this.config)
       config.lists = this.listsOfTasks.map(({name, hidden, ignore}) => ({name, hidden, ignore}))
-      this.$emit('update-config', config)
+      this.$emit('update-list-order', config)
     },
     emitUpdateError (error) {
       this.$emit('update-error', error)
@@ -105,10 +111,10 @@ export default {
       console.log(task)
     },
     showDetail (task) {
-      this.selectedTask = task
+      this.$emit('task-selected', task)
     },
     closeDetail () {
-      this.selectedTask = null
+      this.$emit('task-unselected')
     },
     fileLink () {
       debugger
