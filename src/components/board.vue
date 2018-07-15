@@ -99,10 +99,6 @@ export default {
       this.$emit('update-error', error)
     },
     updateTaskOrder ({newList, oldList, newIndex, oldIndex, taskId}) {
-      // TODO: Listen for the update-task event in parent component and modify file using github edit api id:4
-      // Jesse
-      // jesse@piascik.net
-      // https://github.com/imdone/imdone-vue-lib/issues/7
       if (!this.allowUpdates) return this.emitUpdateError('task order')
       const list = this.listsOfTasks.find(list => list.name === newList)
       const task = list.tasks.find(task => task.id === taskId)
