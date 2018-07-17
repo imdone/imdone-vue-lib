@@ -2,7 +2,13 @@
 .board-wrapper
   .board(:class="{'has-detail': selectedTask}")
     draggable.columns.is-mobile(v-model="listsOfTasks" @end="updateListOrder" :options="draggableOpts")
-      list.column.imdone-list(v-for='list in listsOfTasks' :key="list.name" :list='list.name' :tasks="list.tasks" :selectedTask="selectedTask" :repoURL="repoURL"
+      list.column.imdone-list(v-for='list in listsOfTasks'
+        :key="list.name"
+        :list='list.name'
+        :tasks="list.tasks"
+        :selectedTask="selectedTask"
+        :repoURL="repoURL"
+        :allowUpdates="allowUpdates"
         v-on:update-list="updateList"
         v-on:update-task-order="updateTaskOrder"
         v-on:show-detail="showDetail"

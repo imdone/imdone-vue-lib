@@ -9,7 +9,13 @@
   .card-content
     .overflow-container
       draggable.tasks(:data-list="list" v-model="sortedTasks" :options="{group:'cards'}" @end="onEnd")
-        card(v-for="task in tasks" :selectedTask="selectedTask" :task="task" :key="task.id" :data-id="task.id" :repoURL='repoURL'
+        card(v-for="task in tasks"
+          :selectedTask="selectedTask"
+          :task="task"
+          :key="task.id"
+          :data-id="task.id"
+          :repoURL="repoURL"
+          :allowUpdates="allowUpdates"
           v-on:show-detail="showDetail" v-on:file-link="fileLink")
 </template>
 <script>
@@ -23,7 +29,7 @@ export default {
     Draggable,
     'b-icon': Buefy.Icon
   },
-  props: ['list', 'tasks', 'selectedTask', 'repoURL'],
+  props: ['list', 'tasks', 'selectedTask', 'repoURL', 'allowUpdates'],
   computed: {
     sortedTasks: {
       get () {

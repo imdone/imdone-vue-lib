@@ -6,10 +6,10 @@ article.message(:class="{'is-success': selected, 'is-info': !selected}" v-on:cli
     .card-actions.is-size-6
       .level
         .level-left
-        .level-right
-          .level-item
+          .level-item(v-if="allowUpdates")
             a(:href="fileEditLink" target="_blank")
              b-icon(pack="fa" icon="pencil" size="is-small")
+        .level-right
           .level-item
             img.gravatar(v-if="task.blame && task.blame.email" :src="gravatarURL" :title="name")
             b-icon(v-else pack="fa" icon="user" size="is-small" title="No author found")
@@ -32,7 +32,7 @@ const md = new MarkdownIt()
 
 export default {
   name: 'imdone-card',
-  props: ['task', 'selectedTask', 'repoURL'],
+  props: ['task', 'selectedTask', 'repoURL', 'allowUpdates'],
   components: {
     'b-icon': Buefy.Icon
   },
