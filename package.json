@@ -22,7 +22,7 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
     "gravatar": "^1.6.0",
-    "imdone-core": "^1.5.4",
+    "imdone-core": "^1.5.5",
     "markdown-it": "^8.4.1",
     "markdown-it-checkbox": "^1.1.0",
     "vue": "^2.5.16",
