@@ -84,6 +84,9 @@ img.gravatar {
   width: 25px;
 }
 .message {
+  &:not(:last-child) {
+    margin-bottom: .75em;
+  }
   max-width: 300px;
   a {
     text-decoration: none;
@@ -97,8 +100,10 @@ img.gravatar {
   .message-body {
     word-break: break-word;
     text-align: left;
+    padding: 1em;
     .tags {
-      margin-bottom: 1em;
+      margin-bottom: 0;
+      padding-bottom: 0;
     }
     .task-text {
       margin-bottom: 1em;

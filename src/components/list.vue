@@ -60,9 +60,12 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+  .card-header {
+    height: 3rem;
+  }
   .list {
     max-height: 100%;
-    width: 340px;
+    width: 320px;
     margin-top: 5px;
     margin-bottom: 5px;
   }
@@ -77,6 +80,6 @@ export default {
     overflow: auto;
   }
   .tasks {
-    padding: 1.5em;
+    padding: .75em;
   }
 </style>
