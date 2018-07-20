@@ -83,8 +83,7 @@ export default {
     description: function () {
       const description = _.clone(this.task.description)
       const text = this.task.getText({stripMeta: true, sanitize: true, stripTags: true, stripContext: true})
-      const regex = /((http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?)/
-      const descriptionMD = description.join('\n').replace(regex, '<a href="$1">$1</a>')
+      const descriptionMD = description.join('\n')
       const sep = (description.length > 0 && (!description[0].trim() || description[0].trim().startsWith('-'))) ? `\n  \n` : ' '
       const html = md.render(`${text}${sep}${descriptionMD}`)
       const $ = cheerio.load(html)
