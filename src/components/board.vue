@@ -119,7 +119,7 @@ export default {
       this.$emit('task-unselected')
     },
     fileLink () {
-      debugger
+      // debugger
     }
   }
 }

@@ -65,7 +65,7 @@ export default {
   }
   .list {
     max-height: 100%;
-    width: 320px;
+    width: 330px;
     margin-top: 5px;
     margin-bottom: 5px;
   }
