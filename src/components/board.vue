@@ -166,7 +166,7 @@ html {
       display: flex;
       flex-direction: column;
       &.new-list {
-        width: 340px;
+        width: 330px;
         .card-content {
           padding: .25em;
           .control {
