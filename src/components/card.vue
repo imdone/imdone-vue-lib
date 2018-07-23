@@ -48,22 +48,10 @@ export default {
       return this.task.blame.name
     },
     tags () {
-      // DOING: Fix empty tags id:23
-      //   
-      // ----
-      // <https://github.com/imdone/imdone-vue-lib/issues/27>
-      // Jesse
-      // jesse@piascik.net
-      return this.task.allTags
+      return this.task.allTags.filter(tag => !!tag)
     },
     contexts () {
-      // TODO: Fix empty context id:25
-      //   
-      // ----
-      // <https://github.com/imdone/imdone-vue-lib/issues/31>
-      // Jesse
-      // jesse@piascik.net
-      return this.task.allContext
+      return this.task.allContext.filter(context => !!context)
     },
     selected () {
       return (this.selectedTask && this.selectedTask.id === this.task.id)

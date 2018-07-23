@@ -75,22 +75,10 @@ export default {
       return $.html()
     },
     tags: function () {
-      // TODO: fix empty tags id:29
-      //   
-      // ----
-      // <https://github.com/imdone/imdone-vue-lib/issues/34>
-      // Jesse
-      // jesse@piascik.net
-      return this.task.allTags
+      return this.task.allTags.filter(tag => !!tag)
     },
     contexts: function () {
-      // TODO: fix empty context id:27
-      //   
-      // ----
-      // <https://github.com/imdone/imdone-vue-lib/issues/28>
-      // Jesse
-      // jesse@piascik.net
-      return this.task.allContext
+      return this.task.allContext.filter(context => !!context)
     },
     description: function () {
       const description = _.clone(this.task.description)
