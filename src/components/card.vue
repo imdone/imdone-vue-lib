@@ -48,11 +48,21 @@ export default {
       return this.task.blame.name
     },
     tags () {
-      // DOING: Fix empty tags
+      // DOING: Fix empty tags id:23
+      //   
+      // ----
+      // <https://github.com/imdone/imdone-vue-lib/issues/27>
+      // Jesse
+      // jesse@piascik.net
       return this.task.allTags
     },
     contexts () {
-      // DOING: Fix empty context
+      // DOING: Fix empty context id:25
+      //   
+      // ----
+      // <https://github.com/imdone/imdone-vue-lib/issues/31>
+      // Jesse
+      // jesse@piascik.net
       return this.task.allContext
     },
     selected () {

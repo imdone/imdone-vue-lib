@@ -75,11 +75,21 @@ export default {
       return $.html()
     },
     tags: function () {
-      // TODO: fix empty tags
+      // TODO: fix empty tags id:29
+      //   
+      // ----
+      // <https://github.com/imdone/imdone-vue-lib/issues/34>
+      // Jesse
+      // jesse@piascik.net
       return this.task.allTags
     },
     contexts: function () {
-      // TODO: fix empty context
+      // TODO: fix empty context id:27
+      //   
+      // ----
+      // <https://github.com/imdone/imdone-vue-lib/issues/28>
+      // Jesse
+      // jesse@piascik.net
       return this.task.allContext
     },
     description: function () {
