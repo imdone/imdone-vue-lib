@@ -75,9 +75,11 @@ export default {
       return $.html()
     },
     tags: function () {
+      // TODO: fix empty tags
       return this.task.allTags
     },
     contexts: function () {
+      // TODO: fix empty context
       return this.task.allContext
     },
     description: function () {
