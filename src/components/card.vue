@@ -48,9 +48,11 @@ export default {
       return this.task.blame.name
     },
     tags () {
+      // DOING: Fix empty tags
       return this.task.allTags
     },
     contexts () {
+      // DOING: Fix empty context
       return this.task.allContext
     },
     selected () {
