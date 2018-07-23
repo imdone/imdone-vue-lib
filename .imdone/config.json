@@ -60,5 +60,6 @@
       "titleTemplate": "View github issue %s",
       "icon": "icon-octoface"
     }
-  }
+  },
+  "noHelp": true
 }
