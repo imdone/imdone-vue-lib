@@ -22,16 +22,16 @@
   },
   "lists": [
     {
-      "hidden": false,
-      "name": "TODO"
+      "name": "BACKLOG",
+      "hidden": false
     },
     {
-      "hidden": false,
-      "name": "DOING"
+      "name": "TODO",
+      "hidden": false
     },
     {
-      "hidden": false,
-      "name": "BACKLOG"
+      "name": "DOING",
+      "hidden": false
     }
   ],
   "code": {
