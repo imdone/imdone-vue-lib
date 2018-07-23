@@ -19,10 +19,15 @@
       "NOTE",
       "REVIEW",
       "MARK",
-      "BACKLOG"
+      "BACKLOG",
+      "HELP"
     ]
   },
   "lists": [
+    {
+      "name": "HELP",
+      "hidden": false
+    },
     {
       "name": "TODO",
       "hidden": false
