@@ -57,7 +57,7 @@ export default {
       return this.task.allTags
     },
     contexts () {
-      // DOING: Fix empty context id:25
+      // TODO: Fix empty context id:25
       //   
       // ----
       // <https://github.com/imdone/imdone-vue-lib/issues/31>
