@@ -90,6 +90,7 @@ export default {
       $('a').each(function () {
         $(this).attr('target', '_blank')
       })
+      // TODO: Support updating task lists from UI
       $('input[type=checkbox]').closest('li').css('list-style', 'none')
       $('input[type=checkbox]').attr('disabled', 'true')
       return $.html()
