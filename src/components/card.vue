@@ -14,7 +14,7 @@ article.message(:class="{'is-success': selected, 'is-info': !selected}" v-on:cli
             img.gravatar(v-if="task.blame && task.blame.email" :src="gravatarURL" :title="name")
             b-icon(v-else pack="fa" icon="user" size="is-small" title="No author found")
     .task-text.has-text-left(v-html="text")
-    //- TODO: Display progress of task lists like [github](https://help.github.com/articles/about-task-lists/)
+    //- TODO: Display progress of task lists like [github](https://help.github.com/articles/about-task-lists/) id:37
     .tags.imdone-tags(v-if="tags.length > 0")
       .tag.is-success(v-for="tag in tags") {{tag}}
     .tags.imdone-contexts(v-if="contexts.length > 0")

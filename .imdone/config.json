@@ -1,39 +1,9 @@
 {
-  "noHelp": true,
-  "meta": {
-    "gh": {
-      "icon": "icon-octoface",
-      "titleTemplate": "View github issue %s",
-      "urlTemplate": "https://github.com/imdone/imdone-vue-lib/issues/%s"
-    }
-  },
-  "sync": {
-    "useImdoneioForPriority": true,
-    "name": "imdone/imdone-vue-lib",
-    "id": "5b1a98bb93668c26233ed889"
-  },
-  "marked": {
-    "langPrefix": "language-",
-    "smartLists": true,
-    "pedantic": false,
-    "breaks": false,
-    "tables": true,
-    "gfm": true
-  },
-  "lists": [
-    {
-      "name": "BACKLOG",
-      "hidden": false
-    },
-    {
-      "name": "TODO",
-      "hidden": false
-    },
-    {
-      "name": "DOING",
-      "hidden": false
-    }
+  "exclude": [
+    "^(node_modules|bower_components|\\.imdone|target|build|dist|logs|flow-typed|imdone-export.json)[\\/\\\\]?|\\.(git|svn|hg|npmignore)|\\~$|\\.(jpg|png|gif|swp|ttf|otf)$"
   ],
+  "watcher": true,
+  "keepEmptyPriority": false,
   "code": {
     "include_lists": [
       "TODO",
@@ -53,9 +23,39 @@
       "HELP"
     ]
   },
-  "keepEmptyPriority": false,
-  "watcher": true,
-  "exclude": [
-    "^(node_modules|bower_components|\\.imdone|target|build|dist|logs|flow-typed|imdone-export.json)[\\/\\\\]?|\\.(git|svn|hg|npmignore)|\\~$|\\.(jpg|png|gif|swp|ttf|otf)$"
-  ]
+  "lists": [
+    {
+      "name": "BACKLOG",
+      "hidden": false
+    },
+    {
+      "name": "TODO",
+      "hidden": false
+    },
+    {
+      "name": "DOING",
+      "hidden": false
+    }
+  ],
+  "marked": {
+    "langPrefix": "language-",
+    "smartLists": true,
+    "pedantic": false,
+    "breaks": false,
+    "tables": true,
+    "gfm": true
+  },
+  "sync": {
+    "useImdoneioForPriority": true,
+    "name": "imdone/imdone-vue-lib",
+    "id": "5b1a98bb93668c26233ed889"
+  },
+  "noHelp": true,
+  "meta": {
+    "gh": {
+      "icon": "icon-octoface",
+      "titleTemplate": "View github issue %s",
+      "urlTemplate": "https://github.com/imdone/imdone-vue-lib/issues/%s"
+    }
+  }
 }
