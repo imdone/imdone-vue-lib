@@ -45,6 +45,11 @@
     "tables": true,
     "gfm": true
   },
+  "sync": {
+    "useImdoneioForPriority": true,
+    "name": "imdone/imdone-vue-lib",
+    "id": "5b1a98bb93668c26233ed889"
+  },
   "noHelp": true,
   "meta": {
     "gh": {
@@ -52,10 +57,5 @@
       "titleTemplate": "View github issue %s",
       "urlTemplate": "https://github.com/imdone/imdone-vue-lib/issues/%s"
     }
-  },
-  "sync": {
-    "useImdoneioForPriority": true,
-    "name": "imdone/imdone-vue-lib",
-    "id": "5b1a98bb93668c26233ed889"
   }
 }
