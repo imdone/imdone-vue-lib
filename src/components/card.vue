@@ -1,5 +1,5 @@
 <template lang="pug">
-article.message(:class="{'is-success': selected, 'is-info': !selected}" v-on:click="showDetail")
+article.message(:class="{'is-success': selected, 'is-info': !selected}" v-bind="meta" v-on:click="showDetail")
   //- .message-header
   //-   .task-text.has-text-left(v-html="text")
   .message-body.is-size-7
@@ -7,7 +7,7 @@ article.message(:class="{'is-success': selected, 'is-info': !selected}" v-on:cli
       .level
         .level-left
           .level-item(v-if="allowUpdates")
-            a(:href="fileEditLink" target="_blank")
+            a(:href="fileEditLink" target="_blank" title="edit")
              b-icon(pack="fa" icon="pencil" size="is-small")
         .level-right
           .level-item
@@ -20,6 +20,8 @@ article.message(:class="{'is-success': selected, 'is-info': !selected}" v-on:cli
     .tags.imdone-contexts(v-if="contexts.length > 0")
       .tag.is-info(v-for="context in contexts") {{context}}
     .source
+      //- BACKLOG: Add ban icon for ignoring a file or folder
+      //- b-icon(v-if="allowUpdates" pack="fa" icon="ban" size="is-small")
       a(:href="fileLink" target="_blank") {{task.source.path}}:{{task.line}}
 </template>
 <script>
@@ -38,6 +40,14 @@ export default {
     'b-icon': Buefy.Icon
   },
   computed: {
+    meta () {
+      const att = {}
+      const meta = this.task.allMeta
+      for (const key in meta) {
+        att[`data-meta-${key}`] = meta[key].join(',')
+      }
+      return att
+    },
     text () {
       const html = md.render(this.task.getText({stripMeta: true, sanitize: true, stripTags: true, stripContext: true}))
       const $ = cheerio.load(html)
@@ -85,6 +95,7 @@ img.gravatar {
   width: 25px;
 }
 .message {
+  cursor: -webkit-grab;
   &:not(:last-child) {
     margin-bottom: .75em;
   }

@@ -62,6 +62,7 @@ export default {
 <style lang="scss" scoped>
   .card-header {
     height: 3rem;
+    cursor: -webkit-grab;
   }
   .list {
     max-height: 100%;
@@ -81,5 +82,6 @@ export default {
   }
   .tasks {
     padding: .75em;
+    min-height: 100%;
   }
 </style>

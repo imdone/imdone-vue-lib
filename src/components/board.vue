@@ -15,7 +15,7 @@
         v-on:file-link="fileLink"
         v-on:delete-list="deleteList")
       .column.new-list(slot="footer" v-if="allowUpdates")
-        button.button.is-white(v-if="!addListFormShown" @click="showAddListForm")
+        button#new-list-button.button.is-white(v-if="!addListFormShown" @click="showAddListForm")
           b-icon(pack="fa" icon="plus" size="is-small")
           | &nbsp;&nbsp;Add another list
         .card(v-if="addListFormShown")
