@@ -18,6 +18,12 @@
           .columns(v-if="blame")
             .column.is-3.has-text-left.has-text-weight-bold Author
             .column.is-9.has-text-left {{blame.name}} - #[a(:href="authorEmail" target="_blank") {{blame.email}}]
+          .columns(v-if="date")
+            .column.is-3.has-text-left.has-text-weight-bold Date Added
+            .column.is-9.has-text-left {{date}}
+          .columns(v-if="commit")
+            .column.is-3.has-text-left.has-text-weight-bold Commit
+            .column.is-9.has-text-left #[a(:href="commitLink" target="_blank") {{commit.substring(0,7)}}]
           .columns(v-if="tags.length > 0")
             .column.is-3.has-text-left.has-text-weight-bold Tags
             .column.is-9.has-text-left
@@ -41,6 +47,7 @@
 import * as MarkdownIt from 'markdown-it'
 import * as cheerio from 'cheerio'
 import * as checkbox from 'markdown-it-checkbox'
+import * as moment from 'moment'
 import Buefy from 'buefy'
 import * as _ from 'lodash'
 
@@ -52,18 +59,28 @@ export default {
   components: {
     'b-table': Buefy.Table
   },
-  props: ['task', 'repoURL'],
+  props: ['task', 'repoURL', 'baseURL'],
   methods: {
     close () {
       this.$emit('close-detail')
     }
   },
   computed: {
+    commit () {
+      return _.get(this, 'blame.commit')
+    },
+    commitLink () {
+      return `${this.baseURL}/blob/${this.commit}/${this.task.source.path}#L${this.blame.line}`
+    },
     fileURL: function () {
       return `${this.repoURL}${this.task.source.path}#L${this.task.line}`
     },
     blame: function () {
       return this.task.blame
+    },
+    date () {
+      if (!_.get(this, 'blame.date')) return
+      return moment(this.blame.date).format('lll')
     },
     authorEmail: function () {
       return `mailto:${this.blame.email}`
