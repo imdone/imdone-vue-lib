@@ -20,7 +20,7 @@ article.message(:class="{'is-success': selected, 'is-info': !selected}" v-bind="
     .tags.imdone-contexts(v-if="contexts.length > 0")
       .tag.is-info(v-for="context in contexts") {{context}}
     .source
-      //- BACKLOG: Add ban icon for ignoring a file or folder
+      //- BACKLOG: Add ban icon for ignoring a file or folder id:38
       //- b-icon(v-if="allowUpdates" pack="fa" icon="ban" size="is-small")
       a(:href="fileLink" target="_blank") {{task.source.path}}:{{task.line}}
 </template>
