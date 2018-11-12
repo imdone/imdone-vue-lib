@@ -26,7 +26,7 @@
               button.button.is-success.is-small.add-list-btn(@click="addList") Add List
               a(@click="hideAddListForm")
                 b-icon(pack="fa" icon="times" size="is-small")
-  detail.detail(v-if="selectedTask" :task="selectedTask" :repoURL="repoURL" :baseURL="baseURL" v-on:close-detail="closeDetail")
+  detail.detail(v-if="selectedTask" :task="selectedTask" :repoURL="repoURL" :baseURL="baseURL" :allowUpdates="allowUpdates" :searchIssuesURL="searchIssuesURL" v-on:close-detail="closeDetail")
 </template>
 <script>
 import Draggable from 'vuedraggable'
@@ -38,7 +38,7 @@ import _ from 'lodash'
 export default {
   name: 'imdone-board',
   components: {List, Detail, Draggable, 'b-icon': Buefy.Icon},
-  props: ['tasks', 'config', 'allowUpdates', 'repoURL', 'baseURL', 'selectedTask'],
+  props: ['tasks', 'config', 'allowUpdates', 'repoURL', 'baseURL', 'selectedTask', 'searchIssuesURL'],
   data: function () {
     return {
       addListFormShown: false,

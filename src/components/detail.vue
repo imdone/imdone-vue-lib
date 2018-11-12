@@ -6,48 +6,55 @@
         .columns
           .column.is-11(v-html="text")
           .column.is-1.delete-column
-            button(class="delete" aria-label="delete" v-on:click="close")
+            button(class="delete" aria-label="close" v-on:click="close")
       .panel-block.is-size-7
-        .container
-          .columns
-            .column.is-3.has-text-left.has-text-weight-bold List
-            .column.is-9.has-text-left {{task.list}}
-          .columns
-            .column.is-3.has-text-left.has-text-weight-bold Description
-            .column.is-9.has-text-left.description.break-word(v-html="description")
-          .columns(v-if="blame")
-            .column.is-3.has-text-left.has-text-weight-bold Author
-            .column.is-9.has-text-left {{blame.name}} - #[a(:href="authorEmail" target="_blank") {{blame.email}}]
-          .columns(v-if="date")
-            .column.is-3.has-text-left.has-text-weight-bold Date Added
-            .column.is-9.has-text-left {{date}}
-          .columns(v-if="commit")
-            .column.is-3.has-text-left.has-text-weight-bold Commit
-            .column.is-9.has-text-left #[a(:href="commitLink" target="_blank") {{commit.substring(0,7)}}]
-          .columns(v-if="tags.length > 0")
-            .column.is-3.has-text-left.has-text-weight-bold Tags
-            .column.is-9.has-text-left
-              .tags.imdone-tags
-                .tag.is-success(v-for="tag in tags") {{tag}}
-          .columns(v-if="contexts.length > 0")
-            .column.is-3.has-text-left.has-text-weight-bold Context
-            .column.is-9.has-text-left
-              .tags.imdone-contexts
-                .tag.is-info(v-for="context in contexts") {{context}}
-          .columns
-            .column.is-3.has-text-left.has-text-weight-bold File
-            .column.is-9.has-text-left.break-word
-              a(:href="fileURL" target="_blank") {{task.source.path}}:{{task.line}}
-      .panel-block
-        .container
-          h2.has-text-left.has-text-weight-bold Metadata
-          b-table.is-size-7(:data="metaData" :columns="columns")
+        b-tabs(v-model="activeTab")
+          b-tab-item(label="Comment")
+            .columns
+              .column.is-3.has-text-left.has-text-weight-bold List
+              .column.is-9.has-text-left {{task.list}}
+            .columns
+              .column.is-3.has-text-left.has-text-weight-bold Description
+              .column.is-9.has-text-left.description.break-word(v-html="description")
+            .columns(v-if="blame")
+              .column.is-3.has-text-left.has-text-weight-bold Author
+              .column.is-9.has-text-left {{blame.name}} - #[a(:href="authorEmail" target="_blank") {{blame.email}}]
+            .columns(v-if="date")
+              .column.is-3.has-text-left.has-text-weight-bold Date Added
+              .column.is-9.has-text-left {{date}}
+            .columns(v-if="commit")
+              .column.is-3.has-text-left.has-text-weight-bold Commit
+              .column.is-9.has-text-left #[a(:href="commitLink" target="_blank") {{commit.substring(0,7)}}]
+            .columns(v-if="tags.length > 0")
+              .column.is-3.has-text-left.has-text-weight-bold Tags
+              .column.is-9.has-text-left
+                .tags.imdone-tags
+                  .tag.is-success(v-for="tag in tags") {{tag}}
+            .columns(v-if="contexts.length > 0")
+              .column.is-3.has-text-left.has-text-weight-bold Context
+              .column.is-9.has-text-left
+                .tags.imdone-contexts
+                  .tag.is-info(v-for="context in contexts") {{context}}
+            .columns
+              .column.is-3.has-text-left.has-text-weight-bold File
+              .column.is-9.has-text-left.break-word
+                a(:href="fileURL" target="_blank") {{task.source.path}}:{{task.line}}
+            .columns
+              .column.is-8
+              .column.is-4.has-text-center
+                a.button.is-small.is-fullwidth(v-if="allowUpdates" :href="fileEditLink" target="_blank" title="edit")
+                  b-icon(pack="fa" icon="pencil" size="is-small")
+                  span Edit
+          b-tab-item(label="Linked Issues")
+            linkIssues(:task="task" :repoURL="repoURL" :baseURL="baseURL" :allowUpdates="allowUpdates" :searchIssuesURL="searchIssuesURL")
+
 </template>
 <script>
 import * as MarkdownIt from 'markdown-it'
 import * as cheerio from 'cheerio'
 import * as checkbox from 'markdown-it-checkbox'
 import * as moment from 'moment'
+import linkIssues from '@/components/linkIssues'
 import Buefy from 'buefy'
 import * as _ from 'lodash'
 
@@ -57,9 +64,20 @@ md.use(checkbox)
 export default {
   name: 'imdone-detail',
   components: {
-    'b-table': Buefy.Table
+    'b-icon': Buefy.Icon,
+    'b-tabs': Buefy.Tabs,
+    'b-tab-item': Buefy.TabItem,
+    'b-tag': Buefy.Tag,
+    linkIssues
   },
-  props: ['task', 'repoURL', 'baseURL'],
+  props: ['task', 'repoURL', 'baseURL', 'allowUpdates', 'searchIssuesURL'],
+  data () {
+    return {
+      activeTab: 0,
+      linkIssuesActive: false,
+      defaultSearch: 'is:issue is:open'
+    }
+  },
   methods: {
     close () {
       this.$emit('close-detail')
@@ -120,17 +138,9 @@ export default {
       }
       return meta
     },
-    columns: function () {
-      return [
-        {
-          field: 'key',
-          label: 'Key'
-        },
-        {
-          field: 'value',
-          label: 'Value'
-        }
-      ]
+    fileEditLink () {
+      const repoEditURL = this.repoURL.replace('/blob/', '/edit/')
+      return `${repoEditURL}${this.task.source.path}#L${this.task.line}`
     }
   }
 }
@@ -141,6 +151,9 @@ export default {
   flex: 1;
   min-height: 0;
   max-height: 100vh;
+  .b-tabs {
+    width: 100%;
+  }
   .break-word {
     word-break: break-word
   }

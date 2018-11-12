@@ -6,9 +6,12 @@ article.message(:class="{'is-success': selected, 'is-info': !selected}" v-bind="
     .card-actions.is-size-6
       .level
         .level-left
-          .level-item(v-if="allowUpdates")
-            a(:href="fileEditLink" target="_blank" title="edit")
-             b-icon(pack="fa" icon="pencil" size="is-small")
+          //- .level-item(v-if="allowUpdates")
+          //-   a(:href="fileEditLink" target="_blank" title="edit")
+          //-     b-icon(pack="fa" icon="pencil" size="is-small")
+          //- .level-item(v-if="allowUpdates")
+          //-   a(v-on:click="showIssueLink" title="link to issue")
+          //-     b-icon(pack="fa" icon="share-alt" size="is-small")
         .level-right
           .level-item
             img.gravatar(v-if="task.blame && task.blame.email" :src="gravatarURL" :title="name")
@@ -85,6 +88,9 @@ export default {
     },
     emitFileLink () {
       this.$emit('file-link', this.task)
+    },
+    showIssueLink () {
+      this.$emit('show-issue-link', this.task)
     }
   }
 }
@@ -101,7 +107,7 @@ img.gravatar {
   }
   max-width: 300px;
   a {
-    text-decoration: none;
+    text-decoration: none !important;
   }
   .card-actions {
     width: 100%;

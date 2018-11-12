@@ -20,12 +20,14 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "cheerio": "^1.0.0-rc.2",
     "gravatar": "^1.6.0",
     "imdone-core": "^1.5.5",
     "markdown-it": "^8.4.1",
     "markdown-it-checkbox": "^1.1.0",
     "moment": "^2.22.2",
+    "octicons-vue": "^0.17.2",
     "vue": "^2.5.16",
     "vue-router": "^2.6.0",
     "vuedraggable": "^2.16.0"
