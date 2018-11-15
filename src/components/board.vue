@@ -139,8 +139,8 @@ html {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 30vw;
-  left: 70vw;
+  width: 32vw;
+  left: 68vw;
 }
 .board {
   position: absolute;
@@ -153,7 +153,7 @@ html {
   &.has-detail {
     border-right: 1px solid #dbdbdb;
     left: 0;
-    right: 30vw;
+    right: 32vw;
   }
   .columns {
     max-height: 100%;

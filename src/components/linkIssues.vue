@@ -2,7 +2,7 @@
 .link-issues
   .columns
     .column.is-12
-      b-table.is-size-7(v-if="issues" :data="issues")
+      b-table.is-size-7(v-if="taskIssues" :data="taskIssues")
         template(slot-scope="props")
           b-table-column(field="number" label="Number")
             a(:href="props.row.html_url" target="_blank") {{ props.row.number }}
@@ -12,40 +12,49 @@
             b-tag.has-text-weight-bold(:class="stateText(props.row.state)")
               octicon(:icon="stateIcon(props.row.state)")
               span.is-capitalized &nbsp;{{ props.row.state }}
+          b-table-column.is-narrow.has-text-centered(field="actions")
+            a.is-small(v-on:click="unlinkIssue(props.row)" :title="`unlink ${ props.row.number }`")
+              b-icon(pack="fa" icon="unlink" size="is-small")
+
   .columns
     .column.is-12.has-text-right(v-if="linkIssuesActive")
       a.button.is-small(v-on:click="toggleLinkIssues" title="hide")
         b-icon(pack="fa" icon="share-alt" size="is-small")
-        span Hide Link Issues
+        span Cancel
     .column.is-12.has-text-right
       a.button.is-small(v-if="showLinkIssues" v-on:click="toggleLinkIssues" title="link to issue")
         b-icon(pack="fa" icon="share-alt" size="is-small")
         span Link Issues
-  div(v-if="linkIssuesActive")
-    .columns
-      .column.is-9
-        b-field(custom-class="is-small")
-          b-select(placeholder="Filters" size="is-small")
-            option Open issues and PRs
-            option Your Issues
-            option Your PRs
-            option Assigned to you
-            option Mentioning you
-          b-input(type="search" :placeholder="defaultSearch" size="is-small" v-model="userSearch" @keyup.native.enter="searchIssues")
-      .column.is-3.has-text-right
-        button.button.is-success.is-small New Issue
-    .columns(v-if="searchResults")
-      .column.is-12
-        b-table.is-size-7(:data="searchResults")
-          template(slot-scope="props")
-            b-table-column(field="number" label="Number")
-              a(:href="props.row.html_url" target="_blank") {{ props.row.number }}
-            b-table-column(field="title" label="Title")
-              a(:href="props.row.html_url" target="_blank") {{ props.row.title }}
-            b-table-column.is-narrow.has-text-centered(field="state" label="State")
-              b-tag.has-text-weight-bold(:class="stateText(props.row.state)")
-                octicon(:icon="stateIcon(props.row.state)")
-                span.is-capitalized &nbsp;{{ props.row.state }}
+  .columns(v-if="linkIssuesActive")
+    .column.is-9
+      b-field(custom-class="is-small")
+        b-select(placeholder="Filters" size="is-small")
+          option Open issues and PRs
+          option Your Issues
+          option Your PRs
+          option Assigned to you
+          option Mentioning you
+        b-input(type="search" :placeholder="defaultSearch" size="is-small" v-model="userSearch" @keyup.native.enter="searchIssues")
+    .column.is-3.has-text-right
+      button.button.is-success.is-small New Issue
+  .columns(v-if="linkIssuesActive && searchResults")
+    .column.is-12
+      b-table.is-size-7(:data="searchResults.items")
+        template(slot-scope="props")
+          b-table-column(field="number" label="Number")
+            a(:href="props.row.html_url" target="_blank") {{ props.row.number }}
+          b-table-column(field="title" label="Title")
+            a(:href="props.row.html_url" target="_blank") {{ props.row.title }}
+          b-table-column.is-narrow.has-text-centered(field="state" label="State")
+            b-tag.has-text-weight-bold(:class="stateText(props.row.state)")
+              octicon(:icon="stateIcon(props.row.state)")
+              span.is-capitalized &nbsp;{{ props.row.state }}
+          b-table-column.is-narrow.has-text-centered(field="actions")
+            a.is-small(v-if="!hasIssue(props.row)" v-on:click="linkIssue(props.row)" :title="`link ${ props.row.number }`")
+              b-icon(pack="fa" icon="link" size="is-small")
+            a.is-small(v-if="hasIssue(props.row)" v-on:click="unlinkIssue(props.row)" :title="`unlink ${ props.row.number }`")
+              b-icon(pack="fa" icon="unlink" size="is-small")
+
 </template>
 <script>
 import Buefy from 'buefy'
@@ -73,19 +82,29 @@ export default {
       linkIssuesActive: false,
       defaultSearch: 'is:issue is:open',
       userSearch: null,
-      searchResults: null
+      searchResults: null,
+      taskIssues: [],
+      repoFullName: null
     }
   },
   created () {
     if (!this.searchResults) this.searchIssues()
+    this.taskIssues = this.task.issues
+    this.linkIssuesActive = (this.taskIssues.length === 0)
+    const parts = this.baseURL.split('/')
+    this.repoFullName = `${parts[3]}/${parts[4]}`
+  },
+  watch: {
+    task () {
+      this.taskIssues = this.task.issues
+      this.linkIssuesActive = (this.taskIssues.length === 0)
+    }
   },
   methods: {
     searchIssues () {
-      debugger
-      console.log('searching for issues')
-      axios.get(`${this.searchIssuesURL}?q=${this.searchString}`)
+      axios.get(`${this.searchIssuesURL}?per_page=8&q=${this.searchString}`)
       .then(response => {
-        this.searchResults = response.data.items
+        this.searchResults = response.data
       })
     },
     stateIcon (state) {
@@ -96,6 +115,30 @@ export default {
     },
     toggleLinkIssues () {
       this.linkIssuesActive = !this.linkIssuesActive
+    },
+    linkIssue (issue) {
+      this.task.addIssue(issue)
+      this.task.issues = [...this.task.issues, issue]
+      this.taskIssues = this.task.issues
+      this.updateTask()
+    },
+    unlinkIssue (issue) {
+      this.task.removeIssue(issue)
+      this.task.issues = this.task.issues.filter(i => i.number !== issue.number)
+      this.taskIssues = this.task.issues
+      this.updateTask()
+    },
+    updateTask () {
+      axios.put(`/api/1.0/board/${this.repoFullName}/task`, this.task)
+      .then(response => {
+        console.log(response)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
+    hasIssue (issue) {
+      return this.task.hasIssueNumber(issue.number)
     }
   },
   computed: {
@@ -113,18 +156,6 @@ export default {
     },
     blame: function () {
       return this.task.blame
-    },
-    columns () {
-      return [
-        {
-          field: 'number',
-          label: 'Number'
-        },
-        {
-          field: 'title',
-          label: 'Title'
-        }
-      ]
     }
   }
 }
