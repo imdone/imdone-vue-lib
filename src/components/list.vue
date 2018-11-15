@@ -19,7 +19,7 @@
           v-on:show-detail="showDetail" v-on:file-link="fileLink")
 </template>
 <script>
-import Buefy from 'buefy'
+import { Icon } from 'buefy/dist/components/Icon'
 import Draggable from 'vuedraggable'
 import Card from '@/components/card'
 export default {
@@ -27,7 +27,7 @@ export default {
   components: {
     Card,
     Draggable,
-    'b-icon': Buefy.Icon
+    'b-icon': Icon
   },
   props: ['list', 'tasks', 'selectedTask', 'repoURL', 'allowUpdates'],
   computed: {

@@ -26,19 +26,26 @@
               button.button.is-success.is-small.add-list-btn(@click="addList") Add List
               a(@click="hideAddListForm")
                 b-icon(pack="fa" icon="times" size="is-small")
-  detail.detail(v-if="selectedTask" :task="selectedTask" :repoURL="repoURL" :baseURL="baseURL" :allowUpdates="allowUpdates" :searchIssuesURL="searchIssuesURL" v-on:close-detail="closeDetail")
+  detail.detail(v-if="selectedTask"
+    :task="selectedTask"
+    :repoURL="repoURL"
+    :baseURL="baseURL"
+    :allowUpdates="allowUpdates"
+    :searchIssuesURL="searchIssuesURL"
+    :createIssueURL="createIssueURL"
+    v-on:close-detail="closeDetail")
 </template>
 <script>
 import Draggable from 'vuedraggable'
-import Buefy from 'buefy'
+import { Icon } from 'buefy/dist/components/Icon'
 import List from '@/components/list'
 import Detail from '@/components/detail'
 import _ from 'lodash'
 
 export default {
   name: 'imdone-board',
-  components: {List, Detail, Draggable, 'b-icon': Buefy.Icon},
-  props: ['tasks', 'config', 'allowUpdates', 'repoURL', 'baseURL', 'selectedTask', 'searchIssuesURL'],
+  components: {List, Detail, Draggable, 'b-icon': Icon},
+  props: ['tasks', 'config', 'allowUpdates', 'repoURL', 'baseURL', 'selectedTask', 'searchIssuesURL', 'createIssueURL'],
   data: function () {
     return {
       addListFormShown: false,
@@ -110,7 +117,6 @@ export default {
       const task = list.tasks.find(task => task.id === taskId)
       task.list = newList
       this.$emit('update-task-order', {task, tasks: this.listsOfTasks})
-      console.log(task)
     },
     showDetail (task) {
       this.$emit('task-selected', task)

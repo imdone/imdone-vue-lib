@@ -15,7 +15,7 @@
               .column.is-9.has-text-left {{task.list}}
             .columns
               .column.is-3.has-text-left.has-text-weight-bold Description
-              .column.is-9.has-text-left.description.break-word(v-html="description")
+              .column.is-9.has-text-left.task-description.break-word(v-html="description")
             .columns(v-if="blame")
               .column.is-3.has-text-left.has-text-weight-bold Author
               .column.is-9.has-text-left {{blame.name}} - #[a(:href="authorEmail" target="_blank") {{blame.email}}]
@@ -46,7 +46,12 @@
                   b-icon(pack="fa" icon="pencil" size="is-small")
                   span Edit
           b-tab-item(label="Linked Issues")
-            linkIssues(:task="task" :repoURL="repoURL" :baseURL="baseURL" :allowUpdates="allowUpdates" :searchIssuesURL="searchIssuesURL")
+            linkIssues(:task="task"
+              :repoURL="repoURL"
+              :baseURL="baseURL"
+              :allowUpdates="allowUpdates"
+              :searchIssuesURL="searchIssuesURL"
+              :createIssueURL="createIssueURL")
 
 </template>
 <script>
@@ -55,7 +60,9 @@ import * as cheerio from 'cheerio'
 import * as checkbox from 'markdown-it-checkbox'
 import * as moment from 'moment'
 import linkIssues from '@/components/linkIssues'
-import Buefy from 'buefy'
+import { Icon } from 'buefy/dist/components/Icon'
+import { Tabs, TabItem } from 'buefy/dist/components/Tabs'
+import { Tag } from 'buefy/dist/components/Tag'
 import * as _ from 'lodash'
 
 const md = new MarkdownIt({html: true, breaks: true})
@@ -64,13 +71,13 @@ md.use(checkbox)
 export default {
   name: 'imdone-detail',
   components: {
-    'b-icon': Buefy.Icon,
-    'b-tabs': Buefy.Tabs,
-    'b-tab-item': Buefy.TabItem,
-    'b-tag': Buefy.Tag,
+    'b-icon': Icon,
+    'b-tabs': Tabs,
+    'b-tab-item': TabItem,
+    'b-tag': Tag,
     linkIssues
   },
-  props: ['task', 'repoURL', 'baseURL', 'allowUpdates', 'searchIssuesURL'],
+  props: ['task', 'repoURL', 'baseURL', 'allowUpdates', 'searchIssuesURL', 'createIssueURL'],
   data () {
     return {
       activeTab: 0,
@@ -177,10 +184,13 @@ export default {
     h4 { font-size: 1em; }
     h5 { font-size: .83em; }
     h6 { font-size: .75em; }
+  }
+  .task-description {
     ul {
       list-style: disc;
     }
   }
+
 }
 
 </style>

@@ -31,7 +31,7 @@ article.message(:class="{'is-success': selected, 'is-info': !selected}" v-bind="
 import * as MarkdownIt from 'markdown-it'
 import * as cheerio from 'cheerio'
 import * as gravatar from 'gravatar'
-import Buefy from 'buefy'
+import { Icon } from 'buefy/dist/components/Icon'
 // import Task from 'imdone-core/lib/task'
 
 const md = new MarkdownIt()
@@ -40,7 +40,7 @@ export default {
   name: 'imdone-card',
   props: ['task', 'selectedTask', 'repoURL', 'allowUpdates'],
   components: {
-    'b-icon': Buefy.Icon
+    'b-icon': Icon
   },
   computed: {
     meta () {
