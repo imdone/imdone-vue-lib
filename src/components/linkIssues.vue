@@ -30,9 +30,9 @@
       .column.is-9
         b-field(custom-class="is-small")
           p.control.is-expanded
-            b-input(type="search" :placeholder="defaultSearch" size="is-small" v-model="userSearch" @keyup.native.enter="searchIssues")
+            b-input(type="search" :placeholder="defaultSearch" size="is-small" v-model="userSearch" @keyup.native.enter="searchIssues(1)")
           p.control
-            button.button.is-small.is-info(v-on:click="searchIssues") Search
+            button.button.is-small.is-info(v-on:click="searchIssues(1)") Search
       .column.is-3.has-text-right
         button.button.is-success.is-small(v-on:click="toggleNewIssue") New Issue
     .columns(v-if="searchResults")
@@ -131,7 +131,8 @@ export default {
     toggleNewIssue () {
       this.newIssueShown = !this.newIssueShown
     },
-    searchIssues () {
+    searchIssues (page) {
+      if (page) this.currentPage = page
       axios.get(`${this.searchIssuesURL}?per_page=${this.perPage}&q=${this.searchString}&page=${this.currentPage}`)
       .then(response => {
         this.searchResponse = response
