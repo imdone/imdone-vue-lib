@@ -38485,26 +38485,25 @@ Task.prototype.updateTodoTxt = function() {
 
 Task.prototype.updateTags = function() {
   // TODO: implement updateTags id:7 gh:93
-  var self = this;
-  var tags = Task.getTags(this.text);
   if (this.tags) {
-    this.tags.forEach(function(tag) {
-      if (!_.contains(tags, tag)) self.text += util.format(" +%s", tag);
-    });
+    let text = this.getText({ stripTags: true })
+    this.tags.forEach(tag => {
+      text += ` +${tag}`
+    })
+    this.text = text
   }
-  // TODO: We should also remove stuff id:0 gh:86
 };
 
 Task.prototype.updateContext = function() {
   // TODO: implement updateContext id:1 gh:124
   var self = this;
-  var contexts = Task.getContext(this.text);
   if (this.context) {
-    this.context.forEach(function(context) {
-      if (!_.contains(contexts, context)) self.text += util.format(" @%s", context);
+    let text = this.getText({ stripContext: true })
+    this.context.forEach(context => {
+      text += ` @${context}`
     });
+    this.text = text
   }
-  // TODO: We should also remove stuff id:10 gh:95
 };
 
 // Update task text with metadata
@@ -38660,7 +38659,7 @@ Task.prototype.getList = function() {
 /**
  * Description
  * @method getText
- * @return MemberExpression
+ * @return text
  */
 Task.prototype.getText = function(opts) {
   var text = this.text;
@@ -38669,12 +38668,12 @@ Task.prototype.getText = function(opts) {
     if (opts.stripTags) {
       text = text.replace(new RegExp(Task.TagsRegExp), "");
     } else {
-      this.frontMatter.tags.forEach(tag => text += ` +${tag}`)
+      this.tags.forEach(tag => text += ` +${tag}`)
     }
     if (opts.stripContext) {
       text = text.replace(new RegExp(Task.ContextRegExp), "");
     } else {
-      this.frontMatter.context.forEach(context => text += ` @${context}`)
+      this.context.forEach(context => text += ` @${context}`)
     }
   }
   return text;
@@ -40219,4 +40218,4 @@ function randomFillSync (buf, offset, size) {
 /***/ })
 
 },[627]);
-//# sourceMappingURL=docs.dc84837c794393d3a856.js.map
+//# sourceMappingURL=docs.7a16fb23ac36db783fda.js.map
