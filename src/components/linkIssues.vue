@@ -15,7 +15,6 @@
           b-table-column.is-narrow.has-text-centered(field="actions" label="Link")
             a.is-small(v-on:click="unlinkIssue(props.row)" :title="`unlink ${ props.row.number }`")
               b-icon(pack="fa" icon="unlink" size="is-small")
-  h3.subtitle.is-4.has-text-left Link Issues
   newIssue(v-if="newIssueShown && allowUpdates"
     :task="task"
     :repoURL="repoURL"
@@ -26,6 +25,7 @@
     v-on:new-issue="linkIssue"
     v-on:loading="setLoading")
   .issue-search(v-if="!newIssueShown && allowUpdates")
+    h3.subtitle.is-4.has-text-left Link Issues
     .columns
       .column.is-9
         b-field(custom-class="is-small")

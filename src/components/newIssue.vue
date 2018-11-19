@@ -1,10 +1,11 @@
 <template lang="pug">
 .new-issue
+  h3.subtitle.is-4.has-text-left New Issue
   b-notification(v-if="error" type="is-warning" v-on:close="clearError") {{ error }}
   .columns
     .column.is-12
       b-field
-        b-input(placeholder="Title" v-model="title" @keyup.native.enter="createIssue")
+        b-input(placeholder="Title" v-model="title" @keyup.native.enter="createIssue" ref="titleField")
       b-field
         b-input(placeholder="Leave a comment" v-model="body" maxlength="2000" type="textarea" @keyup.native.enter="createIssue")
   .columns
@@ -36,7 +37,22 @@ export default {
       lastError: null
     }
   },
+  mounted () {
+    this.setDefaultTitle()
+  },
+  watch: {
+    task () {
+      this.setDefaultTitle()
+    }
+  },
   methods: {
+    setDefaultTitle () {
+      this.title = this.task.getText({stripMeta: true})
+      this.$nextTick(() => {
+        this.$refs.titleField.$refs.input.focus()
+        this.$refs.titleField.$refs.input.select()
+      })
+    },
     clearError () {
       this.error = null
     },

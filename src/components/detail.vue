@@ -72,7 +72,7 @@ import { Tag } from 'buefy/dist/components/Tag'
 import { Loading } from 'buefy/dist/components/Loading'
 import * as _ from 'lodash'
 import axios from 'axios'
-import InputTag from '@/components/inputTag'
+import InputTag from '@/components/InputTag'
 import compare from 'just-compare'
 
 const md = new MarkdownIt({html: true, breaks: true})
@@ -96,7 +96,7 @@ export default {
       linkIssuesActive: false,
       tags: this.task.tags,
       context: this.task.context,
-      addTagKeys: [13, 188, 9, 32],
+      addTagKeys: [13, 188, 32],
       saveDisabled: true,
       isLoading: false,
       lastError: null,
@@ -127,7 +127,7 @@ export default {
       this.$emit('close-detail')
     },
     validateTag (tag) {
-      return /\S+/.test(tag)
+      return /^\w+$/i.test(tag)
     },
     shouldBeSaved () {
       const tags = [...this.tags]

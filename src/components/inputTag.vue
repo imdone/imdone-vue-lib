@@ -102,10 +102,10 @@ export default {
         this.validateIfNeeded(this.newTag)
       ) {
         this.innerTags.push(this.newTag)
-        this.newTag = ''
         this.tagChange()
-        e && e.preventDefault()
+        this.newTag = ''
       }
+      e && e.preventDefault()
     },
     validateIfNeeded (tagValue) {
       if (this.validate === '' || this.validate === undefined) {
@@ -140,7 +140,6 @@ export default {
       this.tagChange()
     },
     tagChange () {
-      this.$emit('update:tags', this.innerTags)
       this.$emit('input', this.innerTags)
     }
   }
@@ -165,6 +164,12 @@ export default {
       v-on:blur                = "handleInputBlur"
       v-on:focus               = "handleInputFocus")
 </template>
+<style lang="sass">
+@import "../../node_modules/bulma/sass/utilities/_all.sass";
+@import "../../node_modules/bulma/sass/elements/button.sass";
+@import "../../node_modules/bulma/sass/elements/tag.sass";
+@import "../../node_modules/bulma/sass/elements/other.sass";
+</style>
 <style>
 .input-tag-wrapper {
   background-color: #fff;
