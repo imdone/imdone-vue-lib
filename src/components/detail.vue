@@ -193,6 +193,7 @@ export default {
       })
       // TODO: Support updating task lists from UI id:36
 
+
       $('input[type=checkbox]').closest('li').css('list-style', 'none')
       $('input[type=checkbox]').attr('disabled', 'true')
       return $.html()
