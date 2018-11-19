@@ -18,13 +18,14 @@ article.message(:class="{'is-success': selected, 'is-info': !selected}" v-bind="
             b-icon(v-else pack="fa" icon="user" size="is-small" title="No author found")
     .task-text.has-text-left(v-html="text")
     //- TODO: Display progress of task lists like [github](https://help.github.com/articles/about-task-lists/) id:37
+
     .tags.imdone-tags(v-if="tags.length > 0")
       .tag.is-success(v-for="tag in tags") {{tag}}
     .tags.imdone-contexts(v-if="contexts.length > 0")
       .tag.is-info(v-for="context in contexts") {{context}}
     .source
       //- BACKLOG: Add ban icon for ignoring a file or folder id:38
-      //- b-icon(v-if="allowUpdates" pack="fa" icon="ban" size="is-small")
+      // - b-icon(v-if="allowUpdates" pack="fa" icon="ban" size="is-small")
       a(:href="fileLink" target="_blank") {{task.source.path}}:{{task.line}}
 </template>
 <script>
