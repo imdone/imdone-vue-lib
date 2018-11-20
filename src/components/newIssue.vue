@@ -1,6 +1,6 @@
 <template lang="pug">
 .new-issue
-  h3.subtitle.is-4.has-text-left New Issue
+  h3.subtitle.is-5.has-text-left New Issue
   b-notification(v-if="error" type="is-warning" v-on:close="clearError") {{ error }}
   .columns
     .column.is-12
@@ -8,12 +8,13 @@
         b-input(placeholder="Title" v-model="title" @keyup.native.enter="createIssue" ref="titleField")
       b-field
         b-input(placeholder="Leave a comment" v-model="body" maxlength="2000" type="textarea" @keyup.native.enter="createIssue")
-  .columns
-    .column.is-6
-    .column.has-text-right
-      button.button.is-small(v-on:click="$emit('cancel')") Cancel
-    .column.has-text-right
-      button.button.is-success.is-small(:disabled="!this.title" v-on:click="createIssue") Submit new issue
+  .level
+    .level-left
+    .level-right
+      .level-item.has-text-right
+        button.button.is-small(v-on:click="$emit('cancel')") Cancel
+      .level-item.has-text-right
+        button.button.is-success.is-small(:disabled="!this.title" v-on:click="createIssue") Submit new issue
 </template>
 <script>
 import { Field } from 'buefy/dist/components/Field'

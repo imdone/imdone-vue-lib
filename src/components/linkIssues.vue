@@ -14,7 +14,7 @@
               octicon(:icon="stateIcon(props.row.state)")
           b-table-column.is-narrow.has-text-centered(field="actions" label="Link")
             a.is-small(v-on:click="unlinkIssue(props.row)" :title="`unlink ${ props.row.number }`")
-              b-icon(pack="fa" icon="unlink" size="is-small")
+              b-icon.link-icon(pack="fa" icon="unlink" size="is-small")
   newIssue(v-if="newIssueShown && allowUpdates"
     :task="task"
     :repoURL="repoURL"
@@ -25,16 +25,18 @@
     v-on:new-issue="linkIssue"
     v-on:loading="setLoading")
   .issue-search(v-if="!newIssueShown && allowUpdates")
-    h3.subtitle.is-4.has-text-left Link Issues
-    .columns
-      .column.is-9
-        b-field(custom-class="is-small")
-          p.control.is-expanded
-            b-input(type="search" :placeholder="defaultSearch" size="is-small" v-model="userSearch" @keyup.native.enter="searchIssues(1)")
-          p.control
-            button.button.is-small.is-info(v-on:click="searchIssues(1)") Search
-      .column.is-3.has-text-right
-        button.button.is-success.is-small(v-on:click="toggleNewIssue") New Issue
+    h3.subtitle.is-5.has-text-left Link Issues
+    .level
+      .level-left
+        .level-item
+          b-field(custom-class="is-small")
+            p.control.is-expanded
+              b-input(type="search" :placeholder="defaultSearch" size="is-small" v-model="userSearch" @keyup.native.enter="searchIssues(1)")
+            p.control
+              button.button.is-small.is-info(v-on:click="searchIssues(1)") Search
+      .level-right
+        .level-item
+          button.button.is-success.is-small(v-on:click="toggleNewIssue") New Issue
     .columns(v-if="searchResults")
       .column.is-12
         b-table.is-size-7(:data="searchResults.items")
@@ -48,9 +50,9 @@
                 octicon(:icon="stateIcon(props.row.state)")
             b-table-column.is-narrow.has-text-centered(field="actions" label="Link")
               a.is-small(v-if="!hasIssue(props.row)" v-on:click="linkIssue(props.row)" :title="`link ${ props.row.number }`")
-                b-icon(pack="fa" icon="link" size="is-small")
+                b-icon.link-icon(pack="fa" icon="link" size="is-small")
               a.is-small(v-if="hasIssue(props.row)" v-on:click="unlinkIssue(props.row)" :title="`unlink ${ props.row.number }`")
-                b-icon(pack="fa" icon="unlink" size="is-small")
+                b-icon.link-icon(pack="fa" icon="unlink" size="is-small")
         b-pagination(
           v-if="searchResults.total_count > perPage"
           :total="searchResults.total_count"
@@ -206,6 +208,11 @@ export default {
 }
 </script>
 <style lang="scss">
+.link-icon {
+  i {
+    margin-top: 10px;
+  }
+}
 .loading-overlay {
   bottom: 0;
   left: 0;

@@ -42,15 +42,16 @@
               .column.is-3.has-text-left.has-text-weight-bold File
               .column.is-9.has-text-left.break-word
                 a(:href="fileURL" target="_blank") {{task.source.path}}:{{task.line}}
-            .columns
-              .column.is-6
-              .column.has-text-right
-                button.button.is-small.is-success(:disabled="saveDisabled" v-if="allowUpdates" v-on:click="saveTask")
-                  span Save
-              .column.has-text-right
-                a.button.is-small(v-if="allowUpdates" :href="fileEditLink" target="_blank" title="edit")
-                  b-icon(pack="fa" icon="pencil" size="is-small")
-                  span Edit on GitHub
+            .level
+              .level-left
+              .level-right
+                .level-item.has-text-right
+                  button.button.is-small.is-success(:disabled="saveDisabled" v-if="allowUpdates" v-on:click="saveTask")
+                    span Save
+                .level-item.has-text-right
+                  a.button.is-small(v-if="allowUpdates" :href="fileEditLink" target="_blank" title="edit")
+                    b-icon(pack="fa" icon="pencil" size="is-small")
+                    span Edit on GitHub
           b-tab-item(label="Linked Issues")
             linkIssues(:task="task"
               :repoURL="repoURL"
@@ -142,7 +143,6 @@ export default {
       this.setLoading(true)
       this.task.tags = this.tags
       this.task.context = this.context
-      this.task.updateTodoTxt()
       this.updateTask()
       .catch(error => {
         this.lastError = error
@@ -192,8 +192,6 @@ export default {
         $(this).attr('target', '_blank')
       })
       // TODO: Support updating task lists from UI id:36
-
-
       $('input[type=checkbox]').closest('li').css('list-style', 'none')
       $('input[type=checkbox]').attr('disabled', 'true')
       return $.html()
