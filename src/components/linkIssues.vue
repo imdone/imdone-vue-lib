@@ -15,7 +15,7 @@
           b-table-column.is-narrow.has-text-centered(field="actions" label="Link")
             a.is-small(v-on:click="unlinkIssue(props.row)" :title="`unlink ${ props.row.number }`")
               b-icon.link-icon(pack="fa" icon="unlink" size="is-small")
-  //- DOING: This should cover the whole link issues tab +enhancement
+  //- DOING: This should cover the whole link issues tab id:39 +enhancement
   newIssue(v-if="newIssueShown && allowUpdates"
     :task="task"
     :repoURL="repoURL"
