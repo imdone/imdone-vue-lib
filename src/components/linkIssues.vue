@@ -97,7 +97,7 @@ export default {
     return {
       activeTab: 0,
       Octicons,
-      defaultSearch: 'is:issue is:open',
+      defaultSearch: 'type:issue is:open',
       userSearch: null,
       searchResults: null,
       searchResponse: null,

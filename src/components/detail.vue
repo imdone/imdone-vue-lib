@@ -52,7 +52,7 @@
                   a.button.is-small(v-if="allowUpdates" :href="fileEditLink" target="_blank" title="edit")
                     b-icon(pack="fa" icon="pencil" size="is-small")
                     span Edit on GitHub
-          b-tab-item(label="Linked Issues")
+          b-tab-item(v-if="allowUpdates" label="Linked Issues")
             linkIssues(:task="task"
               :repoURL="repoURL"
               :baseURL="baseURL"
@@ -128,7 +128,7 @@ export default {
       this.$emit('close-detail')
     },
     validateTag (tag) {
-      return /^\w+$/i.test(tag)
+      return /^\S+$/i.test(tag)
     },
     shouldBeSaved () {
       const tags = [...this.tags]
