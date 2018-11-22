@@ -2,15 +2,19 @@
 .detail
   .overflow-container
     .panel.is-size-6.description
-      b-loading(:is-full-page="false" :active="isLoading")
       .panel-heading.has-text-left.has-text-weight-bold
         .columns
           .column.is-11(v-html="text")
           .column.is-1.delete-column
             button(class="delete" aria-label="close" v-on:click="close")
-      .panel-block.is-size-7
+      .panel-block.has-text-left.break-word
+        a(:href="fileURL" target="_blank")
+          b-icon(pack="fa" icon="file" size="is-small")
+          span {{task.source.path}}:{{task.line}}
+      .panel-block.is-size-6
         b-tabs(v-model="activeTab")
           b-tab-item(label="Comment")
+            b-loading(:is-full-page="false" :active="isLoading")
             .columns
               .column.is-3.has-text-left.has-text-weight-bold List
               .column.is-9.has-text-left {{task.list}}
@@ -29,7 +33,7 @@
             .columns
               .column.is-3.has-text-left.has-text-weight-bold Tags
               .column.is-9.has-text-left
-                input-tag.imdone-tags(v-if="allowUpdates" placeholder="Add Tag (e.g. debt, feature, perf)" v-model="tags" :validate="validateTag" :add-tag-on-keys="addTagKeys" tagClass="is-success")
+                input-tag.imdone-tags(v-if="allowUpdates" placeholder="Add Tag (e.g. debt, feature, perf)" v-model="tags" :validate="validateTag" :add-tag-on-keys="addTagKeys" tagClass="is-imdone-primary")
                 .tags.imdone-tags(v-else)
                   .tag.is-info(v-for="tag in tags") {{tag}}
             .columns
@@ -38,18 +42,14 @@
                 input-tag.imdone-tags(v-if="allowUpdates" placeholder="Add Context (e.g. aws, database, cache)" v-model="context"  :validate="validateTag" :add-tag-on-keys="addTagKeys" tagClass="is-info")
                 .tags.imdone-tags(v-else)
                   .tag.is-info(v-for="ctx in context") {{ctx}}
-            .columns
-              .column.is-3.has-text-left.has-text-weight-bold File
-              .column.is-9.has-text-left.break-word
-                a(:href="fileURL" target="_blank") {{task.source.path}}:{{task.line}}
             .level
               .level-left
               .level-right
                 .level-item.has-text-right
-                  button.button.is-small.is-success(:disabled="saveDisabled" v-if="allowUpdates" v-on:click="saveTask")
+                  button.button.is-imdone-primary(:disabled="saveDisabled" v-if="allowUpdates" v-on:click="saveTask")
                     span Save
                 .level-item.has-text-right
-                  a.button.is-small(v-if="allowUpdates" :href="fileEditLink" target="_blank" title="edit")
+                  a.button(v-if="allowUpdates" :href="fileEditLink" target="_blank" title="edit")
                     b-icon(pack="fa" icon="pencil" size="is-small")
                     span Edit on GitHub
           b-tab-item(v-if="allowUpdates" label="Linked Issues")
@@ -237,12 +237,6 @@ export default {
     hr {
       margin: 1rem 0;
     }
-    h1 { font-size: 2em; }
-    h2 { font-size: 1.17em; }
-    h3 { font-size: 1.12em; }
-    h4 { font-size: 1em; }
-    h5 { font-size: .83em; }
-    h6 { font-size: .75em; }
   }
   .task-description {
     ul {

@@ -1,5 +1,5 @@
 <template lang="pug">
-.board-wrapper
+.board-main
   .board(:class="{'has-detail': selectedTask}")
     draggable.columns.is-mobile(v-model="listsOfTasks" @end="updateListOrder" :options="draggableOpts")
       list.column.imdone-list(v-for='list in listsOfTasks'
@@ -23,7 +23,7 @@
             .control
               input.input(type="text" v-model="newListName" ref="newListInput" @keyup.enter="addList" @keyup.esc="hideAddListForm")
             .control
-              button.button.is-success.is-small.add-list-btn(@click="addList") Add List
+              button.button.is-imdone-primary.is-small.add-list-btn(@click="addList") Add List
               a(@click="hideAddListForm")
                 b-icon(pack="fa" icon="times" size="is-small")
   detail.detail(v-if="selectedTask"
@@ -131,16 +131,6 @@ export default {
 }
 </script>
 <style lang="scss">
-html {
-  font-size: 18px;
-}
-.board-wrapper {
-  @import "../../node_modules/bulma/bulma.sass";
-  .icon {
-    margin: 0px;
-  }
-}
-
 .detail {
   position: absolute;
   top: 0;

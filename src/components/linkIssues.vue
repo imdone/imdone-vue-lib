@@ -3,7 +3,7 @@
   b-loading(:is-full-page="false" :active="isLoading")
   .columns
     .column.is-12
-      b-table.is-size-7(v-if="taskIssues" :data="taskIssues")
+      b-table.is-size-6(v-if="hasTaskIssues" :data="taskIssues")
         template(slot-scope="props")
           b-table-column(field="number" label="Number")
             a(:href="props.row.html_url" target="_blank") {{ props.row.number }}
@@ -26,21 +26,19 @@
     v-on:new-issue="linkIssue"
     v-on:loading="setLoading")
   .issue-search(v-if="!newIssueShown && allowUpdates")
-    h3.subtitle.is-5.has-text-left Link Issues
-    .level
-      .level-left
-        .level-item
-          b-field(custom-class="is-small")
-            p.control.is-expanded
-              b-input(type="search" :placeholder="defaultSearch" size="is-small" v-model="userSearch" @keyup.native.enter="searchIssues(1)")
-            p.control
-              button.button.is-small.is-info(v-on:click="searchIssues(1)") Search
-      .level-right
-        .level-item
-          button.button.is-success.is-small(v-on:click="toggleNewIssue") New Issue
-    .columns(v-if="searchResults")
+    h3.subtitle.is-5.has-text-left Add Issue
+    .columns
+      .column.is-two-thirds
+        b-field
+          p.control.is-expanded
+            b-input(class="is-full-width" type="search" :placeholder="defaultSearch" v-model="userSearch" @keyup.native.enter="searchIssues(1)")
+          p.control
+            button.button.is-info(v-on:click="searchIssues(1)") Search
+      .column.is-one-third
+        button.button.is-pulled-right.is-imdone-primary(v-on:click="toggleNewIssue") Add New Issue
+    .columns(v-if="hasSearchResults")
       .column.is-12
-        b-table.is-size-7(:data="searchResults.items")
+        b-table.is-size-6(:data="searchResults.items")
           template(slot-scope="props")
             b-table-column(field="number" label="Number")
               a(:href="props.row.html_url" target="_blank") {{ props.row.number }}
@@ -118,6 +116,29 @@ export default {
     const parts = this.baseURL.split('/')
     this.repoFullName = `${parts[3]}/${parts[4]}`
   },
+  computed: {
+    hasTaskIssues () {
+      return this.taskIssues && this.taskIssues.length > 0
+    },
+    hasSearchResults () {
+      return this.searchResults && this.searchResults.items.length > 0
+    },
+    searchString () {
+      return this.userSearch || this.defaultSearch
+    },
+    showLinkIssues () {
+      return this.allowUpdates && !this.linkIssuesActive
+    },
+    issues () {
+      return this.task.issues
+    },
+    commit () {
+      return _.get(this, 'blame.commit')
+    },
+    blame: function () {
+      return this.task.blame
+    }
+  },
   watch: {
     task () {
       this.taskIssues = this.task.issues
@@ -146,7 +167,7 @@ export default {
       return state === 'open' ? Octicons.issueOpened : Octicons.issueClosed
     },
     stateText (state) {
-      return state === 'open' ? 'has-text-success' : 'has-text-danger'
+      return state === 'open' ? 'has-text-imdone-primary' : 'has-text-danger'
     },
     addIssue (issue) {
       this.task.addIssue(issue)
@@ -188,23 +209,6 @@ export default {
     hasIssue (issue) {
       return this.task.hasIssueNumber(issue.number)
     }
-  },
-  computed: {
-    searchString () {
-      return this.userSearch || this.defaultSearch
-    },
-    showLinkIssues () {
-      return this.allowUpdates && !this.linkIssuesActive
-    },
-    issues () {
-      return this.task.issues
-    },
-    commit () {
-      return _.get(this, 'blame.commit')
-    },
-    blame: function () {
-      return this.task.blame
-    }
   }
 }
 </script>
@@ -214,51 +218,4 @@ export default {
     margin-top: 10px;
   }
 }
-.loading-overlay {
-  bottom: 0;
-  left: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
-  align-items: center;
-  display: none;
-  justify-content: center;
-  overflow: hidden; }
-  .loading-overlay.is-active {
-    display: flex; }
-  .loading-overlay.is-full-page {
-    z-index: 999;
-    position: fixed; }
-    .loading-overlay.is-full-page .loading-icon:after {
-      top: calc(50% - 2.5em);
-      left: calc(50% - 2.5em);
-      width: 5em;
-      height: 5em; }
-  .loading-overlay .loading-background {
-    bottom: 0;
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    background: #7f7f7f;
-    background: rgba(255, 255, 255, 0.5); }
-  .loading-overlay .loading-icon {
-    position: relative; }
-    .loading-overlay .loading-icon:after {
-      animation: spinAround 500ms infinite linear;
-      border: 2px solid #dbdbdb;
-      border-radius: 290486px;
-      border-right-color: transparent;
-      border-top-color: transparent;
-      content: "";
-      display: block;
-      height: 1em;
-      position: relative;
-      width: 1em;
-      position: absolute;
-      top: calc(50% - 1.5em);
-      left: calc(50% - 1.5em);
-      width: 3em;
-      height: 3em;
-      border-width: 0.25em; }
 </style>

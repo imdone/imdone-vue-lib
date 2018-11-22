@@ -1,8 +1,8 @@
 <template lang="pug">
-article.message(:class="{'is-success': selected, 'is-info': !selected}" v-bind="meta" v-on:click="showDetail")
+article.message(:class="{'is-imdone-primary': selected, 'is-info': !selected}" v-bind="meta" v-on:click="showDetail")
   //- .message-header
   //-   .task-text.has-text-left(v-html="text")
-  .message-body.is-size-7
+  .message-body
     .card-actions.is-size-6
       .level
         .level-left
@@ -21,7 +21,7 @@ article.message(:class="{'is-success': selected, 'is-info': !selected}" v-bind="
 
 
     .tags.imdone-tags(v-if="tags.length > 0")
-      .tag.is-success(v-for="tag in tags") {{tag}}
+      .tag.is-imdone-primary(v-for="tag in tags") {{tag}}
     .tags.imdone-contexts(v-if="contexts.length > 0")
       .tag.is-info(v-for="context in contexts") {{context}}
     .source
@@ -121,6 +121,7 @@ img.gravatar {
     word-break: break-word;
     text-align: left;
     padding: 1em;
+    font-size: .9rem !important;
     .tags {
       margin-bottom: 0;
       padding-bottom: 0;

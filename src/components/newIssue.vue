@@ -12,9 +12,9 @@
     .level-left
     .level-right
       .level-item.has-text-right
-        button.button.is-small(v-on:click="$emit('cancel')") Cancel
+        button.button(v-on:click="$emit('cancel')") Cancel
       .level-item.has-text-right
-        button.button.is-success.is-small(:disabled="!this.title" v-on:click="createIssue") Submit new issue
+        button.button.is-imdone-primary(:disabled="!this.title" v-on:click="createIssue") Submit new issue
 </template>
 <script>
 import { Field } from 'buefy/dist/components/Field'
