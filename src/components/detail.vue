@@ -1,16 +1,21 @@
 <template lang="pug">
 .detail
   .overflow-container
-    .panel.is-size-6.description
+    .panel.is-size-6
       .panel-heading.has-text-left.has-text-weight-bold
         .columns
           .column.is-11(v-html="text")
           .column.is-1.delete-column
             button(class="delete" aria-label="close" v-on:click="close")
-      .panel-block.has-text-left.break-word
-        a(:href="fileURL" target="_blank")
-          b-icon(pack="fa" icon="file" size="is-small")
-          span {{task.source.path}}:{{task.line}}
+      .panel-block.is-block
+        .columns
+          .column.is-10.has-text-left.break-word
+            a(:href="fileURL" target="_blank")
+              b-icon(pack="fa" icon="file" size="is-small")
+              span &nbsp;{{task.source.path}}:{{task.line}}
+          .column.has-text-right
+            a.button(v-if="allowUpdates" :href="fileEditLink" target="_blank" title="Edit on GitHub")
+              b-icon(pack="fa" icon="pencil" size="is-small")
       .panel-block.is-size-6
         b-tabs(v-model="activeTab")
           b-tab-item(label="Comment")
@@ -21,7 +26,7 @@
             .columns
               .column.is-3.has-text-left.has-text-weight-bold Description
               .column.is-9.has-text-left.task-description.break-word(v-html="description")
-            .columns(v-if="blame && (blame.name | blame.email)")
+            .columns(v-if="blame && (blame.name || blame.email)")
               .column.is-3.has-text-left.has-text-weight-bold Author
               .column.is-9.has-text-left(v-if="blame.name") {{blame.name}} - #[a(:href="authorEmail" target="_blank" v-if="blame.email") {{blame.email}}]
             .columns(v-if="date")
@@ -48,10 +53,6 @@
                 .level-item.has-text-right
                   button.button.is-imdone-primary(:disabled="saveDisabled" v-if="allowUpdates" v-on:click="saveTask")
                     span Save
-                .level-item.has-text-right
-                  a.button(v-if="allowUpdates" :href="fileEditLink" target="_blank" title="edit")
-                    b-icon(pack="fa" icon="pencil" size="is-small")
-                    span Edit on GitHub
           b-tab-item(v-if="allowUpdates" label="Linked Issues")
             linkIssues(:task="task"
               :repoURL="repoURL"
@@ -217,6 +218,7 @@ export default {
   flex: 1;
   min-height: 0;
   max-height: 100vh;
+  background: #fff;
   .b-tabs {
     width: 100%;
   }
