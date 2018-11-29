@@ -3,14 +3,14 @@
   b-loading(:is-full-page="false" :active="isLoading")
   .columns
     .column.is-12
-      b-table.is-size-6(v-if="hasTaskIssues" :data="taskIssues")
+      b-table(v-if="hasTaskIssues" :data="taskIssues")
         template(slot-scope="props")
-          b-table-column(field="number" label="Number")
+          b-table-column(field="number" label="#")
             a(:href="props.row.html_url" target="_blank") {{ props.row.number }}
           b-table-column(field="title" label="Title")
             a(:href="props.row.html_url" target="_blank") {{ props.row.title }}
           b-table-column.is-narrow.has-text-centered(field="state" label="State")
-            span.icon(:class="stateText(props.row.state)")
+            span.icon(:class="stateText(props.row.state)" :title="props.row.state")
               octicon(:icon="stateIcon(props.row.state)")
           b-table-column.is-narrow.has-text-centered(field="actions" label="Link")
             a.is-small(v-on:click="unlinkIssue(props.row)" :title="`unlink ${ props.row.number }`")
@@ -28,24 +28,24 @@
   .issue-search(v-if="!newIssueShown && allowUpdates")
     h3.subtitle.is-5.has-text-left Add Issue
     .columns
-      .column.is-two-thirds
+      .column.is-8
         b-field
           p.control.is-expanded
             b-input(class="is-full-width" type="search" :placeholder="defaultSearch" v-model="userSearch" @keyup.native.enter="searchIssues(1)")
           p.control
             button.button.is-info(v-on:click="searchIssues(1)") Search
-      .column.is-one-third
-        button.button.is-pulled-right.is-imdone-primary(v-on:click="toggleNewIssue") Add New Issue
+      .column.is-4
+        button.button.is-pulled-right.is-imdone-primary(v-on:click="toggleNewIssue") New Issue
     .columns(v-if="hasSearchResults")
       .column.is-12
-        b-table.is-size-6(:data="searchResults.items")
+        b-table(:data="searchResults.items")
           template(slot-scope="props")
-            b-table-column(field="number" label="Number")
+            b-table-column(field="number" label="#")
               a(:href="props.row.html_url" target="_blank") {{ props.row.number }}
             b-table-column(field="title" label="Title")
               a(:href="props.row.html_url" target="_blank") {{ props.row.title }}
             b-table-column.is-narrow.has-text-centered(field="state" label="State")
-              span.icon(:class="stateText(props.row.state)")
+              span.icon(:class="stateText(props.row.state)" :title="props.row.state")
                 octicon(:icon="stateIcon(props.row.state)")
             b-table-column.is-narrow.has-text-centered(field="actions" label="Link")
               a.is-small(v-if="!hasIssue(props.row)" v-on:click="linkIssue(props.row)" :title="`link ${ props.row.number }`")

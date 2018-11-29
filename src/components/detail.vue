@@ -1,7 +1,7 @@
 <template lang="pug">
 .detail
   .overflow-container
-    .panel.is-size-6
+    .panel
       .panel-heading.has-text-left.has-text-weight-bold
         .columns
           .column.is-11(v-html="text")
@@ -16,7 +16,7 @@
           .column.has-text-right
             a.button(v-if="allowUpdates" :href="fileEditLink" target="_blank" title="Edit on GitHub")
               b-icon(pack="fa" icon="pencil" size="is-small")
-      .panel-block.is-size-6
+      .panel-block
         b-tabs(v-model="activeTab")
           b-tab-item(label="Comment")
             b-loading(:is-full-page="false" :active="isLoading")
@@ -219,6 +219,7 @@ export default {
   min-height: 0;
   max-height: 100vh;
   background: #fff;
+  font-size: .9rem;
   .b-tabs {
     width: 100%;
   }
