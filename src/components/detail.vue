@@ -183,11 +183,7 @@ export default {
       return $.html()
     },
     description: function () {
-      const description = _.clone(this.task.description)
-      const text = this.task.getText({stripMeta: true, sanitize: true, stripTags: true, stripContext: true})
-      const descriptionMD = description.join('\n')
-      const sep = (description.length > 0 && (!description[0].trim() || description[0].trim().startsWith('-'))) ? `\n  \n` : ' '
-      const html = md.render(`${text}${sep}${descriptionMD}`)
+      const html = md.render(this.task.getTextAndDescription())
       const $ = cheerio.load(html)
       $('a').each(function () {
         $(this).attr('target', '_blank')

@@ -39,16 +39,17 @@ export default {
     }
   },
   mounted () {
-    this.setDefaultTitle()
+    this.setIssueDefaults()
   },
   watch: {
     task () {
-      this.setDefaultTitle()
+      this.setIssueDefaults()
     }
   },
   methods: {
-    setDefaultTitle () {
+    setIssueDefaults () {
       this.title = this.task.getText({stripMeta: true})
+      this.body = this.task.getTextAndDescription()
       this.$nextTick(() => {
         this.$refs.titleField.$refs.input.focus()
         this.$refs.titleField.$refs.input.select()
@@ -60,8 +61,8 @@ export default {
     createIssue () {
       this.$emit('loading', true)
       axios.post(this.createIssueURL, {title: this.title, body: this.body})
-      .then(response => {
-        this.$emit('new-issue', response.data)
+      .then(({data}) => {
+        this.$emit('new-issue', data)
         this.$emit('cancel')
       })
       .catch(err => {

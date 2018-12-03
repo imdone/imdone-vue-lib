@@ -74,7 +74,7 @@ import { Loading } from 'buefy/dist/components/Loading'
 import axios from 'axios'
 import Octicon, { Octicons } from 'octicons-vue'
 import newIssue from '@/components/newIssue'
-import * as _ from 'lodash'
+import _ from 'lodash'
 
 export default {
   name: 'imdone-link-issues',
@@ -111,6 +111,7 @@ export default {
   },
   created () {
     if (!this.searchResults) this.searchIssues()
+    if (!this.task.issues) this.task.issues = []
     this.taskIssues = this.task.issues
     this.linkIssuesActive = (this.taskIssues.length === 0)
     const parts = this.baseURL.split('/')
@@ -141,7 +142,7 @@ export default {
   },
   watch: {
     task () {
-      this.taskIssues = this.task.issues
+      this.taskIssues = this.task.issues || []
       this.linkIssuesActive = (this.taskIssues.length === 0)
     },
     currentPage () {
@@ -171,6 +172,7 @@ export default {
     },
     addIssue (issue) {
       this.task.addIssue(issue)
+      if (!this.task.issues) this.task.issues = []
       this.task.issues = [...this.task.issues, issue]
       this.taskIssues = this.task.issues
     },
