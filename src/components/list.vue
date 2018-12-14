@@ -31,7 +31,7 @@ export default {
     Draggable,
     'b-icon': Icon
   },
-  // DOING: Should accept a v-model **list** in the format {name, hidden, tasks}
+  // DOING: Should accept a v-model **list** in the format {name, hidden, tasks} id:41
   props: ['list', 'tasks', 'selectedTask', 'repoURL', 'allowUpdates'],
   computed: {
     sortedTasks: {
