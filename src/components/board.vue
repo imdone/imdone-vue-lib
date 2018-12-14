@@ -48,7 +48,7 @@ import _ from 'lodash'
 export default {
   name: 'imdone-board',
   components: {List, Detail, Draggable, 'b-icon': Icon},
-  // DOING: Should accept a v-model **board** in the format `{config, lists}` where lists is a list of tasks in the format `{name, hidden, tasks}`
+  // DOING: Should accept a v-model **board** in the format `{config, lists}` where lists is a list of tasks in the format `{name, hidden, tasks}` id:40
   props: ['value', 'tasks', 'config', 'allowUpdates', 'repoURL', 'baseURL', 'selectedTask', 'searchIssuesURL', 'createIssueURL'],
   data: function () {
     return {
