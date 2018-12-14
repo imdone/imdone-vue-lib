@@ -12,8 +12,9 @@
         v-on:update-list="updateList"
         v-on:update-task-order="updateTaskOrder"
         v-on:show-detail="showDetail"
-        v-on:file-link="fileLink"
-        v-on:delete-list="deleteList")
+        v-on:file-link="emitFileLink"
+        v-on:delete-list="deleteList"
+        v-on:text-clicked="textClicked")
       .column.new-list(slot="footer" v-if="allowUpdates")
         button#new-list-button.button.is-white(v-if="!addListFormShown" @click="showAddListForm")
           b-icon(pack="fa" icon="plus" size="is-small")
@@ -21,7 +22,7 @@
         .card(v-if="addListFormShown")
           .card-content
             .control
-              input.input(type="text" v-model="newListName" ref="newListInput" @keyup.enter="addList" @keyup.esc="hideAddListForm")
+              input.input(type="text" placeholder="Enter list name..." v-model="newListName" ref="newListInput" @keyup.enter="addList" @keyup.esc="hideAddListForm")
             .control
               button.button.is-imdone-primary.is-small.add-list-btn(@click="addList") Add List
               a(@click="hideAddListForm")
@@ -33,7 +34,9 @@
     :allowUpdates="allowUpdates"
     :searchIssuesURL="searchIssuesURL"
     :createIssueURL="createIssueURL"
-    v-on:close-detail="closeDetail")
+    v-on:close-detail="closeDetail"
+    v-on:file-link="emitFileLink"
+    v-on:text-clicked="textClicked")
 </template>
 <script>
 import Draggable from 'vuedraggable'
@@ -45,7 +48,8 @@ import _ from 'lodash'
 export default {
   name: 'imdone-board',
   components: {List, Detail, Draggable, 'b-icon': Icon},
-  props: ['tasks', 'config', 'allowUpdates', 'repoURL', 'baseURL', 'selectedTask', 'searchIssuesURL', 'createIssueURL'],
+  // DOING: Should accept a v-model **board** in the format `{config, lists}` where lists is a list of tasks in the format `{name, hidden, tasks}`
+  props: ['value', 'tasks', 'config', 'allowUpdates', 'repoURL', 'baseURL', 'selectedTask', 'searchIssuesURL', 'createIssueURL'],
   data: function () {
     return {
       addListFormShown: false,
@@ -70,6 +74,9 @@ export default {
     }
   },
   methods: {
+    textClicked (event) {
+      this.$emit('text-clicked', event)
+    },
     showAddListForm () {
       if (!this.allowUpdates) return this.emitUpdateError('show add')
       this.addListFormShown = true
@@ -104,7 +111,7 @@ export default {
     },
     updateListOrder () {
       if (!this.allowUpdates) return this.emitUpdateError('list order')
-      const config = _.clone(this.config)
+      const config = _.cloneDeep(this.config)
       config.lists = this.listsOfTasks.map(({name, hidden, ignore}) => ({name, hidden, ignore}))
       this.$emit('update-list-order', config)
     },
@@ -116,7 +123,7 @@ export default {
       const list = this.listsOfTasks.find(list => list.name === newList)
       const task = list.tasks.find(task => task.id === taskId)
       task.list = newList
-      this.$emit('update-task-order', {task, tasks: this.listsOfTasks})
+      this.$emit('update-task-order', {task, tasks: this.listsOfTasks, newList, oldList, newIndex, oldIndex, taskId})
     },
     showDetail (task) {
       this.$emit('task-selected', task)
@@ -124,8 +131,8 @@ export default {
     closeDetail () {
       this.$emit('task-unselected')
     },
-    fileLink () {
-      // debugger
+    emitFileLink (task) {
+      this.$emit('file-link', task)
     }
   }
 }

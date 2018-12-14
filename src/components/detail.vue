@@ -4,20 +4,20 @@
     .panel
       .panel-heading.has-text-left.has-text-weight-bold
         .columns
-          .column.is-11(v-html="text")
+          .column.is-11(@click.prevent="textClicked" v-html="text")
           .column.is-1.delete-column
             button(class="delete" aria-label="close" v-on:click="close")
       .panel-block.is-block
         .columns
           .column.is-10.has-text-left.break-word
-            a(:href="fileURL" target="_blank")
+            a.button(@click="emitFileLink" :href="fileURL" :target="target" :title="`Open ${fileLinkText}`")
               b-icon(pack="fa" icon="file" size="is-small")
-              span &nbsp;{{task.source.path}}:{{task.line}}
+              span &nbsp;{{fileLinkText}}
           .column.has-text-right
-            a.button(v-if="allowUpdates" :href="fileEditLink" target="_blank" title="Edit on GitHub")
+            a.button(v-if="allowUpdates && fileEditLink" @click="emitFileLink" :href="fileEditLink" target="_blank" title="`Edit ${fileLinkText} on GitHub`")
               b-icon(pack="fa" icon="pencil" size="is-small")
-      .panel-block
-        b-tabs(v-model="activeTab")
+      .panel-block.is-block(v-if="allowUpdates && allowDetailUpdates")
+        b-tabs(v-if="repoURL" v-model="activeTab")
           b-tab-item(label="Comment")
             b-loading(:is-full-page="false" :active="isLoading")
             .columns
@@ -25,7 +25,7 @@
               .column.is-9.has-text-left {{task.list}}
             .columns
               .column.is-3.has-text-left.has-text-weight-bold Description
-              .column.is-9.has-text-left.task-description.break-word(v-html="description")
+              .column.is-9.has-text-left.task-description.break-word(@click.prevent="textClicked" v-html="description")
             .columns(v-if="blame && (blame.name || blame.email)")
               .column.is-3.has-text-left.has-text-weight-bold Author
               .column.is-9.has-text-left(v-if="blame.name") {{blame.name}} - #[a(:href="authorEmail" target="_blank" v-if="blame.email") {{blame.email}}]
@@ -38,28 +38,81 @@
             .columns
               .column.is-3.has-text-left.has-text-weight-bold Tags
               .column.is-9.has-text-left
-                input-tag.imdone-tags(v-if="allowUpdates" placeholder="Add Tag (e.g. debt, feature, perf)" v-model="tags" :validate="validateTag" :add-tag-on-keys="addTagKeys" tagClass="is-imdone-primary")
-                .tags.imdone-tags(v-else)
-                  .tag.is-info(v-for="tag in tags") {{tag}}
+                input-tag.imdone-tags(placeholder="Add Tag (e.g. debt, feature, perf)" v-model="tags" :validate="validateTag" :add-tag-on-keys="addTagKeys" tagClass="is-imdone-primary")
             .columns
               .column.is-3.has-text-left.has-text-weight-bold Context
               .column.is-9.has-text-left
-                input-tag.imdone-tags(v-if="allowUpdates" placeholder="Add Context (e.g. aws, database, cache)" v-model="context"  :validate="validateTag" :add-tag-on-keys="addTagKeys" tagClass="is-info")
-                .tags.imdone-tags(v-else)
-                  .tag.is-info(v-for="ctx in context") {{ctx}}
+                input-tag.imdone-tags(placeholder="Add Context (e.g. aws, database, cache)" v-model="context"  :validate="validateTag" :add-tag-on-keys="addTagKeys" tagClass="is-info")
             .level
               .level-left
               .level-right
                 .level-item.has-text-right
-                  button.button.is-imdone-primary(:disabled="saveDisabled" v-if="allowUpdates" v-on:click="saveTask")
+                  button.button.is-imdone-primary(:disabled="saveDisabled" v-on:click="saveTask")
                     span Save
-          b-tab-item(v-if="allowUpdates" label="Linked Issues")
+          b-tab-item(label="Linked Issues")
             linkIssues(:task="task"
               :repoURL="repoURL"
               :baseURL="baseURL"
               :allowUpdates="allowUpdates"
               :searchIssuesURL="searchIssuesURL"
               :createIssueURL="createIssueURL")
+        div(v-else)
+          b-loading(:is-full-page="false" :active="isLoading")
+          .columns
+            .column.is-3.has-text-left.has-text-weight-bold List
+            .column.is-9.has-text-left {{task.list}}
+          .columns
+            .column.is-3.has-text-left.has-text-weight-bold Description
+            .column.is-9.has-text-left.task-description.break-word(@click.prevent="textClicked" v-html="description")
+          .columns(v-if="blame && (blame.name || blame.email)")
+            .column.is-3.has-text-left.has-text-weight-bold Author
+            .column.is-9.has-text-left(v-if="blame.name") {{blame.name}} - #[a(:href="authorEmail" target="_blank" v-if="blame.email") {{blame.email}}]
+          .columns(v-if="date")
+            .column.is-3.has-text-left.has-text-weight-bold Date Added
+            .column.is-9.has-text-left {{date}}
+          .columns(v-if="commit")
+            .column.is-3.has-text-left.has-text-weight-bold Commit
+            .column.is-9.has-text-left #[a(:href="commitLink" target="_blank") {{commit.substring(0,7)}}]
+          .columns
+            .column.is-3.has-text-left.has-text-weight-bold Tags
+            .column.is-9.has-text-left
+              input-tag.imdone-tags(placeholder="Add Tag (e.g. debt, feature, perf)" v-model="tags" :validate="validateTag" :add-tag-on-keys="addTagKeys" tagClass="is-imdone-primary")
+          .columns
+            .column.is-3.has-text-left.has-text-weight-bold Context
+            .column.is-9.has-text-left
+              input-tag.imdone-tags(placeholder="Add Context (e.g. aws, database, cache)" v-model="context"  :validate="validateTag" :add-tag-on-keys="addTagKeys" tagClass="is-info")
+          .level
+            .level-left
+            .level-right
+              .level-item.has-text-right
+                button.button.is-imdone-primary(:disabled="saveDisabled" v-on:click="saveTask")
+                  span Save
+      .panel-block.is-block(v-else)
+        .columns
+          .column.is-3.has-text-left.has-text-weight-bold List
+          .column.is-9.has-text-left {{task.list}}
+        .columns
+          .column.is-3.has-text-left.has-text-weight-bold Description
+          .column.is-9.has-text-left.task-description.break-word(@click.prevent="textClicked" v-html="description")
+        .columns(v-if="blame && (blame.name || blame.email)")
+          .column.is-3.has-text-left.has-text-weight-bold Author
+          .column.is-9.has-text-left(v-if="blame.name") {{blame.name}} - #[a(:href="authorEmail" target="_blank" v-if="blame.email") {{blame.email}}]
+        .columns(v-if="date")
+          .column.is-3.has-text-left.has-text-weight-bold Date Added
+          .column.is-9.has-text-left {{date}}
+        .columns(v-if="commit")
+          .column.is-3.has-text-left.has-text-weight-bold Commit
+          .column.is-9.has-text-left #[a(:href="commitLink" target="_blank") {{commit.substring(0,7)}}]
+        .columns(v-if="hasTags")
+          .column.is-3.has-text-left.has-text-weight-bold Tags
+          .column.is-9.has-text-left
+            .tags.imdone-tags
+              .tag.is-imdone-primary(v-for="tag in tags") {{tag}}
+        .columns(v-if="hasContext")
+          .column.is-3.has-text-left.has-text-weight-bold Context
+          .column.is-9.has-text-left
+            .tags.imdone-tags
+              .tag.is-info(v-for="ctx in context") {{ctx}}
 
 </template>
 <script>
@@ -91,7 +144,7 @@ export default {
     LinkIssues,
     InputTag
   },
-  props: ['task', 'repoURL', 'baseURL', 'allowUpdates', 'searchIssuesURL', 'createIssueURL'],
+  props: ['task', 'repoURL', 'baseURL', 'allowUpdates', 'allowDetailUpdates', 'searchIssuesURL', 'createIssueURL'],
   data () {
     return {
       activeTab: 0,
@@ -106,6 +159,7 @@ export default {
     }
   },
   created () {
+    if (!this.baseURL) return
     const parts = this.baseURL.split('/')
     this.repoFullName = `${parts[3]}/${parts[4]}`
   },
@@ -154,9 +208,27 @@ export default {
     },
     updateTask () {
       return axios.put(`/api/1.0/board/${this.repoFullName}/task`, this.task)
+    },
+    emitFileLink () {
+      this.$emit('file-link', this.task)
+    },
+    textClicked (event) {
+      this.$emit('text-clicked', event)
     }
   },
   computed: {
+    hasTags () {
+      return this.tags.length > 0
+    },
+    hasContext () {
+      return this.context.length > 0
+    },
+    fileLinkText () {
+      return `${this.task.source.path}:${this.task.line}`
+    },
+    target () {
+      if (this.repoURL) return '_blank'
+    },
     commit () {
       return _.get(this, 'blame.commit')
     },
@@ -164,6 +236,7 @@ export default {
       return `${this.baseURL}/blob/${this.commit}/${this.task.source.path}#L${this.blame.line}`
     },
     fileURL: function () {
+      if (!this.repoURL) return '#'
       return `${this.repoURL}${this.task.source.path}#L${this.task.line}`
     },
     blame: function () {
@@ -202,6 +275,7 @@ export default {
       return meta
     },
     fileEditLink () {
+      if (!this.repoURL) return
       const repoEditURL = this.repoURL.replace('/blob/', '/edit/')
       return `${repoEditURL}${this.task.source.path}#L${this.task.line}`
     }

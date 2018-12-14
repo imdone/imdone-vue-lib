@@ -3,23 +3,15 @@ article.message(:class="{'is-imdone-primary': selected, 'is-info': !selected}" v
   //- .message-header
   //-   .task-text.has-text-left(v-html="text")
   .message-body
-    .card-actions.is-size-6
+    .card-actions.is-size-6(v-if="task.blame && task.blame.email")
       .level
         .level-left
-          //- .level-item(v-if="allowUpdates")
-          //-   a(:href="fileEditLink" target="_blank" title="edit")
-          //-     b-icon(pack="fa" icon="pencil" size="is-small")
-          //- .level-item(v-if="allowUpdates")
-          //-   a(v-on:click="showIssueLink" title="link to issue")
-          //-     b-icon(pack="fa" icon="share-alt" size="is-small")
         .level-right
           .level-item
             img.gravatar(v-if="task.blame && task.blame.email" :src="gravatarURL" :title="name")
             b-icon(v-else pack="fa" icon="user" size="is-small" title="No author found")
-    .task-text.has-text-left(v-html="text")
+    .task-text.has-text-left(@click.prevent="textClicked" v-html="text")
     //- TODO: Display progress of task lists like [github](https://help.github.com/articles/about-task-lists/) id:37
-
-
     .tags.imdone-tags(v-if="tags.length > 0")
       .tag.is-imdone-primary(v-for="tag in tags") {{tag}}
     .tags.imdone-contexts(v-if="contexts.length > 0")
@@ -27,7 +19,7 @@ article.message(:class="{'is-imdone-primary': selected, 'is-info': !selected}" v
     .source
       //- BACKLOG: Add ban icon for ignoring a file or folder id:38
       // - b-icon(v-if="allowUpdates" pack="fa" icon="ban" size="is-small")
-      a(:href="fileLink" target="_blank") {{task.source.path}}:{{task.line}}
+      a(@click="emitFileLink" :href="fileLink" :target="target") {{task.source.path}}:{{task.line}}
 </template>
 <script>
 import * as MarkdownIt from 'markdown-it'
@@ -72,7 +64,11 @@ export default {
     selected () {
       return (this.selectedTask && this.selectedTask.id === this.task.id)
     },
+    target () {
+      if (this.repoURL) return '_blank'
+    },
     fileLink () {
+      if (!this.repoURL) return '#'
       return `${this.repoURL}${this.task.source.path}#L${this.task.line}`
     },
     fileEditLink () {
@@ -85,6 +81,9 @@ export default {
     }
   },
   methods: {
+    textClicked (event) {
+      this.$emit('text-clicked', event)
+    },
     showDetail () {
       this.$emit('show-detail', this.task)
     },

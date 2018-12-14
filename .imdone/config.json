@@ -25,16 +25,16 @@
   },
   "lists": [
     {
-      "name": "BACKLOG",
-      "hidden": false
+      "hidden": false,
+      "name": "BACKLOG"
     },
     {
-      "name": "TODO",
-      "hidden": false
+      "hidden": false,
+      "name": "TODO"
     },
     {
-      "name": "DOING",
-      "hidden": false
+      "hidden": false,
+      "name": "DOING"
     }
   ],
   "marked": {

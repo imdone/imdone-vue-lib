@@ -16,7 +16,9 @@
           :data-id="task.id"
           :repoURL="repoURL"
           :allowUpdates="allowUpdates"
-          v-on:show-detail="showDetail" v-on:file-link="fileLink")
+          v-on:show-detail="showDetail"
+          v-on:file-link="fileLink"
+          v-on:text-clicked="textClicked")
 </template>
 <script>
 import { Icon } from 'buefy/dist/components/Icon'
@@ -29,6 +31,7 @@ export default {
     Draggable,
     'b-icon': Icon
   },
+  // DOING: Should accept a v-model **list** in the format {name, hidden, tasks}
   props: ['list', 'tasks', 'selectedTask', 'repoURL', 'allowUpdates'],
   computed: {
     sortedTasks: {
@@ -41,6 +44,9 @@ export default {
     }
   },
   methods: {
+    textClicked (event) {
+      this.$emit('text-clicked', event)
+    },
     onEnd ({item, to, from, newIndex, oldIndex}) {
       const newList = to.dataset.list
       const oldList = from.dataset.list
