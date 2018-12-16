@@ -18,7 +18,7 @@ tasks.forEach(task => {
 })
 const task = new Task(tasks[7], true)
 const list = {
-  list: 'TODO',
+  name: 'TODO',
   tasks: lists['TODO']
 }
 
@@ -40,6 +40,11 @@ function listsOfTasks () {
   return listsOfTasks
 }
 
+const board = {
+  config,
+  lists: listsOfTasks()
+}
+
 export default new Router({
   routes: [
     {
@@ -52,7 +57,9 @@ export default new Router({
     {
       path: '/list',
       component: List,
-      props: list
+      props: {
+        value: list
+      }
     },
     {
       path: '/board',
@@ -60,8 +67,7 @@ export default new Router({
       props: {
         repoURL: '',
         allowUpdates: true,
-        config,
-        tasks: listsOfTasks()
+        board
       }
     },
     {

@@ -1,15 +1,13 @@
 <template lang="pug">
 .board-main
   .board(:class="{'has-detail': selectedTask}")
-    draggable.columns.is-mobile(v-model="listsOfTasks" @end="updateListOrder" :options="draggableOpts")
-      list.column.imdone-list(v-for='list in listsOfTasks'
+    draggable.columns.is-mobile(:list="lists" @end="updateListOrder" :options="draggableOpts")
+      list.column.imdone-list(v-for='(list, index) in lists'
         :key="list.name"
-        :list='list.name'
-        :tasks="list.tasks"
+        v-model="lists[index]"
         :selectedTask="selectedTask"
         :repoURL="repoURL"
         :allowUpdates="allowUpdates"
-        v-on:update-list="updateList"
         v-on:update-task-order="updateTaskOrder"
         v-on:show-detail="showDetail"
         v-on:file-link="emitFileLink"
@@ -49,11 +47,12 @@ export default {
   name: 'imdone-board',
   components: {List, Detail, Draggable, 'b-icon': Icon},
   // DOING: Should accept a v-model **board** in the format `{config, lists}` where lists is a list of tasks in the format `{name, hidden, tasks}` id:40
-  props: ['value', 'tasks', 'config', 'allowUpdates', 'repoURL', 'baseURL', 'selectedTask', 'searchIssuesURL', 'createIssueURL'],
+  props: ['board', 'allowUpdates', 'repoURL', 'baseURL', 'selectedTask', 'searchIssuesURL', 'createIssueURL'],
   data: function () {
     return {
       addListFormShown: false,
       newListName: null,
+      innerLists: this.board.lists,
       draggableOpts: {
         group: {
           name: 'lists',
@@ -64,13 +63,21 @@ export default {
     }
   },
   computed: {
-    listsOfTasks: {
+    lists: {
       get () {
-        return this.tasks
+        return this.innerLists
       },
-      set (value) {
-        this.$emit('update-tasks', value)
+      set (lists) {
+        this.innerLists = lists
       }
+    },
+    config () {
+      return this.board.config
+    }
+  },
+  watch: {
+    board () {
+      this.innerLists = this.board.lists
     }
   },
   methods: {
@@ -105,14 +112,10 @@ export default {
       this.newListName = null
       this.hideAddListForm()
     },
-    updateList ({name, tasks}) {
-      if (!this.allowUpdates) return
-      this.$emit('update-list', {name, tasks})
-    },
     updateListOrder () {
       if (!this.allowUpdates) return this.emitUpdateError('list order')
       const config = _.cloneDeep(this.config)
-      config.lists = this.listsOfTasks.map(({name, hidden, ignore}) => ({name, hidden, ignore}))
+      config.lists = this.lists.map(({name, hidden, ignore}) => ({name, hidden, ignore}))
       this.$emit('update-list-order', config)
     },
     emitUpdateError (error) {
@@ -120,10 +123,9 @@ export default {
     },
     updateTaskOrder ({newList, oldList, newIndex, oldIndex, taskId}) {
       if (!this.allowUpdates) return this.emitUpdateError('task order')
-      const list = this.listsOfTasks.find(list => list.name === newList)
+      const list = this.lists.find(list => list.name === newList)
       const task = list.tasks.find(task => task.id === taskId)
-      task.list = newList
-      this.$emit('update-task-order', {task, tasks: this.listsOfTasks, newList, oldList, newIndex, oldIndex, taskId})
+      this.$emit('update-task-order', {task, tasks: this.lists, newList, oldList, newIndex, oldIndex, taskId})
     },
     showDetail (task) {
       this.$emit('task-selected', task)

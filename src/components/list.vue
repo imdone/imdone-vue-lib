@@ -1,14 +1,14 @@
 <template lang="pug">
 .card.list
   header.card-header
-    p.card-header-title {{list}}
-    a.card-header-icon(@click="deleteList" v-if="sortedTasks.length === 0")
+    p.card-header-title {{listName}}
+    a.card-header-icon(@click="deleteList" v-if="tasks.length === 0")
       b-icon(pack="fa" icon="trash" size="is-small")
-    .card-header-icon(v-if="sortedTasks.length > 0")
-      .tag.is-info {{sortedTasks.length}}
+    .card-header-icon(v-if="tasks.length > 0")
+      .tag.is-info {{tasks.length}}
   .card-content
     .overflow-container
-      draggable.tasks(:data-list="list" v-model="sortedTasks" :options="{group:'cards'}" @end="onEnd")
+      draggable.tasks(:data-list="listName" v-model="tasks" :options="{group:'cards'}" @end="onEnd")
         card(v-for="task in tasks"
           :selectedTask="selectedTask"
           :task="task"
@@ -32,15 +32,33 @@ export default {
     'b-icon': Icon
   },
   // DOING: Should accept a v-model **list** in the format {name, hidden, tasks} id:41
-  props: ['list', 'tasks', 'selectedTask', 'repoURL', 'allowUpdates'],
+  props: ['value', 'selectedTask', 'repoURL', 'allowUpdates'],
+  data () {
+    return {
+      innerTasks: this.value.tasks
+    }
+  },
   computed: {
-    sortedTasks: {
+    tasks: {
       get () {
-        return this.tasks
+        return this.innerTasks
       },
       set (value) {
-        this.$emit('update-list', {name: this.list, tasks: value})
+        this.innerTasks = value
+        this.$emit('input', {
+          hidden: this.value.hidden,
+          name: this.listName,
+          tasks: value
+        })
       }
+    },
+    listName () {
+      return this.value.name
+    }
+  },
+  watch: {
+    value () {
+      this.innerTasks = this.value.tasks
     }
   },
   methods: {
@@ -60,7 +78,7 @@ export default {
       this.$emit('file-link', task)
     },
     deleteList () {
-      this.$emit('delete-list', this.list)
+      this.$emit('delete-list', this.listName)
     }
   }
 }
