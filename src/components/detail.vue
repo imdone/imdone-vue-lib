@@ -116,9 +116,6 @@
 
 </template>
 <script>
-import * as MarkdownIt from 'markdown-it'
-import * as cheerio from 'cheerio'
-import * as checkbox from 'markdown-it-checkbox'
 import * as moment from 'moment'
 import LinkIssues from '@/components/linkIssues'
 import { Icon } from 'buefy/dist/components/Icon'
@@ -129,9 +126,7 @@ import * as _ from 'lodash'
 import axios from 'axios'
 import InputTag from '@/components/InputTag'
 import compare from 'just-compare'
-
-const md = new MarkdownIt({html: true, breaks: true})
-md.use(checkbox)
+import taskTextUtils from '../utils/task-text-utils'
 
 export default {
   name: 'imdone-detail',
@@ -249,22 +244,11 @@ export default {
     authorEmail: function () {
       return `mailto:${this.blame.email}`
     },
-    text: function () {
-      const html = md.render(this.task.getText({stripMeta: true, sanitize: true, stripTags: true, stripContext: true}))
-      const $ = cheerio.load(html)
-      $('a').attr('target', '_blank')
-      return $.html()
+    text () {
+      return taskTextUtils.text(this.task)
     },
-    description: function () {
-      const html = md.render(this.task.getTextAndDescription())
-      const $ = cheerio.load(html)
-      $('a').each(function () {
-        $(this).attr('target', '_blank')
-      })
-      // TODO: Support updating task lists from UI id:36
-      $('input[type=checkbox]').closest('li').css('list-style', 'none')
-      $('input[type=checkbox]').attr('disabled', 'true')
-      return $.html()
+    description () {
+      return taskTextUtils.description(this.task)
     },
     metaData: function () {
       const meta = []

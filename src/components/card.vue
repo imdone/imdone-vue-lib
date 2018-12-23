@@ -11,6 +11,7 @@ article.message(:class="{'is-imdone-primary': selected, 'is-info': !selected}" v
             img.gravatar(v-if="task.blame && task.blame.email" :src="gravatarURL" :title="name")
             b-icon(v-else pack="fa" icon="user" size="is-small" title="No author found")
     .task-text.has-text-left(@click.prevent="textClicked" v-html="text")
+    //- DOING: Display description ??? Toggle in preferences?
     //- TODO: Display progress of task lists like [github](https://help.github.com/articles/about-task-lists/) id:37
     .tags.imdone-tags(v-if="tags.length > 0")
       .tag.is-imdone-primary(v-for="tag in tags") {{tag}}
@@ -22,13 +23,10 @@ article.message(:class="{'is-imdone-primary': selected, 'is-info': !selected}" v
       a(@click="emitFileLink" :href="fileLink" :target="target") {{task.source.path}}:{{task.line}}
 </template>
 <script>
-import * as MarkdownIt from 'markdown-it'
-import * as cheerio from 'cheerio'
 import * as gravatar from 'gravatar'
 import { Icon } from 'buefy/dist/components/Icon'
+import taskTextUtils from '../utils/task-text-utils'
 // import Task from 'imdone-core/lib/task'
-
-const md = new MarkdownIt()
 
 export default {
   name: 'imdone-card',
@@ -46,10 +44,10 @@ export default {
       return att
     },
     text () {
-      const html = md.render(this.task.getText({stripMeta: true, sanitize: true, stripTags: true, stripContext: true}))
-      const $ = cheerio.load(html)
-      $('a').attr('target', '_blank')
-      return $.html()
+      return taskTextUtils.text(this.task)
+    },
+    description () {
+      return taskTextUtils.description(this.task)
     },
     name () {
       if (!this.task.blame || !this.task.blame.name) return 'no author found'
