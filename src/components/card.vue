@@ -11,7 +11,7 @@ article.message(:class="{'is-imdone-primary': selected, 'is-info': !selected}" v
             img.gravatar(v-if="task.blame && task.blame.email" :src="gravatarURL" :title="name")
             b-icon(v-else pack="fa" icon="user" size="is-small" title="No author found")
     .task-text.has-text-left(@click.prevent="textClicked" v-html="text")
-    //- DOING: Display description ??? Toggle in preferences?
+    //- DOING: Display description ??? Toggle in preferences? id:42
     //- TODO: Display progress of task lists like [github](https://help.github.com/articles/about-task-lists/) id:37
     .tags.imdone-tags(v-if="tags.length > 0")
       .tag.is-imdone-primary(v-for="tag in tags") {{tag}}
