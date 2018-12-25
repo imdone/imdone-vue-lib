@@ -5,6 +5,7 @@
       list.column.imdone-list(v-for='(list, index) in lists'
         :key="list.name"
         v-model="lists[index]"
+        :board="board"
         :selectedTask="selectedTask"
         :repoURL="repoURL"
         :allowUpdates="allowUpdates"

@@ -2,9 +2,9 @@
 .card.list
   header.card-header
     p.card-header-title {{listName}}
-    a.card-header-icon(@click="deleteList" v-if="tasks.length === 0")
+    a.card-header-icon(@click="deleteList" v-if="tasks.length === 0 && !board.filter")
       b-icon(pack="fa" icon="trash" size="is-small")
-    .card-header-icon(v-if="tasks.length > 0")
+    .card-header-icon(v-else)
       .tag.is-info {{tasks.length}}
   .card-content
     .overflow-container
@@ -32,7 +32,7 @@ export default {
     'b-icon': Icon
   },
   // DOING: Should accept a v-model **list** in the format {name, hidden, tasks} id:41
-  props: ['value', 'selectedTask', 'repoURL', 'allowUpdates'],
+  props: ['value', 'selectedTask', 'repoURL', 'allowUpdates', 'board'],
   data () {
     return {
       innerTasks: this.value.tasks
