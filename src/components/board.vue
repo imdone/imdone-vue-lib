@@ -13,7 +13,9 @@
         v-on:show-detail="showDetail"
         v-on:file-link="emitFileLink"
         v-on:delete-list="deleteList"
-        v-on:text-clicked="textClicked")
+        v-on:text-clicked="textClicked"
+        v-on:tag-clicked='tagClicked'
+        v-on:context-clicked='contextClicked')
       .column.new-list(slot="footer" v-if="allowUpdates")
         button#new-list-button.button.is-white(v-if="!addListFormShown" @click="showAddListForm")
           b-icon(pack="fa" icon="plus" size="is-small")
@@ -84,6 +86,12 @@ export default {
   methods: {
     textClicked (event) {
       this.$emit('text-clicked', event)
+    },
+    tagClicked (data) {
+      this.$emit('tag-clicked', data)
+    },
+    contextClicked (data) {
+      this.$emit('context-clicked', data)
     },
     showAddListForm () {
       if (!this.allowUpdates) return this.emitUpdateError('show add')

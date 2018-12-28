@@ -14,9 +14,9 @@ article.message(:class="{'is-imdone-primary': selected, 'is-info': !selected}" v
     //- DOING: Display description ??? Toggle in preferences? id:42
     //- TODO: Display progress of task lists like [github](https://help.github.com/articles/about-task-lists/) id:37
     .tags.imdone-tags(v-if="tags.length > 0")
-      .tag.is-imdone-primary(v-for="tag in tags") {{tag}}
+      a.tag.is-imdone-primary(v-for="tag in tags" @click.stop='tagClicked(tag)') {{tag}}
     .tags.imdone-contexts(v-if="contexts.length > 0")
-      .tag.is-info(v-for="context in contexts") {{context}}
+      a.tag.is-info(v-for="context in contexts" @click.stop='contextClicked(context)') {{context}}
     .source
       //- BACKLOG: Add ban icon for ignoring a file or folder id:38
       // - b-icon(v-if="allowUpdates" pack="fa" icon="ban" size="is-small")
@@ -79,6 +79,12 @@ export default {
     }
   },
   methods: {
+    tagClicked (tag) {
+      this.$emit('tag-clicked', {task: this.task, tag})
+    },
+    contextClicked (context) {
+      this.$emit('context-clicked', {task: this.task, context})
+    },
     textClicked (event) {
       this.$emit('text-clicked', event)
     },

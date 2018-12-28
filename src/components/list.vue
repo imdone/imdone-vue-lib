@@ -1,5 +1,5 @@
 <template lang="pug">
-.card.list
+.card.list(v-if='visible')
   header.card-header
     p.card-header-title {{listName}}
     a.card-header-icon(@click="deleteList" v-if="tasks.length === 0 && !board.filter")
@@ -18,7 +18,9 @@
           :allowUpdates="allowUpdates"
           v-on:show-detail="showDetail"
           v-on:file-link="fileLink"
-          v-on:text-clicked="textClicked")
+          v-on:text-clicked="textClicked"
+          v-on:tag-clicked='tagClicked'
+          v-on:context-clicked='contextClicked')
 </template>
 <script>
 import { Icon } from 'buefy/dist/components/Icon'
@@ -54,6 +56,9 @@ export default {
     },
     listName () {
       return this.value.name
+    },
+    visible () {
+      return !this.value.hidden
     }
   },
   watch: {
@@ -64,6 +69,12 @@ export default {
   methods: {
     textClicked (event) {
       this.$emit('text-clicked', event)
+    },
+    tagClicked (data) {
+      this.$emit('tag-clicked', data)
+    },
+    contextClicked (data) {
+      this.$emit('context-clicked', data)
     },
     onEnd ({item, to, from, newIndex, oldIndex}) {
       const newList = to.dataset.list
