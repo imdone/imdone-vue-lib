@@ -3,10 +3,12 @@
   .overflow-container
     .panel
       .panel-heading.has-text-left.has-text-weight-bold
-        .columns
-          .column.is-11(@click.prevent="textClicked" v-html="text")
-          .column.is-1.delete-column
-            button(class="delete" aria-label="close" v-on:click="close")
+        .level
+          .level-left
+            .level-item(@click.prevent="textClicked" v-html="text")
+          .level-right
+            .level-item
+              button(class="delete" aria-label="close" v-on:click="close")
       .panel-block.is-block
         .columns
           .column.is-10.has-text-left.break-word
@@ -272,7 +274,6 @@ export default {
   flex: 1;
   min-height: 0;
   max-height: 100vh;
-  background: #fff;
   font-size: .9rem;
   .b-tabs {
     width: 100%;
@@ -286,9 +287,6 @@ export default {
   }
   .panel {
     margin: .75rem;
-  }
-  .delete-column {
-    padding-top: .9em;
   }
   .description {
     hr {
