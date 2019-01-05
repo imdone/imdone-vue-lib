@@ -4,7 +4,7 @@
     .panel
       .panel-heading.has-text-left.has-text-weight-bold
         .level
-          .level-left
+          .level-left.task-text
             .level-item(@click.prevent="textClicked" v-html="text")
           .level-right
             .level-item
@@ -292,6 +292,10 @@ export default {
     hr {
       margin: 1rem 0;
     }
+  }
+  .task-text {
+    max-width: 90%;
+    display: block;
   }
   .task-description {
     ul {
