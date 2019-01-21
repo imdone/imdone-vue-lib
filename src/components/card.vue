@@ -12,10 +12,10 @@ article.message.task-card(:class="{'is-imdone-primary': selected, 'is-info': !se
             b-icon(v-else pack="fa" icon="user" size="is-small" title="No author found")
     .task-text.has-text-left(@click.prevent="textClicked" v-html="description.html")
     .toggle-full-desc(v-if='descTruncated  && !fullDesc')
-      a(@click.stop="fullDesc = true")
+      a(@click.stop="fullDesc = true" title="Show full description")
         octicon(:icon="Octicons.unfold")
     .toggle-full-desc(v-if='fullDesc')
-      a(@click.stop="fullDesc = false")
+      a(@click.stop="fullDesc = false" title="Show truncated description")
         octicon(:icon="Octicons.fold")
     //- TODO: Display progress of task lists like [github](https://help.github.com/articles/about-task-lists/) id:37
     .tags.imdone-tags(v-if="tags.length > 0")
