@@ -63,7 +63,7 @@ export default {
       return this.fullDesc ? taskTextUtils.description(this.task) : taskTextUtils.description(this.task, this.maxDescLines)
     },
     descTruncated () {
-      return this.description.lines.length > this.maxDescLines
+      return this.description.lines.length >= this.maxDescLines
     },
     name () {
       if (!this.task.blame || !this.task.blame.name) return 'no author found'
