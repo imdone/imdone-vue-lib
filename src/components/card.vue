@@ -11,11 +11,11 @@ article.message.task-card(:class="{'is-imdone-primary': selected, 'is-info': !se
             img.gravatar(v-if="task.blame && task.blame.email" :src="gravatarURL" :title="name")
             b-icon(v-else pack="fa" icon="user" size="is-small" title="No author found")
     .task-text.has-text-left(@click.prevent="textClicked" v-html="description.html")
-    .more-desc(v-if='descTruncated  && !fullDesc')
-      a(@click="fullDesc = true")
+    .toggle-full-desc(v-if='descTruncated  && !fullDesc')
+      a(@click.stop="fullDesc = true")
         octicon(:icon="Octicons.unfold")
-    .less-desc(v-if='fullDesc')
-      a(@click="fullDesc = false")
+    .toggle-full-desc(v-if='fullDesc')
+      a(@click.stop="fullDesc = false")
         octicon(:icon="Octicons.fold")
     //- TODO: Display progress of task lists like [github](https://help.github.com/articles/about-task-lists/) id:37
     .tags.imdone-tags(v-if="tags.length > 0")
@@ -145,6 +145,9 @@ img.gravatar {
       margin-bottom: 0;
       padding-bottom: 0;
     }
+  }
+  .toggle-full-desc {
+    margin-bottom: 1em;
   }
   .task-text {
     margin-bottom: 1em;
