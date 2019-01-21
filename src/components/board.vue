@@ -113,7 +113,7 @@ export default {
           this.$refs.newListInput.focus()
           this.$refs.newListInput.select()
         })
-        return this.$emit('list-name-error')
+        return this.$emit('list-name-error', 'List names must be all caps, must be at least 2 characters in length and can include [-] and [_]')
       }
       const config = this.config
       if (_.find(config.lists, {name: this.newListName})) return
