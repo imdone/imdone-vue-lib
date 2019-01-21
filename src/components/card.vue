@@ -38,7 +38,7 @@ export default {
   props: ['task', 'selectedTask', 'repoURL', 'allowUpdates'],
   data () {
     return {
-      maxDescLines: 4,
+      maxDescLines: 5,
       Octicons,
       fullDesc: false
     }

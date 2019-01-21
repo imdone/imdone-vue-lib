@@ -569,7 +569,7 @@
       "----",
       "- User can select from all templates stored in .imdone/templates",
       "- User will be asked to provide information based on 'model' param",
-      "- template files should have a .yml or .yaml extension"
+      "  - template files should have a .yml or .yaml extension"
     ],
     "rawDescription": [
       "Acceptance Criteria",
