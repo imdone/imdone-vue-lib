@@ -1,5 +1,5 @@
 <template lang="pug">
-article.message(:class="{'is-imdone-primary': selected, 'is-info': !selected}" v-bind="meta" v-on:click="showDetail")
+article.message.task-card(:class="{'is-imdone-primary': selected, 'is-info': !selected}" v-bind="meta" v-on:click="showDetail")
   //- .message-header
   //-   .task-text.has-text-left(v-html="text")
   .message-body
@@ -10,8 +10,13 @@ article.message(:class="{'is-imdone-primary': selected, 'is-info': !selected}" v
           .level-item
             img.gravatar(v-if="task.blame && task.blame.email" :src="gravatarURL" :title="name")
             b-icon(v-else pack="fa" icon="user" size="is-small" title="No author found")
-    .task-text.has-text-left(@click.prevent="textClicked" v-html="text")
-    //- DOING: Display description ??? Toggle in preferences? id:42
+    .task-text.has-text-left(@click.prevent="textClicked" v-html="description.html")
+    .more-desc(v-if='descTruncated  && !fullDesc')
+      a(@click="fullDesc = true")
+        octicon(:icon="Octicons.unfold")
+    .less-desc(v-if='fullDesc')
+      a(@click="fullDesc = false")
+        octicon(:icon="Octicons.fold")
     //- TODO: Display progress of task lists like [github](https://help.github.com/articles/about-task-lists/) id:37
     .tags.imdone-tags(v-if="tags.length > 0")
       a.tag.is-imdone-primary(v-for="tag in tags" @click.stop='tagClicked(tag)') {{tag}}
@@ -25,14 +30,22 @@ article.message(:class="{'is-imdone-primary': selected, 'is-info': !selected}" v
 <script>
 import * as gravatar from 'gravatar'
 import { Icon } from 'buefy/dist/components/Icon'
+import Octicon, { Octicons } from 'octicons-vue'
 import taskTextUtils from '../utils/task-text-utils'
-// import Task from 'imdone-core/lib/task'
 
 export default {
   name: 'imdone-card',
   props: ['task', 'selectedTask', 'repoURL', 'allowUpdates'],
+  data () {
+    return {
+      maxDescLines: 4,
+      Octicons,
+      fullDesc: false
+    }
+  },
   components: {
-    'b-icon': Icon
+    'b-icon': Icon,
+    Octicon
   },
   computed: {
     meta () {
@@ -47,7 +60,10 @@ export default {
       return taskTextUtils.text(this.task)
     },
     description () {
-      return taskTextUtils.description(this.task)
+      return this.fullDesc ? taskTextUtils.description(this.task) : taskTextUtils.description(this.task, this.maxDescLines)
+    },
+    descTruncated () {
+      return this.description.lines.length > this.maxDescLines
     },
     name () {
       if (!this.task.blame || !this.task.blame.name) return 'no author found'
@@ -100,12 +116,12 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 img.gravatar {
   border-radius: 50%;
   width: 25px;
 }
-.message {
+.task-card {
   cursor: -webkit-grab;
   &:not(:last-child) {
     margin-bottom: .75em;
@@ -129,28 +145,35 @@ img.gravatar {
       margin-bottom: 0;
       padding-bottom: 0;
     }
-    .task-text {
-      margin-bottom: 1em;
-      h1,h2,h3,h4,h5,ul {
-        margin: .2em 0;
-      }
-      h1 {
-        font-size: 1.5em;
-      }
-      h2 {
-        font-size: 1.35em;
-      }
-      h3 {
-        font-size: 1.2em;
-      }
-      h4 {
-        font-size: 1.05em;
-      }
-      h5 {
-        font-size: 1em;
-      }
-      ul {
-        margin-left: 1.2em;
+  }
+  .task-text {
+    margin-bottom: 1em;
+    h1,h2,h3,h4,h5,ul {
+      margin: .2em 0;
+    }
+    h1 {
+      font-size: 1.5em;
+    }
+    h2 {
+      font-size: 1.35em;
+    }
+    h3 {
+      font-size: 1.2em;
+    }
+    h4 {
+      font-size: 1.05em;
+    }
+    h5 {
+      font-size: 1em;
+    }
+    ul {
+      margin-left: 1.2em;
+      list-style: disc;
+      li {
+        input[type=checkbox] {
+          margin-right: 1em;
+          margin-left: -1.5em;
+        }
       }
     }
   }

@@ -250,7 +250,7 @@ export default {
       return taskTextUtils.text(this.task)
     },
     description () {
-      return taskTextUtils.description(this.task)
+      return taskTextUtils.description(this.task).html
     },
     metaData: function () {
       const meta = []

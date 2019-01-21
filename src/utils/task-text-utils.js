@@ -1,6 +1,7 @@
 import * as MarkdownIt from 'markdown-it'
 import * as cheerio from 'cheerio'
 import * as checkbox from 'markdown-it-checkbox'
+
 const md = new MarkdownIt({html: true, breaks: true})
 md.use(checkbox)
 export default {
@@ -10,8 +11,12 @@ export default {
     $('a').attr('target', '_blank')
     return $.html()
   },
-  description (task) {
-    const html = md.render(task.getTextAndDescription())
+  description (task, lines) {
+    const descAry = task.getTextAndDescription().split('\n')
+    const description = lines
+                        ? task.getTextAndDescription().split('\n').slice(0, lines - 1).join('\n')
+                        : task.getTextAndDescription()
+    const html = md.render(description)
     const $ = cheerio.load(html)
     $('a').each(function () {
       $(this).attr('target', '_blank')
@@ -19,6 +24,9 @@ export default {
     // TODO: Support updating task lists from UI id:36
     $('input[type=checkbox]').closest('li').css('list-style', 'none')
     $('input[type=checkbox]').attr('disabled', 'true')
-    return $.html()
+    return {
+      lines: descAry,
+      html: $.html()
+    }
   }
 }
