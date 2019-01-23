@@ -127,9 +127,6 @@ img.gravatar {
     margin-bottom: .75em;
   }
   max-width: 300px;
-  a {
-    text-decoration: none !important;
-  }
   .card-actions {
     width: 100%;
     a {

@@ -289,6 +289,9 @@ export default {
     margin: .75rem;
   }
   .description {
+    a {
+      text-decoration: underline;
+    }
     hr {
       margin: 1rem 0;
     }
