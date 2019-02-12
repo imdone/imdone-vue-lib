@@ -289,21 +289,39 @@ export default {
   .panel {
     margin: .75rem;
   }
-  .description {
-    a {
-      text-decoration: underline;
-    }
-    hr {
-      margin: 1rem 0;
-    }
-  }
   .task-text {
     max-width: 90%;
     display: block;
   }
   .task-description {
+    margin-bottom: 1em;
+    h1,h2,h3,h4,h5,ul {
+      margin: .2em 0;
+    }
+    h1 {
+      font-size: 1.5em;
+    }
+    h2 {
+      font-size: 1.35em;
+    }
+    h3 {
+      font-size: 1.2em;
+    }
+    h4 {
+      font-size: 1.05em;
+    }
+    h5 {
+      font-size: 1em;
+    }
     ul {
+      margin-left: 1.2em;
       list-style: disc;
+      li {
+        input[type=checkbox] {
+          margin-right: 1em;
+          margin-left: -1.5em;
+        }
+      }
     }
   }
   .imdone-tags {
