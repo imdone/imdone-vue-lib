@@ -10,7 +10,7 @@ article.message.task-card(:class="{'is-imdone-primary': selected, 'is-info': !se
           .level-item
             img.gravatar(v-if="task.blame && task.blame.email" :src="gravatarURL" :title="name")
             b-icon(v-else pack="fa" icon="user" size="is-small" title="No author found")
-    .task-text.has-text-left(@click.prevent="textClicked" v-html="description.html")
+    .task-text.task-description.has-text-left(@click="textClicked" v-html="description.html" ref="description")
     .toggle-full-desc(v-if='descTruncated  && !fullDesc')
       a(@click.stop="fullDesc = true" title="Show full description")
         octicon(:icon="Octicons.unfold")
@@ -102,9 +102,11 @@ export default {
       this.$emit('context-clicked', {task: this.task, context})
     },
     textClicked (event) {
-      this.$emit('text-clicked', event)
+      if (event.target.type !== 'checkbox') event.preventDefault()
+      this.$emit('text-clicked', {event, task: this.task, description: this.$refs.description})
     },
-    showDetail () {
+    showDetail (event) {
+      if (event.target.type === 'checkbox') return
       this.$emit('show-detail', this.task)
     },
     emitFileLink () {

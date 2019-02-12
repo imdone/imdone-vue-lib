@@ -84,8 +84,8 @@ export default {
     }
   },
   methods: {
-    textClicked (event) {
-      this.$emit('text-clicked', event)
+    textClicked (params) {
+      this.$emit('text-clicked', params)
     },
     tagClicked (data) {
       this.$emit('tag-clicked', data)

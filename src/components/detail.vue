@@ -27,7 +27,7 @@
               .column.is-9.has-text-left {{task.list}}
             .columns
               .column.is-3.has-text-left.has-text-weight-bold Description
-              .column.is-9.has-text-left.task-description.break-word(@click.prevent="textClicked" v-html="description")
+              .column.is-9.has-text-left.task-description.break-word(@click="textClicked" v-html="description" ref="description")
             .columns(v-if="blame && (blame.name || blame.email)")
               .column.is-3.has-text-left.has-text-weight-bold Author
               .column.is-9.has-text-left(v-if="blame.name") {{blame.name}} - #[a(:href="authorEmail" target="_blank" v-if="blame.email") {{blame.email}}]
@@ -65,7 +65,7 @@
             .column.is-9.has-text-left {{task.list}}
           .columns
             .column.is-3.has-text-left.has-text-weight-bold Description
-            .column.is-9.has-text-left.task-description.break-word(@click.prevent="textClicked" v-html="description")
+            .column.is-9.has-text-left.task-description.break-word(@click="textClicked" v-html="description" ref="description")
           .columns(v-if="blame && (blame.name || blame.email)")
             .column.is-3.has-text-left.has-text-weight-bold Author
             .column.is-9.has-text-left(v-if="blame.name") {{blame.name}} - #[a(:href="authorEmail" target="_blank" v-if="blame.email") {{blame.email}}]
@@ -95,7 +95,7 @@
           .column.is-9.has-text-left {{task.list}}
         .columns
           .column.is-3.has-text-left.has-text-weight-bold Description
-          .column.is-9.has-text-left.task-description.break-word(@click.prevent="textClicked" v-html="description")
+          .column.is-9.has-text-left.task-description.break-word(@click="textClicked" v-html="description" ref="description")
         .columns(v-if="blame && (blame.name || blame.email)")
           .column.is-3.has-text-left.has-text-weight-bold Author
           .column.is-9.has-text-left(v-if="blame.name") {{blame.name}} - #[a(:href="authorEmail" target="_blank" v-if="blame.email") {{blame.email}}]
@@ -210,7 +210,8 @@ export default {
       this.$emit('file-link', this.task)
     },
     textClicked (event) {
-      this.$emit('text-clicked', event)
+      if (event.target.type !== 'checkbox') event.preventDefault()
+      this.$emit('text-clicked', {event, task: this.task, description: this.$refs.description})
     }
   },
   computed: {
