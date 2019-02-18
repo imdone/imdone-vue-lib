@@ -1,23 +1,30 @@
 <template lang="pug">
-article.message.task-card(:class="{'is-imdone-primary': selected, 'is-info': !selected}" v-bind="meta" v-on:click="showDetail")
+article.message.task-card(:class="{'is-imdone-primary': selected, 'is-info': !selected}" v-bind="meta")
   //- .message-header
   //-   .task-text.has-text-left(v-html="text")
   .message-body
-    .card-actions.is-size-6(v-if="task.blame && task.blame.email")
+    .card-actions.is-size-6
       .level
         .level-left
         .level-right
           .level-item
+            a(@click.stop="showDetail" title="Show Detail")
+              octicon(:icon="Octicons.info")
+          .level-item(v-if="task.blame && task.blame.email")
             img.gravatar(v-if="task.blame && task.blame.email" :src="gravatarURL" :title="name")
             b-icon(v-else pack="fa" icon="user" size="is-small" title="No author found")
     .task-text.task-description.has-text-left(@click="textClicked" v-html="description.html" ref="description")
     .toggle-full-desc(v-if='descTruncated  && !fullDesc')
-      a(@click.stop="fullDesc = true" title="Show full description")
-        octicon(:icon="Octicons.unfold")
+      b-tooltip(label="Expand description" position="is-right" type="is-black")
+        a(@click.stop="fullDesc = true" title="Expand description")
+          octicon(:icon="Octicons.unfold")
     .toggle-full-desc(v-if='fullDesc')
-      a(@click.stop="fullDesc = false" title="Show truncated description")
-        octicon(:icon="Octicons.fold")
+      b-tooltip(label="Collapse description" position="is-right" type="is-black")
+        a(@click.stop="fullDesc = false" title="Collapse description")
+          octicon(:icon="Octicons.fold")
     //- TODO: Display progress of task lists like [github](https://help.github.com/articles/about-task-lists/) id:37
+    // - [Issues · imdone/imdone-vue-lib](https://github.com/imdone/imdone-vue-lib/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
+    // - [ ] Create vue component
     .tags.imdone-tags(v-if="tags.length > 0")
       a.tag.is-imdone-primary(v-for="tag in tags" @click.stop='tagClicked(tag)') {{tag}}
     .tags.imdone-contexts(v-if="contexts.length > 0")
@@ -30,6 +37,7 @@ article.message.task-card(:class="{'is-imdone-primary': selected, 'is-info': !se
 <script>
 import * as gravatar from 'gravatar'
 import { Icon } from 'buefy/dist/components/Icon'
+import { Tooltip } from 'buefy/dist/components/ToolTip'
 import Octicon, { Octicons } from 'octicons-vue'
 import taskTextUtils from '../utils/task-text-utils'
 
@@ -38,13 +46,14 @@ export default {
   props: ['task', 'selectedTask', 'repoURL', 'allowUpdates'],
   data () {
     return {
-      maxDescLines: 5,
+      maxDescLines: 7,
       Octicons,
       fullDesc: false
     }
   },
   components: {
     'b-icon': Icon,
+    'b-tooltip': Tooltip,
     Octicon
   },
   computed: {
@@ -106,7 +115,6 @@ export default {
       this.$emit('text-clicked', {event, task: this.task, description: this.$refs.description})
     },
     showDetail (event) {
-      if (event.target.type === 'checkbox') return
       this.$emit('show-detail', this.task)
     },
     emitFileLink () {
@@ -139,6 +147,7 @@ img.gravatar {
     word-break: break-word;
     text-align: left;
     padding: 1em;
+    padding-top: .5em;
     font-size: .9rem !important;
     .tags {
       margin-bottom: 0;
@@ -167,6 +176,9 @@ img.gravatar {
     }
     h5 {
       font-size: 1em;
+    }
+    ol {
+      margin-left: 1em;
     }
     ul {
       margin-left: 1.2em;

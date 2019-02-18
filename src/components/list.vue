@@ -33,7 +33,7 @@ export default {
     Draggable,
     'b-icon': Icon
   },
-  // DOING: Should accept a v-model **list** in the format {name, hidden, tasks} id:41
+  // BACKLOG: Should accept a v-model **list** in the format {name, hidden, tasks} id:41
   props: ['value', 'selectedTask', 'repoURL', 'allowUpdates', 'board'],
   data () {
     return {

@@ -21,7 +21,9 @@ export default {
     $('a').each(function () {
       $(this).attr('target', '_blank')
     })
-    // TODO: Support updating task lists from UI id:36
+    // DONE: Support updating task lists from UI
+    // - [x] Just like this
+    // TODO: Support sorting of tasks in list +feature
     $('input[type=checkbox]').closest('li').css('list-style', 'none')
     // $('input[type=checkbox]').attr('disabled', 'true')
     return {
