@@ -101,7 +101,9 @@ export default {
   }
   .list {
     max-height: 100%;
-    width: 330px;
+    min-width: 300px;
+    max-width: 450px;
+    width: 20vw;
     margin-top: 5px;
     margin-bottom: 5px;
   }

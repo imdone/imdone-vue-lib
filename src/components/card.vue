@@ -136,7 +136,6 @@ img.gravatar {
   &:not(:last-child) {
     margin-bottom: .75em;
   }
-  max-width: 300px;
   .card-actions {
     width: 100%;
     a {
