@@ -16,6 +16,7 @@
           :data-id="task.id"
           :repoURL="repoURL"
           :allowUpdates="allowUpdates"
+          v-show="!ignored"
           v-on:show-detail="showDetail"
           v-on:file-link="fileLink"
           v-on:text-clicked="textClicked"
@@ -59,6 +60,9 @@ export default {
     },
     visible () {
       return !this.value.hidden
+    },
+    ignored () {
+      return this.value.ignored
     }
   },
   watch: {

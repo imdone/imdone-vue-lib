@@ -23,26 +23,27 @@
           b-tab-item(label="Comment")
             b-loading(:is-full-page="false" :active="isLoading")
             .columns
-              .column.is-3.has-text-left.has-text-weight-bold List
+              .column.is-3.has-text-left.has-text-weight-bold.has-text-grey List
               .column.is-9.has-text-left {{task.list}}
             .columns
-              .column.is-3.has-text-left.has-text-weight-bold Description
-              .column.is-9.has-text-left.task-description.break-word(@click="textClicked" v-html="description" ref="description")
+              .column.is-3.has-text-left.has-text-weight-bold.has-text-grey Description
+            .columns
+              .column.is-12.has-text-left.task-description.break-word(@click="textClicked" v-html="description" ref="description")
             .columns(v-if="blame && (blame.name || blame.email)")
-              .column.is-3.has-text-left.has-text-weight-bold Author
+              .column.is-3.has-text-left.has-text-weight-bold.has-text-grey Author
               .column.is-9.has-text-left(v-if="blame.name") {{blame.name}} - #[a(:href="authorEmail" target="_blank" v-if="blame.email") {{blame.email}}]
             .columns(v-if="date")
-              .column.is-3.has-text-left.has-text-weight-bold Date Added
+              .column.is-3.has-text-left.has-text-weight-bold.has-text-grey Date Added
               .column.is-9.has-text-left {{date}}
             .columns(v-if="commit")
-              .column.is-3.has-text-left.has-text-weight-bold Commit
+              .column.is-3.has-text-left.has-text-weight-bold.has-text-grey Commit
               .column.is-9.has-text-left #[a(:href="commitLink" target="_blank") {{commit.substring(0,7)}}]
             .columns
-              .column.is-3.has-text-left.has-text-weight-bold Tags
+              .column.is-3.has-text-left.has-text-weight-bold.has-text-grey Tags
               .column.is-9.has-text-left
                 input-tag.imdone-tags(placeholder="Add Tag (e.g. debt, feature, perf)" v-model="tags" :validate="validateTag" :add-tag-on-keys="addTagKeys" tagClass="is-imdone-primary")
             .columns
-              .column.is-3.has-text-left.has-text-weight-bold Context
+              .column.is-3.has-text-left.has-text-weight-bold.has-text-grey Context
               .column.is-9.has-text-left
                 input-tag.imdone-tags(placeholder="Add Context (e.g. aws, database, cache)" v-model="context"  :validate="validateTag" :add-tag-on-keys="addTagKeys" tagClass="is-info")
             .level
@@ -61,26 +62,27 @@
         div(v-else)
           b-loading(:is-full-page="false" :active="isLoading")
           .columns
-            .column.is-3.has-text-left.has-text-weight-bold List
+            .column.is-3.has-text-left.has-text-weight-bold.has-text-grey List
             .column.is-9.has-text-left {{task.list}}
           .columns
-            .column.is-3.has-text-left.has-text-weight-bold Description
-            .column.is-9.has-text-left.task-description.break-word(@click="textClicked" v-html="description" ref="description")
+            .column.is-3.has-text-left.has-text-weight-bold.has-text-grey Description
+          .columns
+            .column.is-12.has-text-left.task-description.break-word(@click="textClicked" v-html="description" ref="description")
           .columns(v-if="blame && (blame.name || blame.email)")
-            .column.is-3.has-text-left.has-text-weight-bold Author
+            .column.is-3.has-text-left.has-text-weight-bold.has-text-grey Author
             .column.is-9.has-text-left(v-if="blame.name") {{blame.name}} - #[a(:href="authorEmail" target="_blank" v-if="blame.email") {{blame.email}}]
           .columns(v-if="date")
-            .column.is-3.has-text-left.has-text-weight-bold Date Added
+            .column.is-3.has-text-left.has-text-weight-bold.has-text-grey Date Added
             .column.is-9.has-text-left {{date}}
           .columns(v-if="commit")
-            .column.is-3.has-text-left.has-text-weight-bold Commit
+            .column.is-3.has-text-left.has-text-weight-bold.has-text-grey Commit
             .column.is-9.has-text-left #[a(:href="commitLink" target="_blank") {{commit.substring(0,7)}}]
           .columns
-            .column.is-3.has-text-left.has-text-weight-bold Tags
+            .column.is-3.has-text-left.has-text-weight-bold.has-text-grey Tags
             .column.is-9.has-text-left
               input-tag.imdone-tags(placeholder="Add Tag (e.g. debt, feature, perf)" v-model="tags" :validate="validateTag" :add-tag-on-keys="addTagKeys" tagClass="is-imdone-primary")
           .columns
-            .column.is-3.has-text-left.has-text-weight-bold Context
+            .column.is-3.has-text-left.has-text-weight-bold.has-text-grey Context
             .column.is-9.has-text-left
               input-tag.imdone-tags(placeholder="Add Context (e.g. aws, database, cache)" v-model="context"  :validate="validateTag" :add-tag-on-keys="addTagKeys" tagClass="is-info")
           .level
@@ -91,27 +93,28 @@
                   span Save
       .panel-block.is-block(v-else)
         .columns
-          .column.is-3.has-text-left.has-text-weight-bold List
+          .column.is-3.has-text-left.has-text-weight-bold.has-text-grey List
           .column.is-9.has-text-left {{task.list}}
         .columns
-          .column.is-3.has-text-left.has-text-weight-bold Description
-          .column.is-9.has-text-left.task-description.break-word(@click="textClicked" v-html="description" ref="description")
+          .column.is-3.has-text-left.has-text-weight-bold.has-text-grey Description
+        .columns
+          .column.is-12.has-text-left.task-description.break-word(@click="textClicked" v-html="description" ref="description")
         .columns(v-if="blame && (blame.name || blame.email)")
-          .column.is-3.has-text-left.has-text-weight-bold Author
+          .column.is-3.has-text-left.has-text-weight-bold.has-text-grey Author
           .column.is-9.has-text-left(v-if="blame.name") {{blame.name}} - #[a(:href="authorEmail" target="_blank" v-if="blame.email") {{blame.email}}]
         .columns(v-if="date")
-          .column.is-3.has-text-left.has-text-weight-bold Date Added
+          .column.is-3.has-text-left.has-text-weight-bold.has-text-grey Date Added
           .column.is-9.has-text-left {{date}}
         .columns(v-if="commit")
-          .column.is-3.has-text-left.has-text-weight-bold Commit
+          .column.is-3.has-text-left.has-text-weight-bold.has-text-grey Commit
           .column.is-9.has-text-left #[a(:href="commitLink" target="_blank") {{commit.substring(0,7)}}]
         .columns(v-if="hasTags")
-          .column.is-3.has-text-left.has-text-weight-bold Tags
+          .column.is-3.has-text-left.has-text-weight-bold.has-text-grey Tags
           .column.is-9.has-text-left
             .tags.imdone-tags
               .tag.is-imdone-primary(v-for="tag in tags") {{tag}}
         .columns(v-if="hasContext")
-          .column.is-3.has-text-left.has-text-weight-bold Context
+          .column.is-3.has-text-left.has-text-weight-bold.has-text-grey Context
           .column.is-9.has-text-left
             .tags.imdone-tags
               .tag.is-info(v-for="ctx in context") {{ctx}}
