@@ -8,7 +8,7 @@ article.message.task-card(:class="{'is-imdone-primary': selected, 'is-info': !se
         .level-left
         .level-right
           .level-item
-            a(@click.stop="showDetail" title="Show Detail")
+            a(@click.stop.prevent="showDetail" title="Show Detail")
               octicon(:icon="Octicons.info")
           .level-item(v-if="task.blame && task.blame.email")
             img.gravatar(v-if="task.blame && task.blame.email" :src="gravatarURL" :title="name")

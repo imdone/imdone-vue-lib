@@ -31,6 +31,7 @@
     "moment": "^2.22.2",
     "octicons-vue": "^0.17.2",
     "vue": "^2.5.17",
+    "vue-multipane": "^0.9.5",
     "vue-router": "^2.6.0",
     "vuedraggable": "^2.16.0"
   },
