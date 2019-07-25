@@ -1,7 +1,14 @@
 <template lang="pug">
 .detail
   .overflow-container
-    .panel
+    div(v-if="allowFileEdit")
+      .level.has-text-left.has-text-weight-bold
+        .level-left
+        .level-right
+          .level-item
+            button(class="delete" aria-label="close" v-on:click="close")
+      taskEditor(:task="task")
+    .panel(v-else)
       .panel-heading.has-text-left.has-text-weight-bold
         .level
           .level-left.task-text
@@ -132,6 +139,7 @@ import axios from 'axios'
 import InputTag from '@/components/InputTag'
 import compare from 'just-compare'
 import taskTextUtils from '../utils/task-text-utils'
+import TaskEditor from '@/components/taskEditor'
 
 export default {
   name: 'imdone-detail',
@@ -142,9 +150,10 @@ export default {
     'b-tag': Tag,
     'b-loading': Loading,
     LinkIssues,
-    InputTag
+    InputTag,
+    TaskEditor
   },
-  props: ['task', 'repoURL', 'baseURL', 'allowUpdates', 'allowDetailUpdates', 'searchIssuesURL', 'createIssueURL'],
+  props: ['task', 'repoURL', 'baseURL', 'allowUpdates', 'allowDetailUpdates', 'allowFileEdit', 'searchIssuesURL', 'createIssueURL'],
   data () {
     return {
       activeTab: 0,

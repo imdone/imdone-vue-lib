@@ -17,7 +17,7 @@
           :repoURL="repoURL"
           :allowUpdates="allowUpdates"
           v-show="!ignored"
-          v-on:show-detail="showDetail"
+          v-on:show-edit="showEdit"
           v-on:file-link="fileLink"
           v-on:text-clicked="textClicked"
           v-on:tag-clicked='tagClicked'
@@ -88,6 +88,9 @@ export default {
     },
     showDetail (task) {
       this.$emit('show-detail', task)
+    },
+    showEdit (task) {
+      this.$emit('show-edit', task)
     },
     fileLink (task) {
       this.$emit('file-link', task)

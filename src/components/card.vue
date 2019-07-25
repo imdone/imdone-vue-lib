@@ -1,15 +1,19 @@
 <template lang="pug">
-article.message.task-card(:class="{'is-imdone-primary': selected, 'is-info': !selected}" v-bind="meta")
+article.message.task-card(
+  @mouseover="isActive = true"
+  @mouseleave="isActive = false"
+  :class="{'is-imdone-primary': selected, 'is-info': !selected}"
+  v-bind="meta")
   //- .message-header
   //-   .task-text.has-text-left(v-html="text")
-  .message-body
+  .message-body.toggle-parent
     .card-actions.is-size-6
       .level
         .level-left
         .level-right
-          .level-item
-            a(@click.stop.prevent="showDetail" title="Show Detail")
-              octicon(:icon="Octicons.info")
+          .level-item.is-info
+            a.toggle(v-show="isActive" @mousedown.stop="showEdit" title="Edit")
+              octicon(:icon="Octicons.pencil")
           .level-item(v-if="task.blame && task.blame.email")
             img.gravatar(v-if="task.blame && task.blame.email" :src="gravatarURL" :title="name")
             b-icon(v-else pack="fa" icon="user" size="is-small" title="No author found")
@@ -29,9 +33,9 @@ article.message.task-card(:class="{'is-imdone-primary': selected, 'is-info': !se
       a.tag.is-imdone-primary(v-for="tag in tags" @click.stop='tagClicked(tag)') {{tag}}
     .tags.imdone-contexts(v-if="contexts.length > 0")
       a.tag.is-info(v-for="context in contexts" @click.stop='contextClicked(context)') {{context}}
-    .source
+    .source.toggle(v-show="isActive")
       //- BACKLOG: Add ban icon for ignoring a file or folder id:38
-      // - b-icon(v-if="allowUpdates" pack="fa" icon="ban" size="is-small")
+      //- b-icon(v-if="allowUpdates" pack="fa" icon="ban" size="is-small")
       a(@click="emitFileLink" :href="fileLink" :target="target") {{task.source.path}}:{{task.line}}
 </template>
 <script>
@@ -48,7 +52,8 @@ export default {
     return {
       maxDescLines: 7,
       Octicons,
-      fullDesc: false
+      fullDesc: false,
+      isActive: false
     }
   },
   components: {
@@ -117,6 +122,9 @@ export default {
     showDetail (event) {
       this.$emit('show-detail', this.task)
     },
+    showEdit (event) {
+      this.$emit('show-edit', this.task)
+    },
     emitFileLink () {
       this.$emit('file-link', this.task)
     },
@@ -132,21 +140,34 @@ img.gravatar {
   width: 25px;
 }
 .task-card {
+  background: inherit;
+  position: relative;
   cursor: -webkit-grab;
   &:not(:last-child) {
     margin-bottom: .75em;
   }
+  .toggle {
+    background: inherit;
+    opacity: 0.8;
+  }
+  .toggle-parent {
+    background: inherit;
+  }
   .card-actions {
+    position: absolute;
+    top: 2px;
+    left: 0;
     width: 100%;
     a {
       text-decoration: none;
+      margin-right: 5px;
     }
   }
   .message-body {
+    background: inherit;
     word-break: break-word;
     text-align: left;
     padding: 1em;
-    padding-top: .5em;
     font-size: .9rem !important;
     .tags {
       margin-bottom: 0;
@@ -156,8 +177,12 @@ img.gravatar {
   .toggle-full-desc {
     margin-bottom: 1em;
   }
+  .source {
+    position: absolute;
+    bottom: 0;
+    left: 1em;
+  }
   .task-text {
-    margin-bottom: 1em;
     h1,h2,h3,h4,h5,ul {
       margin: .2em 0;
     }
