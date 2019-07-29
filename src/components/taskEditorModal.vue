@@ -3,9 +3,11 @@
     .modal-background(@click="close")
     .board-modal-content.has-text-left
       taskEditor(
-        :task="task" 
+        :task="task"
+        :list="list"
         v-on:close="close"
         v-on:save-task="saveTask"
+        v-on:new-task="newTask"
       )
     button.modal-close.is-large(aria-label="close" @click="close")
 </template>
@@ -13,13 +15,16 @@
 import TaskEditor from '@/components/taskEditor'
 export default {
   components: { TaskEditor },
-  props: ['task'],
+  props: ['task', 'list'],
   methods: {
     close () {
       this.$emit('close')
     },
     saveTask (opts) {
       this.$emit('save-task', opts)
+    },
+    newTask (opts) {
+      this.$emit('new-task', opts)
     }
   }
 }

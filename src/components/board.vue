@@ -6,6 +6,12 @@ div
     v-on:close="closeEdit"
     v-on:save-task="saveTask"
   )
+  taskEditorModal(
+    v-if="newCardList" 
+    :list="newCardList" 
+    v-on:close="closeEdit"
+    v-on:new-task="newTask"
+  )
   multipane.board-main(v-on:paneResizeStop="resizeStop")
     .imdone-pane(:style="{width: '100%'}" ref="boardPanel")
       .board
@@ -18,6 +24,7 @@ div
             :selectedTask="selectedTask"
             :repoURL="repoURL"
             :allowUpdates="allowUpdates"
+            :taskAdded="taskAddedForList(list.name)"
             v-on:update-task-order="updateTaskOrder"
             v-on:show-detail="showDetail"
             v-on:show-edit="showEdit"
@@ -25,9 +32,10 @@ div
             v-on:delete-list="deleteList"
             v-on:text-clicked="textClicked"
             v-on:tag-clicked='tagClicked'
-            v-on:context-clicked='contextClicked')
+            v-on:context-clicked='contextClicked'
+            v-on:add-card="addCard")
           .column.new-list(slot="footer" v-if="allowUpdates")
-            button#new-list-button.button.is-white(v-if="!addListFormShown" @click="showAddListForm")
+            button#new-list-button.button.is-white.has-text-left.block(v-if="!addListFormShown" @click="showAddListForm")
               b-icon(pack="fa" icon="plus" size="is-small")
               | &nbsp;&nbsp;Add another list
             .card(v-if="addListFormShown")
@@ -69,6 +77,8 @@ export default {
   props: ['board', 'allowUpdates', 'allowFileEdit', 'repoURL', 'baseURL', 'selectedTask', 'searchIssuesURL', 'createIssueURL'],
   data: function () {
     return {
+      newCardList: null,
+      newTaskAddedList: null,
       detailOpen: false,
       boardPanelWidth: '60%',
       addListFormShown: false,
@@ -102,6 +112,9 @@ export default {
     }
   },
   methods: {
+    addCard (list) {
+      this.newCardList = list
+    },
     textClicked (params) {
       this.$emit('text-clicked', params)
     },
@@ -159,9 +172,18 @@ export default {
     },
     closeEdit () {
       this.$emit('task-unselected')
+      this.newCardList = null
     },
     saveTask (opts) {
       this.$emit('save-task', opts)
+    },
+    newTask (opts) {
+      const { list } = opts
+      this.newTaskAddedList = list
+      this.$emit('new-task', opts)
+    },
+    taskAddedForList (name) {
+      return this.newTaskAddedList === name
     },
     showDetail (task) {
       this.$emit('task-selected', task)
@@ -225,7 +247,7 @@ export default {
   bottom: 0;
   right: 0;
   left: 0;
-  padding: 20px;
+  padding: 20px 20px 0px 20px;
   overflow-x: auto;
   overflow-y: auto;
   .columns {

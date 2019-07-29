@@ -1,13 +1,20 @@
 <template lang="pug">
   .task-editor-wrapper
+    .level.task-editor-header
+      .level-left
+        .level-item
+          .tag.is-large.is-black.list-name {{listName}}
     codemirror.imdone-editor.is-small(
       @ready="onCmReady"
       v-model="content" 
       :options="cmOptions")
     .level
       .level-left
-        .level-item
+        .level-item(v-if="task")
           button.button.is-info(@click.stop="saveTask") Save
+        .level-item(v-else)
+          button.button.is-info(@click.stop="newTask") Add Card
+
 </template>
 
 <script>
@@ -17,7 +24,7 @@ import 'codemirror/mode/markdown/markdown'
 
 export default {
   components: { codemirror },
-  props: [ 'task' ],
+  props: [ 'task', 'list' ],
   data: function () {
     return {
       content: ''
@@ -27,7 +34,16 @@ export default {
     if (this.task) this.content = this.task.getRawTextAndDescription()
   },
   computed: {
+    listName () {
+      if (this.task) return this.task.list
+      else if (this.list) return this.list
+    },
+    line () {
+      if (!this.task) return 0
+      return this.task.line
+    },
     cmOptions () {
+      const saveFunc = this.task ? this.saveTask : this.newTask
       return {
         // codemirror options
         tabSize: 2,
@@ -36,10 +52,10 @@ export default {
         lineWrapping: true,
         lineNumbers: true,
         line: true,
-        firstLineNumber: this.task.line,
+        firstLineNumber: this.line,
         extraKeys: {
-          'Cmd-S': this.saveTask,
-          'Ctrl-S': this.saveTask,
+          'Cmd-S': saveFunc,
+          'Ctrl-S': saveFunc,
           'Esc': this.close
         }
         // more codemirror options, 更多 codemirror 的高级配置...
@@ -49,6 +65,10 @@ export default {
   methods: {
     saveTask () {
       this.$emit('save-task', {task: this.task, content: this.content})
+      this.close()
+    },
+    newTask () {
+      this.$emit('new-task', {list: this.list, content: this.content})
       this.close()
     },
     close () {
@@ -71,5 +91,12 @@ export default {
 }
 .level {
   margin-top: 20px;
+}
+.task-editor-header {
+  margin: 0;
+  padding: 1em 0;
+  .list-name {
+    position: relative;
+  }
 }
 </style>

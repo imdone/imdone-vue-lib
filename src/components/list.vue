@@ -7,7 +7,7 @@
     .card-header-icon(v-else)
       .tag.is-info {{tasks.length}}
   .card-content
-    .overflow-container
+    .overflow-container(ref="tasksEl")
       draggable.tasks(:data-list="listName" v-model="tasks" :options="{group:'cards'}" @end="onEnd")
         card(v-for="task in tasks"
           :selectedTask="selectedTask"
@@ -22,6 +22,10 @@
           v-on:text-clicked="textClicked"
           v-on:tag-clicked='tagClicked'
           v-on:context-clicked='contextClicked')
+  .card-footer
+    button.button.is-white.has-text-left.is-smaller(@click.stop="addCard")
+      b-icon.has-text-left(pack="fa" icon="plus" size="is-small")
+      span.button-text Add a card
 </template>
 <script>
 import { Icon } from 'buefy/dist/components/Icon'
@@ -35,7 +39,7 @@ export default {
     'b-icon': Icon
   },
   // BACKLOG: Should accept a v-model **list** in the format {name, hidden, tasks} id:41
-  props: ['value', 'selectedTask', 'repoURL', 'allowUpdates', 'board'],
+  props: ['value', 'selectedTask', 'repoURL', 'allowUpdates', 'board', 'taskAdded'],
   data () {
     return {
       innerTasks: this.value.tasks
@@ -68,9 +72,17 @@ export default {
   watch: {
     value () {
       this.innerTasks = this.value.tasks
+      if (this.taskAdded) this.$nextTick(this.scrollToEnd)
     }
   },
   methods: {
+    addCard () {
+      this.$emit('add-card', this.listName)
+    },
+    scrollToEnd () {
+      const el = this.$refs.tasksEl
+      el.scrollTop = el.scrollHeight
+    },
     textClicked (params) {
       this.$emit('text-clicked', params)
     },
@@ -105,6 +117,18 @@ export default {
   .card-header {
     height: 3rem;
     cursor: -webkit-grab;
+  }
+  .card-footer {
+    display: -webkit-inline-box;
+    border-top: 0px;
+    button.button {
+      color:gray;
+      width: 100%;
+      display: inherit;
+      .button-text {
+        vertical-align: top;
+      }
+    }
   }
   .list {
     max-height: 100%;
