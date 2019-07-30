@@ -42,6 +42,9 @@ export default {
       if (!this.task) return 0
       return this.task.line
     },
+    noContent () {
+      return !this.content || this.content.trim() === ''
+    },
     cmOptions () {
       const saveFunc = this.task ? this.saveTask : this.newTask
       return {
@@ -64,10 +67,12 @@ export default {
   },
   methods: {
     saveTask () {
+      if (this.noContent) return
       this.$emit('save-task', {task: this.task, content: this.content})
       this.close()
     },
     newTask () {
+      if (this.noContent) return
       this.$emit('new-task', {list: this.list, content: this.content})
       this.close()
     },
