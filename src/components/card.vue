@@ -1,8 +1,10 @@
 <template lang="pug">
 article.message.task-card(
+  tabindex="-1"
   @mouseover="isActive = true"
   @mouseleave="isActive = false"
-  :class="{'is-imdone-primary': selected, 'is-info': !selected}"
+  @focus="cardInFocus"
+  :class="{'is-imdone-primary': selected || active, 'active': selected || active, 'is-info': !selected && !active}"
   v-bind="meta")
   //- .message-header
   //-   .task-text.has-text-left(v-html="text")
@@ -47,7 +49,7 @@ import taskTextUtils from '../utils/task-text-utils'
 
 export default {
   name: 'imdone-card',
-  props: ['task', 'selectedTask', 'repoURL', 'allowUpdates'],
+  props: ['task', 'selectedTask', 'activeTask', 'repoURL', 'allowUpdates'],
   data () {
     return {
       maxDescLines: 7,
@@ -60,6 +62,14 @@ export default {
     'b-icon': Icon,
     'b-tooltip': Tooltip,
     Octicon
+  },
+  watch: {
+    active: {
+      immediate: true,
+      handler (val) {
+        if (val && this.$el) this.$el.focus()
+      }
+    }
   },
   computed: {
     meta () {
@@ -92,6 +102,9 @@ export default {
     selected () {
       return (this.selectedTask && this.selectedTask.id === this.task.id)
     },
+    active () {
+      return (this.activeTask && this.activeTask.id === this.task.id)
+    },
     target () {
       if (this.repoURL) return '_blank'
     },
@@ -109,6 +122,10 @@ export default {
     }
   },
   methods: {
+    cardInFocus () {
+      if (this.active) return
+      this.$emit('card-in-focus', {task: this.task})
+    },
     tagClicked (tag) {
       this.$emit('tag-clicked', {task: this.task, tag})
     },
@@ -142,9 +159,21 @@ img.gravatar {
 .task-card {
   background: inherit;
   position: relative;
+  border-top: 1px solid transparent;
+  border-right: 1px solid transparent;
+  border-bottom: 1px solid transparent;
   cursor: -webkit-grab;
+  &:focus {
+    outline: none;
+  }
   &:not(:last-child) {
     margin-bottom: .75em;
+  }
+  &.active {
+    border-top: 1px solid;
+    border-right: 1px solid;
+    border-bottom: 1px solid;
+    border-color: #18a84f;
   }
   .toggle {
     background: inherit;

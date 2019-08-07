@@ -11,6 +11,7 @@
       draggable.tasks(:data-list="listName" v-model="tasks" :options="{group:'cards'}" @end="onEnd")
         card(v-for="task in tasks"
           :selectedTask="selectedTask"
+          :activeTask="activeTask"
           :task="task"
           :key="task.id"
           :data-id="task.id"
@@ -21,7 +22,8 @@
           v-on:file-link="fileLink"
           v-on:text-clicked="textClicked"
           v-on:tag-clicked='tagClicked'
-          v-on:context-clicked='contextClicked')
+          v-on:context-clicked='contextClicked'
+          v-on:card-in-focus="cardInFocus")
   .card-footer
     button.button.is-white.has-text-left.is-smaller(@click.stop="addCard")
       b-icon.has-text-left(pack="fa" icon="plus" size="is-small")
@@ -39,7 +41,7 @@ export default {
     'b-icon': Icon
   },
   // BACKLOG: Should accept a v-model **list** in the format {name, hidden, tasks} id:41
-  props: ['value', 'selectedTask', 'repoURL', 'allowUpdates', 'board', 'taskAdded'],
+  props: ['value', 'selectedTask', 'repoURL', 'activeTask', 'allowUpdates', 'board', 'taskAdded'],
   data () {
     return {
       innerTasks: this.value.tasks
@@ -76,6 +78,9 @@ export default {
     }
   },
   methods: {
+    cardInFocus ({task}) {
+      this.$emit('card-in-focus', {task})
+    },
     addCard () {
       this.$emit('add-card', this.listName)
     },

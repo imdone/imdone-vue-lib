@@ -22,6 +22,7 @@ div
             v-model="lists[index]"
             :board="board"
             :selectedTask="selectedTask"
+            :activeTask="activeTask"
             :repoURL="repoURL"
             :allowUpdates="allowUpdates"
             :taskAdded="taskAddedForList(list.name)"
@@ -33,7 +34,8 @@ div
             v-on:text-clicked="textClicked"
             v-on:tag-clicked='tagClicked'
             v-on:context-clicked='contextClicked'
-            v-on:add-card="addCard")
+            v-on:add-card="addCard"
+            v-on:card-in-focus="cardInFocus")
           .column.new-list(slot="footer" v-if="allowUpdates")
             button#new-list-button.button.is-white.has-text-left.block(v-if="!addListFormShown" @click="showAddListForm")
               b-icon(pack="fa" icon="plus" size="is-small")
@@ -74,7 +76,17 @@ export default {
   name: 'imdone-board',
   components: {List, Detail, Draggable, 'b-icon': Icon, Multipane, MultipaneResizer, TaskEditorModal},
   // BACKLOG: Should accept a v-model **board** in the format `{config, lists}` where lists is a list of tasks in the format `{name, hidden, tasks}` id:40
-  props: ['board', 'allowUpdates', 'allowFileEdit', 'repoURL', 'baseURL', 'selectedTask', 'searchIssuesURL', 'createIssueURL'],
+  props: [
+    'board',
+    'allowUpdates',
+    'allowFileEdit',
+    'repoURL',
+    'baseURL',
+    'selectedTask',
+    'activeTask',
+    'searchIssuesURL',
+    'createIssueURL'
+  ],
   data: function () {
     return {
       newCardList: null,
@@ -112,6 +124,9 @@ export default {
     }
   },
   methods: {
+    cardInFocus ({task}) {
+      this.$emit('card-in-focus', {task})
+    },
     addCard (list) {
       this.newCardList = list
     },
