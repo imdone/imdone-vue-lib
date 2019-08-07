@@ -7,8 +7,8 @@ div
     v-on:save-task="saveTask"
   )
   taskEditorModal(
-    v-if="newCardList" 
-    :list="newCardList" 
+    v-if="innerNewCardList" 
+    :list="innerNewCardList" 
     v-on:close="closeEdit"
     v-on:new-task="newTask"
   )
@@ -84,12 +84,13 @@ export default {
     'baseURL',
     'selectedTask',
     'activeTask',
+    'newCardList',
     'searchIssuesURL',
     'createIssueURL'
   ],
   data: function () {
     return {
-      newCardList: null,
+      innerNewCardList: this.newCardList,
       newTaskAddedList: null,
       detailOpen: false,
       boardPanelWidth: '60%',
@@ -121,6 +122,9 @@ export default {
   watch: {
     board () {
       this.innerLists = this.board.lists
+    },
+    newCardList () {
+      this.innerNewCardList = this.newCardList
     }
   },
   methods: {
@@ -128,7 +132,7 @@ export default {
       this.$emit('card-in-focus', {task})
     },
     addCard (list) {
-      this.newCardList = list
+      this.innerNewCardList = list
     },
     textClicked (params) {
       this.$emit('text-clicked', params)
@@ -187,7 +191,7 @@ export default {
     },
     closeEdit () {
       this.$emit('task-unselected')
-      this.newCardList = null
+      this.innerNewCardList = null
     },
     saveTask (opts) {
       this.$emit('save-task', opts)

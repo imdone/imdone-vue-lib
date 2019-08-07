@@ -14,7 +14,7 @@ article.message.task-card(
         .level-left
         .level-right
           .level-item.is-info
-            a.toggle(v-show="isActive" @mousedown.stop="showEdit" title="Edit")
+            a.toggle(v-show="isActive" @click.stop.prevent="showEdit" title="Edit")
               octicon(:icon="Octicons.pencil")
           .level-item(v-if="task.blame && task.blame.email")
             img.gravatar(v-if="task.blame && task.blame.email" :src="gravatarURL" :title="name")
