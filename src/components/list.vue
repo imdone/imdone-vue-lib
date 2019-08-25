@@ -74,7 +74,6 @@ export default {
   watch: {
     value () {
       this.innerTasks = this.value.tasks
-      if (this.taskAdded) this.$nextTick(this.scrollToEnd)
     }
   },
   methods: {
