@@ -37,7 +37,7 @@ article.message.task-card(
       a.tag.is-info(v-for="context in contexts" @click.stop='contextClicked(context)') {{context}}
     .source.toggle(v-show="isActive")
       //- BACKLOG: Add ban icon for ignoring a file or folder id:38
-      //- b-icon(v-if="allowUpdates" pack="fa" icon="ban" size="is-small")
+      // - b-icon(v-if="allowUpdates" pack="fa" icon="ban" size="is-small")
       a(@click="emitFileLink" :href="fileLink" :target="target") {{task.source.path}}:{{task.line}}
 </template>
 <script>
