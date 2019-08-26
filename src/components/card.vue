@@ -199,6 +199,7 @@ img.gravatar {
     padding: 1em;
     font-size: .9rem !important;
     .tags {
+      margin-top: .5rem;
       margin-bottom: 0;
       padding-bottom: 0;
     }
