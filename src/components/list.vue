@@ -11,7 +11,7 @@
   .card-content
     .overflow-container(ref="tasksEl")
       p.ignore-text(v-if="ignored") Cards dropped here will be ignored
-      draggable.tasks(v-else :data-list="listName" v-model="tasks" :options="{group:'cards'}" @end="onEnd")
+      draggable.tasks(:data-list="listName" v-model="tasks" :options="{group:'cards'}" @end="onEnd")
         card(v-for="task in tasks"
           :selectedTask="selectedTask"
           :activeTask="activeTask"
@@ -157,7 +157,7 @@ export default {
   }
   .tasks {
     padding: .75em;
-    min-height: 100%;
+    min-height: 90%;
   }
   .ignore-text {
     margin: 1em;
