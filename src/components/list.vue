@@ -2,13 +2,16 @@
 .card.list(v-if='visible')
   header.card-header
     p.card-header-title {{listName}}
-    a.card-header-icon(@click="deleteList" v-if="tasks.length === 0 && !board.filter")
+    a.card-header-icon(@click="deleteList" v-if="tasks.length === 0 && !board.filter && !ignored")
       b-icon(pack="fa" icon="trash" size="is-small")
+    .card-header-icon(v-else-if="ignored")
+      b-icon(pack="fa" icon="archive" size="is-small")
     .card-header-icon(v-else)
       .tag.is-info {{tasks.length}}
   .card-content
     .overflow-container(ref="tasksEl")
-      draggable.tasks(:data-list="listName" v-model="tasks" :options="{group:'cards'}" @end="onEnd")
+      p.ignore-text(v-if="ignored") Cards dropped here will be ignored
+      draggable.tasks(v-else :data-list="listName" v-model="tasks" :options="{group:'cards'}" @end="onEnd")
         card(v-for="task in tasks"
           :selectedTask="selectedTask"
           :activeTask="activeTask"
@@ -68,7 +71,7 @@ export default {
       return !this.value.hidden
     },
     ignored () {
-      return this.value.ignored
+      return this.value.ignore
     }
   },
   watch: {
@@ -155,5 +158,9 @@ export default {
   .tasks {
     padding: .75em;
     min-height: 100%;
+  }
+  .ignore-text {
+    margin: 1em;
+    text-align: center;
   }
 </style>
