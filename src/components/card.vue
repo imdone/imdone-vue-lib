@@ -54,7 +54,7 @@ export default {
     return {
       maxDescLines: 7,
       Octicons,
-      fullDesc: false,
+      fullDesc: this.expandByDefault(),
       isActive: false
     }
   },
@@ -122,6 +122,9 @@ export default {
     }
   },
   methods: {
+    expandByDefault () {
+      return this.task && this.task.meta && this.task.meta.expand
+    },
     cardInFocus () {
       if (this.active) return
       this.$emit('card-in-focus', {task: this.task})
@@ -245,5 +248,32 @@ img.gravatar {
       }
     }
   }
+  .task-description {
+    table {
+        border-collapse: collapse;
+        border-spacing: 0;
+        display: block;
+        margin-bottom: 1rem;
+        overflow: auto;
+        width: 100%
+    }
+
+    th {
+        font-weight: 700
+    }
+
+    td, th {
+        border: 1px solid #ddd;
+        padding: 6px 13px
+    }
+
+    tr {
+        border-top: 1px solid #ccc
+    }
+
+    tr:nth-child(2n) {
+        background-color: #f8f8f8
+    }
+  } 
 }
 </style>
