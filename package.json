@@ -1,6 +1,6 @@
 {
   "name": "imdone-vue-lib",
-  "version": "0.4.8",
+  "version": "0.4.9",
   "description": "imdone vue components",
   "author": "Jesse <jesse@piascik.net>",
   "main": "dist/lib/imdone-vue-lib.min.js",
@@ -24,7 +24,7 @@
     "bulma": "^0.7.2",
     "cheerio": "^1.0.0-rc.2",
     "gravatar": "^1.6.0",
-    "imdone-core": "^1.5.31",
+    "imdone-core": "^1.5.35",
     "just-compare": "^1.3.0",
     "markdown-it": "^8.4.1",
     "markdown-it-checkbox": "^1.1.0",

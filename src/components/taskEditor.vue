@@ -86,13 +86,16 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "../../node_modules/codemirror/lib/codemirror.css";
 @import "../../node_modules/codemirror/theme/abcdef.css";
 .imdone-editor {
   width: calc(100vw - 400px);
-  min-width: 1px;
-  max-width: 1000px;
+  min-width: 600px;
+  .CodeMirror {
+    height: calc(100vh - 400px) !important;
+    min-height: 400px;
+  }
 }
 .level {
   margin-top: 20px;
