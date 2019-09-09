@@ -29,6 +29,7 @@ div
             v-on:update-task-order="updateTaskOrder"
             v-on:show-detail="showDetail"
             v-on:show-edit="showEdit"
+            v-on:show-delete="showDelete"
             v-on:file-link="emitFileLink"
             v-on:delete-list="deleteList"
             v-on:text-clicked="textClicked"
@@ -188,6 +189,9 @@ export default {
     },
     showEdit (task) {
       this.$emit('task-selected', task)
+    },
+    showDelete (task) {
+      this.$emit('show-delete', task)
     },
     closeEdit () {
       this.$emit('task-unselected')

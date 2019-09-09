@@ -22,6 +22,7 @@
           :allowUpdates="allowUpdates"
           v-show="!ignored"
           v-on:show-edit="showEdit"
+          v-on:show-delete="showDelete"
           v-on:file-link="fileLink"
           v-on:text-clicked="textClicked"
           v-on:tag-clicked='tagClicked'
@@ -110,6 +111,9 @@ export default {
     },
     showEdit (task) {
       this.$emit('show-edit', task)
+    },
+    showDelete (task) {
+      this.$emit('show-delete', task)
     },
     fileLink (task) {
       this.$emit('file-link', task)

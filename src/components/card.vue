@@ -1,9 +1,11 @@
 <template lang="pug">
 article.message.task-card(
   tabindex="-1"
-  @mouseover="isActive = true"
-  @mouseleave="isActive = false"
+  @click="cardInFocus"
+  @mouseover="activate"
+  @mouseout="inactivateUnlessInFocus"
   @focus="cardInFocus"
+  @blur="inactivate"
   :class="{'is-imdone-primary': selected || active, 'active': selected || active, 'is-info': !selected && !active}"
   v-bind="meta")
   //- .message-header
@@ -12,10 +14,13 @@ article.message.task-card(
     .card-actions.is-size-6
       .level
         .level-left
-        .level-right
-          .level-item.is-info
-            a.toggle(v-show="isActive" @click.stop.prevent="showEdit" title="Edit")
+        .level-right.toggle-parent
+          .level-item.is-info.toggle
+            a(v-show="isActive" @click.stop.prevent="showEdit" title="Edit")
               octicon(:icon="Octicons.pencil")
+          .level-item.is-info.toggle
+            a(v-show="isActive" @click.stop.prevent="showDelete" title="Delete")
+              octicon(:icon="Octicons.trashcan")
           .level-item(v-if="task.blame && task.blame.email")
             img.gravatar(v-if="task.blame && task.blame.email" :src="gravatarURL" :title="name")
             b-icon(v-else pack="fa" icon="user" size="is-small" title="No author found")
@@ -126,8 +131,17 @@ export default {
       return this.task && this.task.meta && this.task.meta.expand
     },
     cardInFocus () {
-      if (this.active) return
-      this.$emit('card-in-focus', {task: this.task})
+      this.activate()
+      if (!this.active) this.$emit('card-in-focus', {task: this.task})
+    },
+    activate () {
+      this.isActive = true
+    },
+    inactivate () {
+      this.isActive = false
+    },
+    inactivateUnlessInFocus () {
+      if (!this.active) this.inactivate()
     },
     tagClicked (tag) {
       this.$emit('tag-clicked', {task: this.task, tag})
@@ -144,6 +158,9 @@ export default {
     },
     showEdit (event) {
       this.$emit('show-edit', this.task)
+    },
+    showDelete (event) {
+      this.$emit('show-delete', this.task)
     },
     emitFileLink () {
       this.$emit('file-link', this.task)
@@ -190,9 +207,15 @@ img.gravatar {
     top: 2px;
     left: 0;
     width: 100%;
-    a {
-      text-decoration: none;
-      margin-right: 5px;
+    .level {
+      margin-top: 5px;
+      .level-item {
+        margin-right: 5px;
+      }
+      a {
+        text-decoration: none;
+        margin-right: 5px;
+      }
     }
   }
   .message-body {
@@ -216,6 +239,7 @@ img.gravatar {
     left: 1em;
   }
   .task-text {
+    margin-top: .75rem;
     h1,h2,h3,h4,h5,ul {
       margin: .2em 0;
     }
