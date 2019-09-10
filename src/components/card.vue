@@ -234,9 +234,9 @@ img.gravatar {
     margin-bottom: 1em;
   }
   .source {
-    position: absolute;
-    bottom: 0;
-    left: 1em;
+    // position: absolute;
+    // bottom: 0;
+    // left: 1em;
   }
   .task-text {
     margin-top: .75rem;
