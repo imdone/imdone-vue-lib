@@ -20,6 +20,7 @@ div
             v-if="lists"
             :key="list.name"
             v-model="lists[index]"
+            :showFileLinks="showFileLinks"
             :board="board"
             :selectedTask="selectedTask"
             :activeTask="activeTask"
@@ -76,7 +77,7 @@ import { Multipane, MultipaneResizer } from 'vue-multipane'
 export default {
   name: 'imdone-board',
   components: {List, Detail, Draggable, 'b-icon': Icon, Multipane, MultipaneResizer, TaskEditorModal},
-  // BACKLOG: Should accept a v-model **board** in the format `{config, lists}` where lists is a list of tasks in the format `{name, hidden, tasks}` id:40
+  // BACKLOG:10 Should accept a v-model **board** in the format `{config, lists}` where lists is a list of tasks in the format `{name, hidden, tasks}` id:40
   props: [
     'board',
     'allowUpdates',
@@ -87,7 +88,8 @@ export default {
     'activeTask',
     'newCardList',
     'searchIssuesURL',
-    'createIssueURL'
+    'createIssueURL',
+    'showFileLinks'
   ],
   data: function () {
     return {

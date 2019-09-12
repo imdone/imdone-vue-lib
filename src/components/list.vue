@@ -13,6 +13,7 @@
       p.ignore-text(v-if="ignored") Cards dropped here will be ignored
       draggable.tasks(:data-list="listName" v-model="tasks" :options="{group:'cards'}" @end="onEnd")
         card(v-for="task in tasks"
+          :showFileLinks="showFileLinks"
           :selectedTask="selectedTask"
           :activeTask="activeTask"
           :task="task"
@@ -44,8 +45,8 @@ export default {
     Draggable,
     'b-icon': Icon
   },
-  // BACKLOG: Should accept a v-model **list** in the format {name, hidden, tasks} id:41
-  props: ['value', 'selectedTask', 'repoURL', 'activeTask', 'allowUpdates', 'board', 'taskAdded'],
+  // BACKLOG:20 Should accept a v-model **list** in the format {name, hidden, tasks} id:41
+  props: ['value', 'selectedTask', 'repoURL', 'activeTask', 'allowUpdates', 'board', 'taskAdded', 'showFileLinks'],
   data () {
     return {
       innerTasks: this.value.tasks

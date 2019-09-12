@@ -33,14 +33,14 @@ article.message.task-card(
       b-tooltip(label="Collapse description" position="is-right" type="is-black")
         a(@click.stop="fullDesc = false" title="Collapse description")
           octicon(:icon="Octicons.fold")
-    //- TODO: Display progress of task lists like [github](https://help.github.com/articles/about-task-lists/) id:37
+    //- TODO:0 Display progress of task lists like [github](https://help.github.com/articles/about-task-lists/) id:37
     // - [Issues · imdone/imdone-vue-lib](https://github.com/imdone/imdone-vue-lib/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
     // - [ ] Create vue component
     .tags.imdone-tags(v-if="tags.length > 0")
       a.tag.is-imdone-primary(v-for="tag in tags" @click.stop='tagClicked(tag)') {{tag}}
     .tags.imdone-contexts(v-if="contexts.length > 0")
       a.tag.is-info(v-for="context in contexts" @click.stop='contextClicked(context)') {{context}}
-    .source.toggle(v-show="isActive")
+    .source.toggle(v-show="isActive || showFileLinks")
       //- BACKLOG: Add ban icon for ignoring a file or folder id:38
       // - b-icon(v-if="allowUpdates" pack="fa" icon="ban" size="is-small")
       a(@click="emitFileLink" :href="fileLink" :target="target") {{task.source.path}}:{{task.line}}
@@ -54,7 +54,7 @@ import taskTextUtils from '../utils/task-text-utils'
 
 export default {
   name: 'imdone-card',
-  props: ['task', 'selectedTask', 'activeTask', 'repoURL', 'allowUpdates'],
+  props: ['task', 'selectedTask', 'activeTask', 'repoURL', 'allowUpdates', 'showFileLinks'],
   data () {
     return {
       maxDescLines: 7,
@@ -222,21 +222,13 @@ img.gravatar {
     background: inherit;
     word-break: break-word;
     text-align: left;
-    padding: 1em;
+    padding: 1em 1em .25em 1em;
     font-size: .9rem !important;
     .tags {
       margin-top: .5rem;
       margin-bottom: 0;
       padding-bottom: 0;
     }
-  }
-  .toggle-full-desc {
-    margin-bottom: 1em;
-  }
-  .source {
-    // position: absolute;
-    // bottom: 0;
-    // left: 1em;
   }
   .task-text {
     margin-top: .75rem;
