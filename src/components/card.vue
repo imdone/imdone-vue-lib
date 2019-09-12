@@ -41,7 +41,7 @@ article.message.task-card(
     .tags.imdone-contexts(v-if="contexts.length > 0")
       a.tag.is-info(v-for="context in contexts" @click.stop='contextClicked(context)') {{context}}
     .source.toggle(v-show="isActive || showFileLinks")
-      //- BACKLOG: Add ban icon for ignoring a file or folder id:38
+      //- DOING:0 Add ban icon for ignoring a file or folder id:38
       // - b-icon(v-if="allowUpdates" pack="fa" icon="ban" size="is-small")
       a(@click="emitFileLink" :href="fileLink" :target="target") {{task.source.path}}:{{task.line}}
 </template>
