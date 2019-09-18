@@ -20,29 +20,34 @@
       "REVIEW",
       "MARK",
       "BACKLOG",
-      "HELP"
+      "HELP",
+      "READY"
     ]
   },
   "lists": [
     {
-      "name": "BACKLOG",
-      "hidden": true
+      "hidden": true,
+      "name": "BACKLOG"
     },
     {
-      "name": "NOTE",
-      "hidden": false
+      "hidden": false,
+      "name": "NOTE"
     },
     {
-      "name": "TODO",
-      "hidden": false
+      "hidden": false,
+      "name": "TODO"
     },
     {
-      "name": "DOING",
-      "hidden": false
+      "hidden": false,
+      "name": "DOING"
     },
     {
-      "name": "DONE",
-      "hidden": false
+      "hidden": false,
+      "name": "READY"
+    },
+    {
+      "hidden": false,
+      "name": "DONE"
     }
   ],
   "marked": {
