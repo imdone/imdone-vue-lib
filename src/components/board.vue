@@ -18,6 +18,7 @@ div
         draggable.columns.is-mobile(:list="lists" @end="updateListOrder" :options="draggableOpts")
           list.column.imdone-list(v-for='(list, index) in lists'
             v-if="lists"
+            :data-list="list.name"
             :key="list.name"
             v-model="lists[index]"
             :showFileLinks="showFileLinks"
@@ -77,7 +78,7 @@ import { Multipane, MultipaneResizer } from 'vue-multipane'
 export default {
   name: 'imdone-board',
   components: {List, Detail, Draggable, 'b-icon': Icon, Multipane, MultipaneResizer, TaskEditorModal},
-  // BACKLOG:10 Should accept a v-model **board** in the format `{config, lists}` where lists is a list of tasks in the format `{name, hidden, tasks}` id:40
+  // TODO:60 Should accept a v-model **board** in the format `{config, lists}` where lists is a list of tasks in the format `{name, hidden, tasks}` id:40
   props: [
     'board',
     'allowUpdates',
@@ -174,11 +175,9 @@ export default {
       this.newListName = null
       this.hideAddListForm()
     },
-    updateListOrder () {
+    updateListOrder (update) {
       if (!this.allowUpdates) return this.emitUpdateError('list order')
-      const config = _.cloneDeep(this.config)
-      config.lists = this.lists.map(({name, hidden, ignore}) => ({name, hidden, ignore}))
-      this.$emit('update-list-order', config)
+      this.$emit('update-list-order', update)
     },
     emitUpdateError (error) {
       this.$emit('update-error', error)

@@ -25,16 +25,20 @@
   },
   "lists": [
     {
-      "hidden": false,
-      "name": "BACKLOG"
+      "name": "BACKLOG",
+      "hidden": true
     },
     {
-      "hidden": false,
-      "name": "TODO"
+      "name": "NOTE",
+      "hidden": false
     },
     {
-      "hidden": false,
-      "name": "DOING"
+      "name": "TODO",
+      "hidden": false
+    },
+    {
+      "name": "DOING",
+      "hidden": false
     },
     {
       "name": "DONE",
@@ -48,11 +52,6 @@
     "breaks": false,
     "tables": true,
     "gfm": true
-  },
-  "sync": {
-    "useImdoneioForPriority": true,
-    "name": "imdone/imdone-vue-lib",
-    "id": "5b1a98bb93668c26233ed889"
   },
   "noHelp": true,
   "meta": {
