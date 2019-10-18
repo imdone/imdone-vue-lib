@@ -1,7 +1,7 @@
 import * as MarkdownIt from 'markdown-it'
 import * as cheerio from 'cheerio'
 import * as checkbox from 'markdown-it-checkbox'
-import os from 'os'
+import eol from 'eol'
 
 const md = new MarkdownIt({html: true, breaks: true})
 md.use(checkbox)
@@ -13,9 +13,9 @@ export default {
     return $.html()
   },
   description (task, lines) {
-    const descAry = task.getTextAndDescription().split(os.EOL)
+    const descAry = eol.split(task.getTextAndDescription())
     const description = lines
-                        ? task.getTextAndDescription().split(os.EOL).slice(0, lines - 1).join(os.EOL)
+                        ? eol.split(task.getTextAndDescription()).slice(0, lines - 1).join(eol.lf)
                         : task.getTextAndDescription()
     const html = md.render(description)
     const $ = cheerio.load(html)
