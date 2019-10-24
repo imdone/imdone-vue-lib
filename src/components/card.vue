@@ -232,6 +232,10 @@ img.gravatar {
   }
   .task-text {
     margin-top: .75rem;
+    blockquote {
+      margin-left: 1em;
+      font-style: italic;
+    }
     h1,h2,h3,h4,h5,ul {
       margin: .2em 0;
     }
