@@ -21,6 +21,7 @@
           :data-id="task.id"
           :repoURL="repoURL"
           :allowUpdates="allowUpdates"
+          :config="board.config"
           v-show="!ignored"
           v-on:show-edit="showEdit"
           v-on:show-delete="showDelete"

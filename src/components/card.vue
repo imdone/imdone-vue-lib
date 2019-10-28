@@ -3,27 +3,36 @@ article.message.task-card(
   tabindex="-1"
   @click="cardInFocus"
   @mouseover="activate"
-  @mouseout="inactivateUnlessInFocus"
+  @mouseout="inactivate"
   @focus="cardInFocus"
   @blur="inactivate"
-  :class="{'is-imdone-primary': selected || active, 'active': selected || active, 'is-info': !selected && !active}"
+  :class="clazz"
   v-bind="meta")
   //- .message-header
   //-   .task-text.has-text-left(v-html="text")
   .message-body.toggle-parent
-    .card-actions.is-size-6
-      .level
-        .level-left
-        .level-right.toggle-parent
-          .level-item.is-info.toggle
-            a(v-show="isActive" @click.stop.prevent="showEdit" title="Edit")
-              octicon(:icon="Octicons.pencil")
-          .level-item.is-info.toggle
-            a(v-show="isActive" @click.stop.prevent="showDelete" title="Delete")
-              octicon(:icon="Octicons.trashcan")
-          .level-item(v-if="task.blame && task.blame.email")
-            img.gravatar(v-if="task.blame && task.blame.email" :src="gravatarURL" :title="name")
-            b-icon(v-else pack="fa" icon="user" size="is-small" title="No author found")
+    .tags.card-actions.is-size-6(v-show="isActive")
+      .tag.is-white
+        a(@click="emitFileLink" :href="fileLink" :target="target" :title="`${task.source.path}:${task.line}`")
+          octicon(:icon="Octicons.link")
+        a(@click.stop.prevent="showEdit" title="Edit")
+          octicon(:icon="Octicons.pencil")
+        a(@click.stop.prevent="showDelete" title="Delete")
+          octicon(:icon="Octicons.trashcan")
+
+      //- .level
+      //-   .level-left
+      //-   .level-right.toggle-parent
+      //-     .level-item.is-info.toggle.actions(v-show="isActive")
+      //-       a(@click="emitFileLink" :href="fileLink" :target="target" :title="`${task.source.path}:${task.line}`")
+      //-         octicon(:icon="Octicons.link")
+      //-       a(@click.stop.prevent="showEdit" title="Edit")
+      //-         octicon(:icon="Octicons.pencil")
+      //-       a(@click.stop.prevent="showDelete" title="Delete")
+      //-         octicon(:icon="Octicons.trashcan")
+      //-     .level-item(v-if="task.blame && task.blame.email")
+      //-       img.gravatar(v-if="task.blame && task.blame.email" :src="gravatarURL" :title="name")
+      //-       b-icon(v-else pack="fa" icon="user" size="is-small" title="No author found")
     .task-text.task-description.has-text-left(@click="textClicked" v-html="description.html" ref="description")
     .toggle-full-desc(v-if='descTruncated  && !fullDesc')
       b-tooltip(label="Expand description" position="is-right" type="is-black")
@@ -40,10 +49,6 @@ article.message.task-card(
       a.tag.is-imdone-primary(v-for="tag in tags" @click.stop='tagClicked(tag)') {{tag}}
     .tags.imdone-contexts(v-if="contexts.length > 0")
       a.tag.is-info(v-for="context in contexts" @click.stop='contextClicked(context)') {{context}}
-    .source.toggle(v-show="isActive || showFileLinks")
-      //- DOING:0 Add ban icon for ignoring a file or folder id:38
-      // - b-icon(v-if="allowUpdates" pack="fa" icon="ban" size="is-small")
-      a(@click="emitFileLink" :href="fileLink" :target="target") {{task.source.path}}:{{task.line}}
 </template>
 <script>
 import * as gravatar from 'gravatar'
@@ -54,7 +59,7 @@ import taskTextUtils from '../utils/task-text-utils'
 
 export default {
   name: 'imdone-card',
-  props: ['task', 'selectedTask', 'activeTask', 'repoURL', 'allowUpdates', 'showFileLinks'],
+  props: ['task', 'selectedTask', 'activeTask', 'repoURL', 'allowUpdates', 'showFileLinks', 'config'],
   data () {
     return {
       maxDescLines: 7,
@@ -77,6 +82,13 @@ export default {
     }
   },
   computed: {
+    clazz () {
+      let clazz = this.task.customClass || 'is-info'
+      // clazz += ' is-info'
+      // DOING: Move this to imdone-settings as task.customClass
+      if (this.activeOrSelected) clazz += ' active'
+      return clazz
+    },
     meta () {
       const att = {}
       const meta = this.task.allMeta
@@ -110,6 +122,9 @@ export default {
     active () {
       return (this.activeTask && this.activeTask.id === this.task.id)
     },
+    activeOrSelected () {
+      return this.active || this.selected
+    },
     target () {
       if (this.repoURL) return '_blank'
     },
@@ -131,7 +146,6 @@ export default {
       return this.task && this.task.meta && this.task.meta.expand
     },
     cardInFocus () {
-      this.activate()
       if (!this.active) this.$emit('card-in-focus', {task: this.task})
     },
     activate () {
@@ -179,10 +193,8 @@ img.gravatar {
 .task-card {
   background: inherit;
   position: relative;
-  border-top: 1px solid transparent;
-  border-right: 1px solid transparent;
-  border-bottom: 1px solid transparent;
   cursor: -webkit-grab;
+  padding: 1px 1px 1px 0;
   &:focus {
     outline: none;
   }
@@ -190,10 +202,18 @@ img.gravatar {
     margin-bottom: .75em;
   }
   &.active {
-    border-top: 1px solid;
-    border-right: 1px solid;
-    border-bottom: 1px solid;
-    border-color: #18a84f;
+    padding: 0;
+    .message-body {
+      border-top: 1px solid;
+      border-right: 1px solid;
+      border-bottom: 1px solid;
+    }
+    // DOING: Set border color same as left border
+    // border-color: #18a84f;
+    // filter: brightness(93%)// hue-rotate(-90deg);
+    // .tag {
+    //   filter: hue-rotate(90deg);
+    // }
   }
   .toggle {
     background: inherit;
@@ -205,33 +225,41 @@ img.gravatar {
   .card-actions {
     position: absolute;
     top: 2px;
-    left: 0;
-    width: 100%;
-    .level {
-      margin-top: 5px;
-      .level-item {
-        margin-right: 5px;
-      }
+    right: .25rem;
+    .tag {
       a {
         text-decoration: none;
         margin-right: 5px;
       }
+      margin-bottom: .25rem;
+    }
+    .level {
+      margin-top: 5px;
+      .level-item {
+        margin: 5px;
+      }
     }
   }
   .message-body {
+    // border-top: 1px solid transparent;
+    // border-right: 1px solid transparent;
+    // border-bottom: 1px solid transparent;
     background: inherit;
     word-break: break-word;
     text-align: left;
-    padding: 1em 1em .25em 1em;
+    padding: 2px 1em .25em 1em;
     font-size: .9rem !important;
     .tags {
-      margin-top: .5rem;
+      margin-top: .25rem;
       margin-bottom: 0;
       padding-bottom: 0;
+      .tag {
+        margin-bottom: .25rem;
+      }
     }
   }
   .task-text {
-    margin-top: .75rem;
+    margin-top: .5rem;
     blockquote {
       margin-left: 1em;
       font-style: italic;
