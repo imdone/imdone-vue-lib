@@ -35,12 +35,12 @@ article.message.task-card(
       //-       b-icon(v-else pack="fa" icon="user" size="is-small" title="No author found")
     .task-text.task-description.has-text-left(@click="textClicked" v-html="description.html" ref="description")
     .toggle-full-desc(v-if='descTruncated  && !fullDesc')
-      b-tooltip(label="Expand description" position="is-right" type="is-black")
-        a(@click.stop="fullDesc = true" title="Expand description")
+      b-tooltip(label="Expand description" position="is-left" type="is-black")
+        a(@click.stop="fullDesc = true")
           octicon(:icon="Octicons.unfold")
     .toggle-full-desc(v-if='fullDesc')
-      b-tooltip(label="Collapse description" position="is-right" type="is-black")
-        a(@click.stop="fullDesc = false" title="Collapse description")
+      b-tooltip(label="Collapse description" position="is-left" type="is-black")
+        a(@click.stop="fullDesc = false")
           octicon(:icon="Octicons.fold")
     //- TODO:0 Display progress of task lists like [github](https://help.github.com/articles/about-task-lists/) id:37
     // - [Issues · imdone/imdone-vue-lib](https://github.com/imdone/imdone-vue-lib/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
@@ -253,8 +253,18 @@ img.gravatar {
       margin-top: .25rem;
       margin-bottom: 0;
       padding-bottom: 0;
+      margin-right: .25rem;
       .tag {
         margin-bottom: .25rem;
+      }
+    }
+    .toggle-full-desc {
+      position: relative;
+      height: 1.5rem;
+      span {
+        position: absolute;
+        bottom: 0;
+        right: 0;
       }
     }
   }
