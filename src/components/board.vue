@@ -27,7 +27,6 @@ div
             :activeTask="activeTask"
             :repoURL="repoURL"
             :allowUpdates="allowUpdates"
-            :taskAdded="taskAddedForList(list.name)"
             v-on:update-task-order="updateTaskOrder"
             v-on:show-detail="showDetail"
             v-on:show-edit="showEdit"
@@ -95,7 +94,6 @@ export default {
   data: function () {
     return {
       innerNewCardList: this.newCardList,
-      newTaskAddedList: null,
       detailOpen: false,
       boardPanelWidth: '60%',
       addListFormShown: false,
@@ -202,12 +200,7 @@ export default {
       this.$emit('save-task', opts)
     },
     newTask (opts) {
-      const { list } = opts
-      this.newTaskAddedList = list
       this.$emit('new-task', opts)
-    },
-    taskAddedForList (name) {
-      return this.newTaskAddedList === name
     },
     showDetail (task) {
       this.$emit('task-selected', task)

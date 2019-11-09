@@ -59,7 +59,11 @@ export default {
         extraKeys: {
           'Cmd-S': saveFunc,
           'Ctrl-S': saveFunc,
-          'Esc': this.close
+          'Esc': this.close,
+          Tab: function (cm) {
+            var spaces = Array(cm.getOption('indentUnit') + 1).join(' ')
+            cm.replaceSelection(spaces)
+          }
         }
         // more codemirror options, 更多 codemirror 的高级配置...
       }

@@ -47,7 +47,7 @@ export default {
     'b-icon': Icon
   },
   // TODO:50 Should accept a v-model **list** in the format {name, hidden, tasks} id:41
-  props: ['value', 'selectedTask', 'repoURL', 'activeTask', 'allowUpdates', 'board', 'taskAdded', 'showFileLinks'],
+  props: ['value', 'selectedTask', 'repoURL', 'activeTask', 'allowUpdates', 'board', 'showFileLinks'],
   data () {
     return {
       innerTasks: this.value.tasks
@@ -88,10 +88,6 @@ export default {
     },
     addCard () {
       this.$emit('add-card', this.listName)
-    },
-    scrollToEnd () {
-      const el = this.$refs.tasksEl
-      el.scrollTop = el.scrollHeight
     },
     textClicked (params) {
       this.$emit('text-clicked', params)

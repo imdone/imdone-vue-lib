@@ -77,7 +77,15 @@ export default {
     active: {
       immediate: true,
       handler (val) {
-        if (val && this.$el) this.$el.focus()
+        // if (val) console.log('active:', {val, task: this.task, isMoved: this.task.isMoved})
+        if (val && this.$el) this.$nextTick(() => this.$el.focus())
+      }
+    },
+    task: {
+      immediate: true,
+      handler (val, oldVal) {
+        // console.log('task:', {val, oldVal, isMoved: val.isMoved})
+        if ((this.active && oldVal && val.index !== oldVal.index) || (this.active === false && !oldVal)) this.$nextTick(() => this.$el.focus())
       }
     }
   },
