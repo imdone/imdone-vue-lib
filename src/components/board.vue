@@ -1,12 +1,14 @@
 <template lang="pug">
 div
   taskEditorModal(
+    :repo="board"
     v-if="selectedTask" 
     :task="selectedTask" 
     v-on:close="closeEdit"
     v-on:save-task="saveTask"
   )
   taskEditorModal(
+    :repo="board"
     v-if="innerNewCardList" 
     :list="innerNewCardList" 
     v-on:close="closeEdit"

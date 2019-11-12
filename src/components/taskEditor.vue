@@ -6,7 +6,7 @@
           .tag.is-large.is-black.list-name {{listName}}
     codemirror.imdone-editor.is-small(
       @ready="onCmReady"
-      v-model="content" 
+      v-model="content"
       :options="cmOptions")
     .level
       .level-left
@@ -20,11 +20,13 @@
 <script>
 // require component
 import { codemirror } from 'vue-codemirror'
+import 'codemirror/addon/hint/show-hint'
 import 'codemirror/mode/markdown/markdown'
+import './autosuggest'
 
 export default {
   components: { codemirror },
-  props: [ 'task', 'list' ],
+  props: [ 'task', 'list', 'repo' ],
   data: function () {
     return {
       content: ''
@@ -64,7 +66,23 @@ export default {
             var spaces = Array(cm.getOption('indentUnit') + 1).join(' ')
             cm.replaceSelection(spaces)
           }
-        }
+        },
+        autoSuggest: [
+          {
+            mode: 'markdown',
+            startChar: '+',
+            listCallback: () => {
+              return this.repo.allTags.map(tag => ({text: tag, displayText: tag + ' '}))
+            }
+          },
+          {
+            mode: 'markdown',
+            startChar: '@',
+            listCallback: () => {
+              return this.repo.allContext.map(context => ({text: context, displayText: context + ' '}))
+            }
+          }
+        ]
         // more codemirror options, 更多 codemirror 的高级配置...
       }
     }
@@ -93,6 +111,7 @@ export default {
 <style lang="scss">
 @import "../../node_modules/codemirror/lib/codemirror.css";
 @import "../../node_modules/codemirror/theme/abcdef.css";
+@import "../../node_modules/codemirror/addon/hint/show-hint.css";
 .imdone-editor {
   width: calc(100vw - 400px);
   min-width: 600px;
@@ -100,6 +119,9 @@ export default {
     height: calc(100vh - 400px) !important;
     min-height: 400px;
   }
+}
+.CodeMirror-hints {
+  z-index: 999;
 }
 .level {
   margin-top: 20px;

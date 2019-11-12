@@ -3,6 +3,7 @@
     .modal-background(@click="close")
     .board-modal-content.has-text-left
       taskEditor(
+        :repo='repo'
         :task="task"
         :list="list"
         v-on:close="close"
@@ -15,7 +16,7 @@
 import TaskEditor from '@/components/taskEditor'
 export default {
   components: { TaskEditor },
-  props: ['task', 'list'],
+  props: ['task', 'list', 'repo'],
   methods: {
     close () {
       this.$emit('close')
