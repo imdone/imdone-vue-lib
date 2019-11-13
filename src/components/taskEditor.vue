@@ -123,8 +123,10 @@ export default {
 .CodeMirror-hints {
   z-index: 999;
 }
-.level {
-  margin-top: 20px;
+.task-editor-wrapper {
+  .level {
+    margin-top: 20px;
+  }
 }
 .task-editor-header {
   margin: 0;

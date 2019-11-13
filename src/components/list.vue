@@ -50,7 +50,8 @@ export default {
   props: ['value', 'selectedTask', 'repoURL', 'activeTask', 'allowUpdates', 'board', 'showFileLinks'],
   data () {
     return {
-      innerTasks: this.value.tasks
+      innerTasks: this.value.tasks,
+      filtered: false
     }
   },
   computed: {
@@ -82,7 +83,29 @@ export default {
       this.innerTasks = this.value.tasks
     }
   },
+  created () {
+    if (this.$services) this.$services.on('filtered', this.onFiltered)
+  },
+  destroyed () {
+    if (this.$services) this.$services.off('filtered', this.onFiltered)
+  },
+  updated () {
+    if (this.filtered) {
+      this.$nextTick(() => {
+        this.scrollToTop()
+        this.filtered = false
+      })
+    }
+  },
   methods: {
+    onFiltered ({path}) {
+      if (path === this.board.path) this.filtered = true
+    },
+    scrollToTop () {
+      const tasksEl = this.$refs.tasksEl
+      if (!tasksEl) return
+      tasksEl.scrollTop = 0
+    },
     cardInFocus ({task}) {
       this.$emit('card-in-focus', {task})
     },
