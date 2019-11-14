@@ -31,7 +31,6 @@ div
           :repoURL="repoURL"
           :allowUpdates="allowUpdates"
           v-on:update-task-order="updateTaskOrder"
-          v-on:show-detail="showDetail"
           v-on:show-edit="showEdit"
           v-on:show-delete="showDelete"
           v-on:file-link="emitFileLink"
@@ -54,18 +53,18 @@ div
                 a(@click="hideAddListForm")
                   b-icon(pack="fa" icon="times" size="is-small")
     //- multipane-resizer(v-if="detailOpen")
-    detail.imdone-pane.detail(
-      v-if="detailOpen"
-      :task="selectedTask"
-      :repoURL="repoURL"
-      :baseURL="baseURL"
-      :allowUpdates="allowUpdates"
-      :allowFileEdit="allowFileEdit"
-      :searchIssuesURL="searchIssuesURL"
-      :createIssueURL="createIssueURL"
-      v-on:close-detail="closeDetail"
-      v-on:file-link="emitFileLink"
-      v-on:text-clicked="textClicked")
+    //- detail.imdone-pane.detail(
+    //-   v-if="detailOpen"
+    //-   :task="selectedTask"
+    //-   :repoURL="repoURL"
+    //-   :baseURL="baseURL"
+    //-   :allowUpdates="allowUpdates"
+    //-   :allowFileEdit="allowFileEdit"
+    //-   :searchIssuesURL="searchIssuesURL"
+    //-   :createIssueURL="createIssueURL"
+    //-   v-on:close-detail="closeDetail"
+    //-   v-on:file-link="emitFileLink"
+    //-   v-on:text-clicked="textClicked")
 
 </template>
 <script>
