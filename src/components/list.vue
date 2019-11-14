@@ -92,8 +92,10 @@ export default {
   updated () {
     if (this.filtered) {
       this.$nextTick(() => {
-        this.scrollToTop()
-        this.filtered = false
+        setTimeout(() => {
+          this.scrollToTop()
+          this.filtered = false
+        }, 250)
       })
     }
   },
