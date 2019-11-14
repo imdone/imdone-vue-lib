@@ -14,45 +14,46 @@ div
     v-on:close="closeEdit"
     v-on:new-task="newTask"
   )
-  multipane.board-main(v-on:paneResizeStop="resizeStop")
-    .imdone-pane(:style="{width: '100%'}" ref="boardPanel")
-      .board
-        draggable.columns.is-mobile(:list="lists" @end="updateListOrder" :options="draggableOpts")
-          list.column.imdone-list(v-for='(list, index) in lists'
-            v-if="lists"
-            :data-list="list.name"
-            :key="list.name"
-            v-model="lists[index]"
-            :showFileLinks="showFileLinks"
-            :board="board"
-            :selectedTask="selectedTask"
-            :activeTask="activeTask"
-            :repoURL="repoURL"
-            :allowUpdates="allowUpdates"
-            v-on:update-task-order="updateTaskOrder"
-            v-on:show-detail="showDetail"
-            v-on:show-edit="showEdit"
-            v-on:show-delete="showDelete"
-            v-on:file-link="emitFileLink"
-            v-on:delete-list="deleteList"
-            v-on:text-clicked="textClicked"
-            v-on:tag-clicked='tagClicked'
-            v-on:context-clicked='contextClicked'
-            v-on:add-card="addCard"
-            v-on:card-in-focus="cardInFocus")
-          .column.new-list(slot="footer" v-if="allowUpdates")
-            button#new-list-button.button.is-white.has-text-left.block(v-if="!addListFormShown" @click="showAddListForm")
-              b-icon(pack="fa" icon="plus" size="is-small")
-              | &nbsp;&nbsp;Add another list
-            .card(v-if="addListFormShown")
-              .card-content
-                .control
-                  input.input(type="text" placeholder="Enter list name..." v-model="newListName" ref="newListInput" @keyup.enter="addList" @keyup.esc="hideAddListForm")
-                .control
-                  button.button.is-imdone-primary.is-small.add-list-btn(@click="addList") Add List
-                  a(@click="hideAddListForm")
-                    b-icon(pack="fa" icon="times" size="is-small")
-    multipane-resizer(v-if="detailOpen")
+  //- multipane.board-main(v-on:paneResizeStop="resizeStop")
+  .board-main
+    //- .imdone-pane(:style="{width: '100%'}" ref="boardPanel")
+    .board
+      draggable.columns.is-mobile(:list="lists" @end="updateListOrder" :options="draggableOpts")
+        list.column.imdone-list(v-for='(list, index) in lists'
+          v-if="lists"
+          :data-list="list.name"
+          :key="list.name"
+          v-model="lists[index]"
+          :showFileLinks="showFileLinks"
+          :board="board"
+          :selectedTask="selectedTask"
+          :activeTask="activeTask"
+          :repoURL="repoURL"
+          :allowUpdates="allowUpdates"
+          v-on:update-task-order="updateTaskOrder"
+          v-on:show-detail="showDetail"
+          v-on:show-edit="showEdit"
+          v-on:show-delete="showDelete"
+          v-on:file-link="emitFileLink"
+          v-on:delete-list="deleteList"
+          v-on:text-clicked="textClicked"
+          v-on:tag-clicked='tagClicked'
+          v-on:context-clicked='contextClicked'
+          v-on:add-card="addCard"
+          v-on:card-in-focus="cardInFocus")
+        .column.new-list(slot="footer" v-if="allowUpdates")
+          button#new-list-button.button.is-white.has-text-left.block(v-if="!addListFormShown" @click="showAddListForm")
+            b-icon(pack="fa" icon="plus" size="is-small")
+            | &nbsp;&nbsp;Add another list
+          .card(v-if="addListFormShown")
+            .card-content
+              .control
+                input.input(type="text" placeholder="Enter list name..." v-model="newListName" ref="newListInput" @keyup.enter="addList" @keyup.esc="hideAddListForm")
+              .control
+                button.button.is-imdone-primary.is-small.add-list-btn(@click="addList") Add List
+                a(@click="hideAddListForm")
+                  b-icon(pack="fa" icon="times" size="is-small")
+    //- multipane-resizer(v-if="detailOpen")
     detail.imdone-pane.detail(
       v-if="detailOpen"
       :task="selectedTask"
@@ -74,11 +75,12 @@ import List from '@/components/list'
 import Detail from '@/components/detail'
 import TaskEditorModal from '@/components/taskEditorModal'
 import _ from 'lodash'
-import { Multipane, MultipaneResizer } from 'vue-multipane'
+// import { Multipane, MultipaneResizer } from 'vue-multipane'
 
 export default {
   name: 'imdone-board',
-  components: {List, Detail, Draggable, 'b-icon': Icon, Multipane, MultipaneResizer, TaskEditorModal},
+  components: {List, Detail, Draggable, 'b-icon': Icon, TaskEditorModal},
+  // components: {List, Detail, Draggable, 'b-icon': Icon, Multipane, MultipaneResizer, TaskEditorModal},
   // TODO:60 Should accept a v-model **board** in the format `{config, lists}` where lists is a list of tasks in the format `{name, hidden, tasks}` id:40
   props: [
     'board',
@@ -204,19 +206,19 @@ export default {
     newTask (opts) {
       this.$emit('new-task', opts)
     },
-    showDetail (task) {
-      this.$emit('task-selected', task)
-      this.$refs.boardPanel.style.width = this.boardPanelWidth
-      this.$refs.boardPanel.style.maxWidth = '75%'
-    },
-    closeDetail () {
-      this.$emit('task-unselected')
-      this.$refs.boardPanel.style.width = '100%'
-      this.$refs.boardPanel.style.maxWidth = '100%'
-    },
-    resizeStop (pane, container, size) {
-      this.boardPanelWidth = this.$refs.boardPanel.style.width
-    },
+    // showDetail (task) {
+    //   this.$emit('task-selected', task)
+    //   this.$refs.boardPanel.style.width = this.boardPanelWidth
+    //   this.$refs.boardPanel.style.maxWidth = '75%'
+    // },
+    // closeDetail () {
+    //   this.$emit('task-unselected')
+    //   this.$refs.boardPanel.style.width = '100%'
+    //   this.$refs.boardPanel.style.maxWidth = '100%'
+    // },
+    // resizeStop (pane, container, size) {
+    //   this.boardPanelWidth = this.$refs.boardPanel.style.width
+    // },
     emitFileLink (task) {
       this.$emit('file-link', task)
     }
@@ -254,6 +256,7 @@ export default {
   border: 1px solid #ccc;
 }
 .board-main {
+  border: 1px solid #ccc;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -270,6 +273,7 @@ export default {
   overflow-x: auto;
   overflow-y: auto;
   .columns {
+    padding-top: 10px;
     max-height: 100%;
     height: 100%;
     width: max-content;
