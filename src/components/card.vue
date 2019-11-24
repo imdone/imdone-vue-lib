@@ -1,6 +1,6 @@
 <template lang="pug">
 article.message.task-card(
-  tabindex="-1"
+  tabindex="0"
   @click="cardInFocus"
   @mouseover="activate"
   @mouseout="inactivate"
@@ -93,7 +93,7 @@ export default {
     clazz () {
       let clazz = this.task.customClass || 'is-info'
       // clazz += ' is-info'
-      // DOING: Move this to imdone-settings as task.customClass
+      // DOING:0 Move this to imdone-settings as task.customClass
       if (this.activeOrSelected) clazz += ' active'
       return clazz
     },
@@ -216,7 +216,7 @@ img.gravatar {
       border-right: 1px solid;
       border-bottom: 1px solid;
     }
-    // DOING: Set border color same as left border
+    // DOING:10 Set border color same as left border
     // border-color: #18a84f;
     // filter: brightness(93%)// hue-rotate(-90deg);
     // .tag {

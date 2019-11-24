@@ -118,6 +118,9 @@ export default {
   .CodeMirror {
     height: calc(100vh - 400px) !important;
     min-height: 400px;
+    .CodeMirror-cursor {
+      width: 3px;
+    }
   }
 }
 .CodeMirror-hints {
