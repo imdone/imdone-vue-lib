@@ -7,7 +7,7 @@
     .card-header-icon(v-else-if="ignored")
       b-icon(pack="fa" icon="archive" size="is-small")
     .card-header-icon(v-else)
-      .tag.is-info {{tasks.length}}
+      .tag.is-light {{tasks.length}}
   .card-content
     .overflow-container(ref="tasksEl")
       p.ignore-text(v-if="ignored") Cards dropped here will be ignored

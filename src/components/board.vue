@@ -255,7 +255,7 @@ export default {
   border: 1px solid #ccc;
 }
 .board-main {
-  border: 1px solid #ccc;
+  border: 1px solid #F0F0F0;
   position: absolute;
   top: 0;
   bottom: 0;

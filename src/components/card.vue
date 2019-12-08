@@ -13,12 +13,15 @@ article.message.task-card(
   .message-body.toggle-parent
     .tags.card-actions.is-size-6(v-show="isActive")
       .tag.is-white
-        a(@click="emitFileLink" :href="fileLink" :target="target" :title="`${task.source.path}:${task.line}`")
-          octicon(:icon="Octicons.link")
-        a(@click.stop.prevent="showEdit" title="Edit")
-          octicon(:icon="Octicons.pencil")
-        a(@click.stop.prevent="showDelete" title="Delete")
-          octicon(:icon="Octicons.trashcan")
+        b-tooltip(label="Open file" position="is-left" type="is-info" :delay="500" :animated="true")
+          a(@click="emitFileLink" :href="fileLink" :target="target")
+            octicon(:icon="Octicons.link")
+        b-tooltip(label="Edit card" position="is-left" type="is-info" :delay="500" :animated="true")
+          a(@click.stop.prevent="showEdit")
+            octicon(:icon="Octicons.pencil")
+        b-tooltip(label="Delete card" position="is-left" type="is-info" :delay="500" :animated="true")
+          a(@click.stop.prevent="showDelete")
+            octicon(:icon="Octicons.trashcan")
 
       //- .level
       //-   .level-left
@@ -35,20 +38,22 @@ article.message.task-card(
       //-       b-icon(v-else pack="fa" icon="user" size="is-small" title="No author found")
     .task-text.task-description.has-text-left(@click="textClicked" v-html="description.html" ref="description")
     .toggle-full-desc(v-if='descTruncated  && !fullDesc')
-      b-tooltip(label="Expand description" position="is-left" type="is-black")
+      b-tooltip(label="Expand description" position="is-left" type="is-info" :delay="500" :animated="true")
         a(@click.stop="fullDesc = true")
           octicon(:icon="Octicons.unfold")
     .toggle-full-desc(v-if='fullDesc')
-      b-tooltip(label="Collapse description" position="is-left" type="is-black")
+      b-tooltip(label="Collapse description" position="is-left" type="is-info" :delay="500" :animated="true")
         a(@click.stop="fullDesc = false")
           octicon(:icon="Octicons.fold")
     //- TODO:0 Display progress of task lists like [github](https://help.github.com/articles/about-task-lists/) id:37
     // - [Issues · imdone/imdone-vue-lib](https://github.com/imdone/imdone-vue-lib/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
     // - [ ] Create vue component
     .tags.imdone-tags(v-if="tags.length > 0")
-      a.tag.is-imdone-primary(v-for="tag in tags" @click.stop='tagClicked(tag)') {{tag}}
+      b-tooltip(v-for="tag in tags" :key="tag" :label="`Filter by '${tag}'`" type="is-info" :delay="500" :animated="true")
+        a.tag.is-imdone-primary(@click.stop='tagClicked(tag)') {{tag}}
     .tags.imdone-contexts(v-if="contexts.length > 0")
-      a.tag.is-info(v-for="context in contexts" @click.stop='contextClicked(context)') {{context}}
+      b-tooltip(v-for="context in contexts" :key="context" :label="`Filter by '${context}'`" type="is-info" :delay="500" :animated="true")
+        a.tag.is-info(@click.stop='contextClicked(context)') {{context}}
 </template>
 <script>
 import * as gravatar from 'gravatar'
@@ -262,6 +267,14 @@ img.gravatar {
       margin-bottom: 0;
       padding-bottom: 0;
       margin-right: .25rem;
+      .b-tooltip {
+        a {
+          text-decoration: none;
+        }
+        margin-right: 5px;
+        margin-bottom: .25rem;
+      }
+
       .tag {
         margin-bottom: .25rem;
       }
