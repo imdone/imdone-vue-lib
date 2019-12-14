@@ -4,7 +4,6 @@ article.message.task-card(
   @click="cardInFocus"
   @mouseover="activate"
   @mouseout="inactivate"
-  @focus="cardInFocus"
   @blur="inactivate"
   :class="clazz"
   v-bind="meta")
@@ -168,7 +167,7 @@ export default {
       this.isActive = false
     },
     inactivateUnlessInFocus () {
-      if (!this.active) this.inactivate()
+      if (!this.isActive) this.inactivate()
     },
     tagClicked (tag) {
       this.$emit('tag-clicked', {task: this.task, tag})
