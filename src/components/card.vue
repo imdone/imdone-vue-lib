@@ -36,14 +36,14 @@ article.message.task-card(
       //-       img.gravatar(v-if="task.blame && task.blame.email" :src="gravatarURL" :title="name")
       //-       b-icon(v-else pack="fa" icon="user" size="is-small" title="No author found")
     .task-text.task-description.has-text-left(@click="textClicked" v-html="description.html" ref="description")
-    .toggle-full-desc(v-if='descTruncated  && !fullDesc')
-      b-tooltip(label="Expand description" position="is-left" type="is-info" :delay="500" :animated="true")
-        a(@click.stop="fullDesc = true")
-          octicon(:icon="Octicons.unfold")
-    .toggle-full-desc(v-if='fullDesc')
+    .toggle-full-desc(v-if="descIsOverMax && fullDesc")
       b-tooltip(label="Collapse description" position="is-left" type="is-info" :delay="500" :animated="true")
         a(@click.stop="fullDesc = false")
           octicon(:icon="Octicons.fold")
+    .toggle-full-desc(v-if="descIsOverMax && !fullDesc")
+      b-tooltip(label="Expand description" position="is-left" type="is-info" :delay="500" :animated="true")
+        a(@click.stop="fullDesc = true")
+          octicon(:icon="Octicons.unfold")
     //- TODO:0 Display progress of task lists like [github](https://help.github.com/articles/about-task-lists/) id:37
     // - [Issues · imdone/imdone-vue-lib](https://github.com/imdone/imdone-vue-lib/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
     // - [ ] Create vue component
@@ -68,7 +68,7 @@ export default {
     return {
       maxDescLines: 7,
       Octicons,
-      fullDesc: this.expandByDefault(),
+      fullDesc: false,
       isActive: false
     }
   },
@@ -76,6 +76,9 @@ export default {
     'b-icon': Icon,
     'b-tooltip': Tooltip,
     Octicon
+  },
+  created () {
+    this.fullDesc = this.expandByDefault()
   },
   watch: {
     active: {
@@ -116,7 +119,10 @@ export default {
       return this.fullDesc ? taskTextUtils.description(this.task) : taskTextUtils.description(this.task, this.maxDescLines)
     },
     descTruncated () {
-      return this.description.lines.length >= this.maxDescLines
+      return this.description.lines.length > this.maxDescLines
+    },
+    descIsOverMax () {
+      return this.task && this.task.description && this.task.description.length + 1 > this.maxDescLines
     },
     name () {
       if (!this.task.blame || !this.task.blame.name) return 'no author found'
@@ -155,7 +161,7 @@ export default {
   },
   methods: {
     expandByDefault () {
-      return this.task && this.task.meta && this.task.meta.expand
+      return this.task && this.task.meta && this.task.meta.expand && this.task.meta.expand.length > 0 && this.descTruncated
     },
     cardInFocus () {
       if (!this.active) this.$emit('card-in-focus', {task: this.task})

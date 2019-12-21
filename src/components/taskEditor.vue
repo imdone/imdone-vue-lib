@@ -21,7 +21,7 @@
 // require component
 import { codemirror } from 'vue-codemirror'
 import 'codemirror/addon/hint/show-hint'
-import 'codemirror/mode/markdown/markdown'
+import 'codemirror/mode/gfm/gfm'
 import './autosuggest'
 
 export default {
@@ -52,7 +52,7 @@ export default {
       return {
         // codemirror options
         tabSize: 2,
-        mode: 'markdown',
+        mode: 'gfm',
         theme: 'abcdef',
         lineWrapping: true,
         lineNumbers: true,
@@ -69,14 +69,14 @@ export default {
         },
         autoSuggest: [
           {
-            mode: 'markdown',
+            mode: 'gfm',
             startChar: '+',
             listCallback: () => {
               return this.repo.allTags.map(tag => ({text: tag, displayText: tag + ' '}))
             }
           },
           {
-            mode: 'markdown',
+            mode: 'gfm',
             startChar: '@',
             listCallback: () => {
               return this.repo.allContext.map(context => ({text: context, displayText: context + ' '}))
