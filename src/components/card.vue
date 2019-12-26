@@ -78,7 +78,7 @@ export default {
     Octicon
   },
   created () {
-    this.fullDesc = this.expandByDefault()
+    this.fullDesc = this.expandByDefault
   },
   watch: {
     active: {
@@ -122,7 +122,10 @@ export default {
       return this.description.lines.length > this.maxDescLines
     },
     descIsOverMax () {
-      return this.task && this.task.description && this.task.description.length + 1 > this.maxDescLines
+      return this.task && this.task.description && this.task.description.length + 1 >= this.maxDescLines
+    },
+    expandByDefault () {
+      return this.task && this.task.meta && this.task.meta.expand && this.task.meta.expand.length > 0
     },
     name () {
       if (!this.task.blame || !this.task.blame.name) return 'no author found'
@@ -160,9 +163,6 @@ export default {
     }
   },
   methods: {
-    expandByDefault () {
-      return this.task && this.task.meta && this.task.meta.expand && this.task.meta.expand.length > 0 && this.descTruncated
-    },
     cardInFocus () {
       if (!this.active) this.$emit('card-in-focus', {task: this.task})
     },
