@@ -16,6 +16,7 @@ function formatDescription (task, description) {
   const props = {...task.frontMatter.props, content: CONTENT_TOKEN}
   const computed = {...task.frontMatter.computed}
   let encodedText
+  let encodedMD
   try {
     for (let [key, value] of Object.entries(computed)) {
       const computedTemplate = `\${${template(value)({...props, ...computed})}}`
@@ -23,18 +24,20 @@ function formatDescription (task, description) {
       computed[key] = computedValue
     }
     description = template(description)({...props, ...computed})
-    let plainDescription = removeMD(description, {stripListLeaders: false})
+    const linkRegex = /\[([^[]+)\](\(.*\))/gm
+    let plainDescription = removeMD(description.replace(linkRegex, '$2'), {stripListLeaders: false})
     plainDescription = plainDescription.replace(/:\w+:/, match => {
       const html = md.render(match)
       const $ = cheerio.load(html)
       return $.text().trim()
     })
     encodedText = encodeURIComponent(plainDescription)
+    encodedMD = encodeURIComponent(description)
     description = description.replace(CONTENT_TOKEN, encodedText)
   } catch (e) {
     console.log(e)
   }
-  return { description, encodedText }
+  return { description, encodedText, encodedMD }
 }
 
 export default {
@@ -43,7 +46,7 @@ export default {
     const truncDesc = lines
                         ? eol.split(task.getTextAndDescription()).slice(0, lines - 1).join(eol.lf)
                         : task.getTextAndDescription()
-    let {description, encodedText} = formatDescription(task, truncDesc)
+    let {description, encodedText, encodedMD} = formatDescription(task, truncDesc)
     const html = md.render(description)
     const $ = cheerio.load(html)
     $('a').each(function () {
@@ -67,7 +70,8 @@ export default {
     return {
       lines: descAry,
       html: $.html(),
-      encodedText
+      encodedText,
+      encodedMD
     }
   },
   formatText (text, data) {

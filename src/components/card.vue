@@ -106,8 +106,14 @@ export default {
       const frontMatter = this.task.frontMatter
       if (frontMatter && frontMatter.links) {
         links = frontMatter.links.map(({pack, icon, title, href}) => {
-          const encodedText = this.description.encodedText
-          href = taskTextUtils.formatText(href, {encodedText, ...this.task})
+          const { encodedText, encodedMD } = this.description
+          const frontMatterCopy = {...frontMatter}
+          frontMatterCopy.props.encodedText = encodedText
+          frontMatterCopy.props.encodedMD = encodedMD
+          frontMatterCopy.props.task = this.task
+          debugger
+          href = taskTextUtils.formatDescription({frontMatter: frontMatterCopy}, href).description
+          // href = taskTextUtils.formatText(href, {encodedText, ...this.task})
           return {pack, icon, title, href}
         })
       }
@@ -116,7 +122,7 @@ export default {
     clazz () {
       let clazz = this.task.customClass || 'is-info'
       // clazz += ' is-info'
-      // DOING:0 Move this to imdone-settings as task.customClass
+      // DOING:5 Move this to imdone-settings as task.customClass
       if (this.activeOrSelected) clazz += ' active'
       return clazz
     },
