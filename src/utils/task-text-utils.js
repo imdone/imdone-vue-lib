@@ -72,5 +72,6 @@ export default {
   },
   formatText (text, data) {
     return template(text)(data)
-  }
+  },
+  formatDescription
 }

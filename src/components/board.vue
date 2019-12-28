@@ -11,6 +11,7 @@ div
     :repo="board"
     v-if="innerNewCardList" 
     :list="innerNewCardList" 
+    :template="cardTemplate"
     v-on:close="closeEdit"
     v-on:new-task="newTask"
   )
@@ -74,6 +75,7 @@ import List from '@/components/list'
 import Detail from '@/components/detail'
 import TaskEditorModal from '@/components/taskEditorModal'
 import _ from 'lodash'
+import taskTextUtils from '../utils/task-text-utils'
 // import { Multipane, MultipaneResizer } from 'vue-multipane'
 
 export default {
@@ -92,7 +94,8 @@ export default {
     'newCardList',
     'searchIssuesURL',
     'createIssueURL',
-    'showFileLinks'
+    'showFileLinks',
+    'frontMatter'
   ],
   data: function () {
     return {
@@ -122,6 +125,9 @@ export default {
     },
     config () {
       return this.board.config
+    },
+    cardTemplate () {
+      return this.frontMatter && taskTextUtils.formatDescription({frontMatter: this.frontMatter}, this.frontMatter.template).description
     }
   },
   watch: {

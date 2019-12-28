@@ -26,7 +26,7 @@ import './autosuggest'
 
 export default {
   components: { codemirror },
-  props: [ 'task', 'list', 'repo' ],
+  props: [ 'task', 'list', 'repo', 'template' ],
   data: function () {
     return {
       content: ''
@@ -34,6 +34,7 @@ export default {
   },
   mounted () {
     if (this.task) this.content = this.task.getRawTextAndDescription()
+    if (this.template) this.content = this.template
   },
   computed: {
     listName () {

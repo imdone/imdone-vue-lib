@@ -6,6 +6,7 @@
         :repo='repo'
         :task="task"
         :list="list"
+        :template="template"
         v-on:close="close"
         v-on:save-task="saveTask"
         v-on:new-task="newTask"
@@ -16,7 +17,7 @@
 import TaskEditor from '@/components/taskEditor'
 export default {
   components: { TaskEditor },
-  props: ['task', 'list', 'repo'],
+  props: ['task', 'list', 'repo', 'template'],
   methods: {
     close () {
       this.$emit('close')
