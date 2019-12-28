@@ -2,24 +2,48 @@ import * as MarkdownIt from 'markdown-it'
 import * as cheerio from 'cheerio'
 import * as checkbox from 'markdown-it-checkbox'
 import * as emoji from 'markdown-it-emoji'
+import removeMD from 'remove-markdown'
 import eol from 'eol'
 import path from 'path'
+import template from 'lodash.template'
 
 const md = new MarkdownIt({html: true, breaks: true})
 md.use(checkbox)
 md.use(emoji)
+
+const CONTENT_TOKEN = '__CONTENT__'
+function formatDescription (task, description) {
+  const props = {...task.frontMatter.props, content: CONTENT_TOKEN}
+  const computed = {...task.frontMatter.computed}
+  let encodedText
+  try {
+    for (let [key, value] of Object.entries(computed)) {
+      const computedTemplate = `\${${template(value)({...props, ...computed})}}`
+      const computedValue = template(computedTemplate)({})
+      computed[key] = computedValue
+    }
+    description = template(description)({...props, ...computed})
+    let plainDescription = removeMD(description, {stripListLeaders: false})
+    plainDescription = plainDescription.replace(/:\w+:/, match => {
+      const html = md.render(match)
+      const $ = cheerio.load(html)
+      return $.text().trim()
+    })
+    encodedText = encodeURIComponent(plainDescription)
+    description = description.replace(CONTENT_TOKEN, encodedText)
+  } catch (e) {
+    console.log(e)
+  }
+  return { description, encodedText }
+}
+
 export default {
-  text (task) {
-    const html = md.render(task.getText({stripMeta: true, sanitize: true, stripTags: true, stripContext: true}))
-    const $ = cheerio.load(html)
-    $('a').attr('target', '_blank')
-    return $.html()
-  },
   description (task, lines) {
     const descAry = eol.split(task.getTextAndDescription())
-    const description = lines
+    const truncDesc = lines
                         ? eol.split(task.getTextAndDescription()).slice(0, lines - 1).join(eol.lf)
                         : task.getTextAndDescription()
+    let {description, encodedText} = formatDescription(task, truncDesc)
     const html = md.render(description)
     const $ = cheerio.load(html)
     $('a').each(function () {
@@ -42,7 +66,11 @@ export default {
     // $('input[type=checkbox]').attr('disabled', 'true')
     return {
       lines: descAry,
-      html: $.html()
+      html: $.html(),
+      encodedText
     }
+  },
+  formatText (text, data) {
+    return template(text)(data)
   }
 }

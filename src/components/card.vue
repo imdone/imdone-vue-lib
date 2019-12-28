@@ -21,6 +21,9 @@ article.message.task-card(
         b-tooltip(label="Delete card" position="is-left" type="is-info" :delay="500" :animated="true")
           a(@click.stop.prevent="showDelete")
             octicon(:icon="Octicons.trashcan")
+        b-tooltip(v-for='link in links' :label='link.title' :key='link.icon' position="is-left" type="is-info" :delay="500" :animated="true")
+          a.action-link(@click="textClicked" :href='link.href' target='_blank')
+            b-icon.is-small(:pack='link.pack' :icon='link.icon')
 
       //- .level
       //-   .level-left
@@ -97,6 +100,19 @@ export default {
     }
   },
   computed: {
+    links () {
+      let links = []
+      if (!this.task) return links
+      const frontMatter = this.task.frontMatter
+      if (frontMatter && frontMatter.links) {
+        links = frontMatter.links.map(({pack, icon, title, href}) => {
+          const encodedText = this.description.encodedText
+          href = taskTextUtils.formatText(href, {encodedText, ...this.task})
+          return {pack, icon, title, href}
+        })
+      }
+      return links
+    },
     clazz () {
       let clazz = this.task.customClass || 'is-info'
       // clazz += ' is-info'
@@ -112,10 +128,8 @@ export default {
       }
       return att
     },
-    text () {
-      return taskTextUtils.text(this.task)
-    },
     description () {
+      if (!this.task) return ''
       return this.fullDesc ? taskTextUtils.description(this.task) : taskTextUtils.description(this.task, this.maxDescLines)
     },
     descTruncated () {
@@ -256,6 +270,12 @@ img.gravatar {
       .level-item {
         margin: 5px;
       }
+    }
+    .action-link {
+      width: 12px;
+      height: 18px;
+      padding-left: .5em;
+      padding-top: .10em;
     }
   }
   .message-body {
