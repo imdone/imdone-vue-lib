@@ -1,0 +1,51 @@
+keepEmptyPriority: false
+code:
+  include_lists:
+    - TODO
+    - DOING
+    - DONE
+    - PLANNING
+    - FIXME
+    - ARCHIVE
+    - HACK
+    - CHANGED
+    - XXX
+    - IDEA
+    - NOTE
+    - REVIEW
+    - MARK
+    - BACKLOG
+    - HELP
+    - READY
+lists:
+  - hidden: true
+    name: BACKLOG
+  - hidden: false
+    name: NOTE
+  - hidden: false
+    name: TODO
+  - hidden: false
+    name: DOING
+  - hidden: false
+    name: READY
+  - hidden: false
+    name: DONE
+marked:
+  langPrefix: language-
+  smartLists: true
+  pedantic: false
+  breaks: false
+  tables: true
+  gfm: true
+noHelp: true
+meta:
+  gh:
+    icon: icon-octoface
+    titleTemplate: View github issue %s
+    urlTemplate: https://github.com/imdone/imdone-vue-lib/issues/%s
+settings:
+  cards:
+    colors:
+      - color: red
+        filter: +urgent
+  journalPath: /notes

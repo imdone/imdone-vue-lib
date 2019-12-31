@@ -115,7 +115,7 @@ export default {
 @import "../../node_modules/codemirror/addon/hint/show-hint.css";
 .imdone-editor {
   width: calc(100vw - 400px);
-  min-width: 600px;
+  min-width: 200px;
   .CodeMirror {
     height: calc(100vh - 400px) !important;
     min-height: 400px;

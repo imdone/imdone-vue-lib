@@ -22,6 +22,7 @@
           :repoURL="repoURL"
           :allowUpdates="allowUpdates"
           :config="board.config"
+          :maxLines="maxLines"
           v-show="!ignored"
           v-on:show-edit="showEdit"
           v-on:show-delete="showDelete"
@@ -47,7 +48,7 @@ export default {
     'b-icon': Icon
   },
   // TODO:50 Should accept a v-model **list** in the format {name, hidden, tasks} id:41
-  props: ['value', 'selectedTask', 'repoURL', 'activeTask', 'allowUpdates', 'board', 'showFileLinks'],
+  props: ['value', 'selectedTask', 'repoURL', 'activeTask', 'allowUpdates', 'board', 'showFileLinks', 'maxLines'],
   data () {
     return {
       innerTasks: this.value.tasks,

@@ -66,13 +66,15 @@ import taskTextUtils from '../utils/task-text-utils'
 
 export default {
   name: 'imdone-card',
-  props: ['task', 'selectedTask', 'activeTask', 'repoURL', 'allowUpdates', 'showFileLinks', 'config'],
+  props: ['task', 'selectedTask', 'activeTask', 'repoURL', 'allowUpdates', 'showFileLinks', 'config', 'maxLines'],
   data () {
     return {
-      maxDescLines: 7,
+      maxDescLines: 6,
       Octicons,
       fullDesc: false,
-      isActive: false
+      isActive: false,
+      refreshId: null,
+      refreshInterval: null
     }
   },
   components: {
@@ -97,6 +99,12 @@ export default {
         // console.log('task:', {val, oldVal, isMoved: val.isMoved})
         if ((this.active && oldVal && val.index !== oldVal.index) || (this.active === false && !oldVal)) this.$nextTick(() => this.$el.focus())
       }
+    },
+    maxLines: {
+      immediate: true,
+      handler (val, oldVal) {
+        this.maxDescLines = this.maxLines || 6
+      }
     }
   },
   computed: {
@@ -111,9 +119,7 @@ export default {
           frontMatterCopy.props.encodedText = encodedText
           frontMatterCopy.props.encodedMD = encodedMD
           frontMatterCopy.props.task = this.task
-          debugger
           href = taskTextUtils.formatDescription({frontMatter: frontMatterCopy}, href).description
-          // href = taskTextUtils.formatText(href, {encodedText, ...this.task})
           return {pack, icon, title, href}
         })
       }
@@ -135,14 +141,14 @@ export default {
       return att
     },
     description () {
-      if (!this.task) return ''
-      return this.fullDesc ? taskTextUtils.description(this.task) : taskTextUtils.description(this.task, this.maxDescLines)
+      const task = this.task
+      return this.fullDesc ? taskTextUtils.description(task) : taskTextUtils.description(task, this.maxDescLines)
     },
     descTruncated () {
       return this.description.lines.length > this.maxDescLines
     },
     descIsOverMax () {
-      return this.task && this.task.description && this.task.description.length + 1 >= this.maxDescLines
+      return this.task && this.task.description && this.task.description.length + 1 > this.maxDescLines
     },
     expandByDefault () {
       return this.task && this.task.meta && this.task.meta.expand && this.task.meta.expand.length > 0
@@ -183,6 +189,23 @@ export default {
     }
   },
   methods: {
+    startRefresh () {
+      if (this.task.meta.refresh) {
+        this.refreshInterval = parseInt(this.task.meta.refresh[0])
+      } else if (this.task.frontMatter && this.task.frontMatter.refresh) {
+        this.refreshInterval = this.task.frontMatter.refresh
+      }
+      this.$nextTick(() => {
+        if (this.refreshInterval) this.refreshId = setInterval(this.$forceUpdate(), this.refreshInterval)
+      })
+    },
+    stopRefresh () {
+      if (this.refreshId) {
+        clearInterval(this.refreshId)
+        this.refreshId = null
+      }
+      if (this.refreshInterval) this.refreshInterval = null
+    },
     cardInFocus () {
       if (!this.active) this.$emit('card-in-focus', {task: this.task})
     },
@@ -353,7 +376,7 @@ img.gravatar {
       li {
         input[type=checkbox] {
           margin-right: 1em;
-          margin-left: -1.5em;
+          margin-left: -2em;
         }
       }
     }

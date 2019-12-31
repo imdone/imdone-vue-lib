@@ -13,6 +13,13 @@ md.use(emoji)
 
 const CONTENT_TOKEN = '__CONTENT__'
 function formatDescription (task, description) {
+  if (!task) {
+    return {
+      description: '',
+      encodedText: '',
+      encodedMD: ''
+    }
+  }
   const props = {...task.frontMatter.props, content: CONTENT_TOKEN}
   const computed = {...task.frontMatter.computed}
   let encodedText
@@ -42,11 +49,20 @@ function formatDescription (task, description) {
 
 export default {
   description (task, lines) {
+    if (!task) {
+      return {
+        lines: [],
+        html: '',
+        encodedText: '',
+        encodedMD: ''
+      }
+    }
     const descAry = eol.split(task.getTextAndDescription())
     const truncDesc = lines
-                        ? eol.split(task.getTextAndDescription()).slice(0, lines - 1).join(eol.lf)
+                        ? eol.split(task.getTextAndDescription()).slice(0, lines).join(eol.lf)
                         : task.getTextAndDescription()
-    let {description, encodedText, encodedMD} = formatDescription(task, truncDesc)
+    let {description} = formatDescription(task, truncDesc)
+    let {encodedText, encodedMD} = formatDescription(task, task.getTextAndDescription())
     const html = md.render(description)
     const $ = cheerio.load(html)
     $('a').each(function () {

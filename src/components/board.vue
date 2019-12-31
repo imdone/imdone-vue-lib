@@ -31,6 +31,7 @@ div
           :activeTask="activeTask"
           :repoURL="repoURL"
           :allowUpdates="allowUpdates"
+          :maxLines="maxLines"
           v-on:update-task-order="updateTaskOrder"
           v-on:show-edit="showEdit"
           v-on:show-delete="showDelete"
@@ -125,6 +126,9 @@ export default {
     },
     config () {
       return this.board.config
+    },
+    maxLines () {
+      return this.config.settings && this.config.settings.maxLines
     },
     cardTemplate () {
       return this.frontMatter && taskTextUtils.formatDescription({frontMatter: this.frontMatter}, this.frontMatter.template).description
