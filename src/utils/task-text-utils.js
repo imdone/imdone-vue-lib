@@ -33,7 +33,7 @@ function formatDescription (task, description) {
     description = template(description)({...props, ...computed})
     const linkRegex = /\[([^[]+)\](\(.*\))/gm
     let plainDescription = removeMD(description.replace(linkRegex, '$2'), {stripListLeaders: false})
-    plainDescription = plainDescription.replace(/:\w+:/, match => {
+    plainDescription = plainDescription.replace(/:\w+:/g, match => {
       const html = md.render(match)
       const $ = cheerio.load(html)
       return $.text().trim()
