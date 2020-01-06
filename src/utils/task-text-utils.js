@@ -6,6 +6,7 @@ import removeMD from 'remove-markdown'
 import eol from 'eol'
 import path from 'path'
 import template from 'lodash.template'
+import _ from 'lodash'
 
 const md = new MarkdownIt({html: true, breaks: true})
 md.use(checkbox)
@@ -20,8 +21,10 @@ function formatDescription (task, description) {
       encodedMD: ''
     }
   }
-  const props = {...task.frontMatter.props, content: CONTENT_TOKEN}
-  const computed = {...task.frontMatter.computed}
+  const frontMatterProps = _.get(task, 'frontMatter.props') || {}
+  const frontMatterComputed = _.get(task, 'frontMatter.computed') || {}
+  const props = {...frontMatterProps, content: CONTENT_TOKEN}
+  const computed = {...frontMatterComputed}
   let encodedText
   let encodedMD
   try {

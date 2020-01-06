@@ -262,10 +262,10 @@ export default {
   text-align: left;
   padding: 15px;
   overflow: hidden;
-  border: 1px solid #ccc;
+  // border: 1px solid #ccc;
 }
 .board-main {
-  border: 1px solid #F0F0F0;
+  // border: 1px solid #F0F0F0;
   position: absolute;
   top: 0;
   bottom: 0;
