@@ -31,7 +31,7 @@
           v-on:tag-clicked='tagClicked'
           v-on:context-clicked='contextClicked'
           v-on:card-in-focus="cardInFocus")
-  .card-footer
+  .card-footer(v-if="!filter")
     button.button.is-white.has-text-left.is-smaller(@click.stop="addCard")
       b-icon.has-text-left(pack="fa" icon="plus" size="is-small")
       span.button-text Add a card
@@ -77,6 +77,9 @@ export default {
     },
     ignored () {
       return this.value.ignore
+    },
+    filter () {
+      return this.value.filter
     }
   },
   watch: {

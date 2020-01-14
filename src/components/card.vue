@@ -74,7 +74,8 @@ export default {
       fullDesc: false,
       isActive: false,
       refreshId: null,
-      refreshInterval: null
+      refreshInterval: null,
+      count: 0
     }
   },
   components: {
@@ -98,6 +99,8 @@ export default {
       handler (val, oldVal) {
         // console.log('task:', {val, oldVal, isMoved: val.isMoved})
         if ((this.active && oldVal && val.index !== oldVal.index) || (this.active === false && !oldVal)) this.$nextTick(() => this.$el.focus())
+        this.stopRefresh()
+        this.startRefresh()
       }
     },
     maxLines: {
@@ -142,7 +145,9 @@ export default {
     },
     description () {
       const task = this.task
-      return this.fullDesc ? taskTextUtils.description(task) : taskTextUtils.description(task, this.maxDescLines)
+      const desc = this.fullDesc ? taskTextUtils.description(task) : taskTextUtils.description(task, this.maxDescLines)
+      desc.html += `<!-- Refresh count: ${this.count} -->`
+      return desc
     },
     descTruncated () {
       return this.description.lines.length > this.maxDescLines
@@ -196,7 +201,7 @@ export default {
         this.refreshInterval = this.task.frontMatter.refresh
       }
       this.$nextTick(() => {
-        if (this.refreshInterval) this.refreshId = setInterval(this.$forceUpdate(), this.refreshInterval)
+        if (this.refreshInterval) this.refreshId = setInterval(this.increment, this.refreshInterval)
       })
     },
     stopRefresh () {
@@ -205,6 +210,9 @@ export default {
         this.refreshId = null
       }
       if (this.refreshInterval) this.refreshInterval = null
+    },
+    increment () {
+      this.count++
     },
     cardInFocus () {
       if (!this.active) this.$emit('card-in-focus', {task: this.task})

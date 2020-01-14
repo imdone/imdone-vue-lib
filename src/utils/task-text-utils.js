@@ -14,13 +14,12 @@ md.use(emoji)
 
 const CONTENT_TOKEN = '__CONTENT__'
 function formatDescription (task, description) {
-  if (!task) {
-    return {
-      description: '',
-      encodedText: '',
-      encodedMD: ''
-    }
+  const emptyResult = {
+    description: '',
+    encodedText: '',
+    encodedMD: ''
   }
+  if (!task) return emptyResult
   const frontMatterProps = _.get(task, 'frontMatter.props') || {}
   const frontMatterComputed = _.get(task, 'frontMatter.computed') || {}
   const props = {...frontMatterProps, content: CONTENT_TOKEN}
@@ -45,7 +44,7 @@ function formatDescription (task, description) {
     encodedMD = encodeURIComponent(description)
     description = description.replace(CONTENT_TOKEN, encodedText)
   } catch (e) {
-    console.log(e)
+    return emptyResult
   }
   return { description, encodedText, encodedMD }
 }
