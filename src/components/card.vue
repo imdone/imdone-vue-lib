@@ -56,6 +56,8 @@ article.message.task-card(
     .tags.imdone-contexts(v-if="contexts.length > 0")
       b-tooltip(v-for="context in contexts" :key="context" :label="`Filter by '${context}'`" type="is-info" :delay="500" :animated="true")
         a.tag.is-info(@click.stop='contextClicked(context)') {{context}}
+    .tags.due(v-if="due")
+      .tag.is-danger Due {{dueDisplay}}
 </template>
 <script>
 import * as gravatar from 'gravatar'
@@ -63,6 +65,7 @@ import { Icon } from 'buefy/dist/components/Icon'
 import { Tooltip } from 'buefy/dist/components/ToolTip'
 import Octicon, { Octicons } from 'octicons-vue'
 import taskTextUtils from '../utils/task-text-utils'
+import moment from 'moment'
 
 export default {
   name: 'imdone-card',
@@ -142,6 +145,12 @@ export default {
         att[`data-meta-${key}`] = meta[key].join(',')
       }
       return att
+    },
+    due () {
+      return this.task.due && new Date(this.task.due)
+    },
+    dueDisplay () {
+      return moment().to(moment(this.due))
     },
     description () {
       const task = this.task
@@ -283,6 +292,9 @@ img.gravatar {
     // .tag {
     //   filter: hue-rotate(90deg);
     // }
+  }
+  .tags {
+    color: #ffffff;
   }
   .toggle {
     background: inherit;

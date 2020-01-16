@@ -9,17 +9,17 @@ div
   )
   taskEditorModal(
     :repo="board"
-    v-if="innerNewCardList" 
+    v-if="newCardEditorActive" 
     :list="innerNewCardList" 
     :template="cardTemplate"
-    v-on:close="closeEdit"
+    v-on:close="closeNewCardEditor"
     v-on:new-task="newTask"
   )
   //- multipane.board-main(v-on:paneResizeStop="resizeStop")
   .board-main
     //- .imdone-pane(:style="{width: '100%'}" ref="boardPanel")
     .board
-      draggable.columns.is-mobile(:list="lists" @end="updateListOrder" :options="draggableOpts")
+      draggable.columns.is-mobile(:list="lists" @end="updateListOrder" :group="group" :draggable="draggable")
         list.column.imdone-list(v-for='(list, index) in lists'
           v-if="lists"
           :data-list="list.name"
@@ -40,6 +40,7 @@ div
           v-on:text-clicked="textClicked"
           v-on:tag-clicked='tagClicked'
           v-on:context-clicked='contextClicked'
+          v-on:filter-clicked="filterClicked"
           v-on:add-card="addCard"
           v-on:card-in-focus="cardInFocus")
         .column.new-list(slot="footer" v-if="allowUpdates")
@@ -101,18 +102,17 @@ export default {
   data: function () {
     return {
       innerNewCardList: this.newCardList,
+      newCardEditorActive: false,
       detailOpen: false,
       boardPanelWidth: '60%',
       addListFormShown: false,
       newListName: null,
       innerLists: this.board.lists,
-      draggableOpts: {
-        group: {
-          name: 'lists',
-          pull: false
-        },
-        draggable: '.imdone-list'
-      }
+      group: {
+        name: 'lists',
+        pull: false
+      },
+      draggable: '.imdone-list'
     }
   },
   computed: {
@@ -140,9 +140,13 @@ export default {
     },
     newCardList () {
       this.innerNewCardList = this.newCardList
+      if (this.newCardList) this.newCardEditorActive = true
     }
   },
   methods: {
+    closeNewCardEditor () {
+      this.newCardEditorActive = false
+    },
     cardInFocus ({task}) {
       this.$emit('card-in-focus', {task})
     },
@@ -157,6 +161,9 @@ export default {
     },
     contextClicked (data) {
       this.$emit('context-clicked', data)
+    },
+    filterClicked (filter) {
+      this.$emit('filter-clicked', filter)
     },
     showAddListForm () {
       if (!this.allowUpdates) return this.emitUpdateError('show add')

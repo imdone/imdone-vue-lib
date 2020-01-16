@@ -1,7 +1,11 @@
 <template lang="pug">
 .card.list(v-if='visible')
   header.card-header
-    p.card-header-title {{listName}}
+    p.card-header-title 
+      a(@click="filterClicked" v-if="filter" :title="filter") {{listName}}
+      span(v-else) {{listName}}
+    a.card-header-icon(@click="filterClicked" v-if="filter" :title="filter")
+      b-icon(pack="fa" icon="filter" size="is-small")
     a.card-header-icon(@click="deleteList" v-if="tasks.length === 0 && !board.filter && !ignored")
       b-icon(pack="fa" icon="trash" size="is-small")
     .card-header-icon(v-else-if="ignored")
@@ -11,7 +15,7 @@
   .card-content
     .overflow-container(ref="tasksEl")
       p.ignore-text(v-if="ignored") Cards dropped here will be ignored
-      draggable.tasks(:data-list="listName" v-model="tasks" :options="{group:'cards'}" @end="onEnd")
+      draggable.tasks(:data-list="listName" v-model="tasks" :group="group" @end="onEnd" :draggable="draggable")
         card(v-for="task in tasks"
           :showFileLinks="showFileLinks"
           :selectedTask="selectedTask"
@@ -80,6 +84,14 @@ export default {
     },
     filter () {
       return this.value.filter
+    },
+    draggable () {
+      if (this.filter) return
+      return '.task-card'
+    },
+    group () {
+      if (this.filter) return
+      return 'cards'
     }
   },
   watch: {
@@ -104,6 +116,9 @@ export default {
     }
   },
   methods: {
+    filterClicked () {
+      this.$emit('filter-clicked', this.filter)
+    },
     onFiltered ({path}) {
       if (path === this.board.path) this.filtered = true
     },

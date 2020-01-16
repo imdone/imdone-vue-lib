@@ -29,7 +29,8 @@ export default {
   props: [ 'task', 'list', 'repo', 'template' ],
   data: function () {
     return {
-      content: ''
+      content: '',
+      innerList: this.list
     }
   },
   mounted () {
@@ -39,7 +40,7 @@ export default {
   computed: {
     listName () {
       if (this.task) return this.task.list
-      else if (this.list) return this.list
+      else if (this.innerList) return this.innerList
     },
     line () {
       if (!this.task) return 0
@@ -96,7 +97,7 @@ export default {
     },
     newTask () {
       if (this.noContent) return
-      this.$emit('new-task', {list: this.list, content: this.content})
+      this.$emit('new-task', {list: this.innerList, content: this.content})
       this.close()
     },
     close () {
