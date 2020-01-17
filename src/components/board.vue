@@ -152,6 +152,7 @@ export default {
     },
     addCard (list) {
       this.innerNewCardList = list
+      this.newCardEditorActive = true
     },
     textClicked (params) {
       this.$emit('text-clicked', params)
