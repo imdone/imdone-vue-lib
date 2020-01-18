@@ -57,7 +57,7 @@ article.message.task-card(
       b-tooltip(v-for="context in contexts" :key="context" :label="`Filter by '${context}'`" type="is-info" :delay="500" :animated="true")
         a.tag.is-info(@click.stop='contextClicked(context)') {{context}}
     .tags.due(v-if="due")
-      .tag.is-danger Due {{dueDisplay}}
+      .tag(:class="dueClass") Due {{dueDisplay}}
 </template>
 <script>
 import * as gravatar from 'gravatar'
@@ -114,6 +114,10 @@ export default {
     }
   },
   computed: {
+    dueClass () {
+      if (this.due > new Date()) return 'is-warning'
+      return 'is-danger'
+    },
     links () {
       let links = []
       if (!this.task) return links
@@ -133,7 +137,6 @@ export default {
     },
     clazz () {
       let clazz = this.task.customClass || 'is-info'
-      // clazz += ' is-info'
       // DOING:5 Move this to imdone-settings as task.customClass
       if (this.activeOrSelected) clazz += ' active'
       return clazz
