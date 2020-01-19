@@ -337,7 +337,7 @@ img.gravatar {
     background: inherit;
     word-break: break-word;
     text-align: left;
-    padding: 2px 1em .25em 1em;
+    padding: 2px 1em .35em 1em;
     font-size: .9rem !important;
     .tags {
       margin-top: .25rem;
@@ -368,6 +368,7 @@ img.gravatar {
   }
   .task-text {
     margin-top: .5rem;
+    margin-bottom: .5em;
     blockquote {
       margin-left: 1em;
       font-style: italic;
