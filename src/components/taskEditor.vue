@@ -23,6 +23,7 @@ import { codemirror } from 'vue-codemirror'
 import 'codemirror/addon/hint/show-hint'
 import 'codemirror/mode/gfm/gfm'
 import './autosuggest'
+// import stringify from 'json-stringify-safe'
 
 export default {
   components: { codemirror },
@@ -36,6 +37,8 @@ export default {
   mounted () {
     if (this.task) this.content = this.task.getRawTextAndDescription()
     if (this.template) this.content = this.template
+    // DOING: Add easter egg to display JSON
+    // console.log('Editing Task:', stringify(this.task))
   },
   computed: {
     listName () {
