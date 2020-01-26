@@ -36,7 +36,7 @@ export default {
   },
   mounted () {
     if (this.task) this.content = this.task.getRawTextAndDescription()
-    if (this.template) this.content = this.template
+    else if (this.template) (this.content = this.template)
     // DOING: Add easter egg to display JSON
     // console.log('Editing Task:', stringify(this.task))
   },

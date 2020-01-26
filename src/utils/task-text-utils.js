@@ -13,7 +13,7 @@ md.use(checkbox)
 md.use(emoji)
 
 const CONTENT_TOKEN = '__CONTENT__'
-function formatDescription (task, description) {
+function formatDescription (task, description, mustache) {
   const emptyResult = {
     description: '',
     encodedText: '',
@@ -24,6 +24,7 @@ function formatDescription (task, description) {
   const frontMatterComputed = _.get(task, 'frontMatter.computed') || {}
   const props = {...frontMatterProps, content: CONTENT_TOKEN}
   const computed = {...frontMatterComputed}
+  const taskProps = _.pick(task, 'due', 'created', 'tags', 'context', 'meta')
   let encodedText
   let encodedMD
   try {
@@ -32,7 +33,12 @@ function formatDescription (task, description) {
       const computedValue = template(computedTemplate)({})
       computed[key] = computedValue
     }
-    description = template(description)({...props, ...computed})
+    const data = {...props, ...computed, ...taskProps}
+    description = template(description)(data)
+    if (mustache) {
+      const opts = { interpolate: /{{([\s\S]+?)}}/g }
+      description = template(description, opts)(data)
+    }
     const linkRegex = /\[([^[]+)\](\(.*\))/gm
     let plainDescription = removeMD(description.replace(linkRegex, '$2'), {stripListLeaders: false})
     plainDescription = plainDescription.replace(/:\w+:/g, match => {
@@ -59,12 +65,13 @@ export default {
         encodedMD: ''
       }
     }
-    const descAry = eol.split(task.getTextAndDescription())
+    const textAndDescription = task.getTextAndDescription()
+    const descAry = eol.split(textAndDescription)
     const truncDesc = lines
-                        ? eol.split(task.getTextAndDescription()).slice(0, lines).join(eol.lf)
-                        : task.getTextAndDescription()
-    let {description} = formatDescription(task, truncDesc)
-    let {encodedText, encodedMD} = formatDescription(task, task.getTextAndDescription())
+                        ? eol.split(textAndDescription).slice(0, lines).join(eol.lf)
+                        : textAndDescription
+    let {description} = formatDescription(task, truncDesc, true)
+    let {encodedText, encodedMD} = formatDescription(task, textAndDescription, true)
     const html = md.render(description)
     const $ = cheerio.load(html)
     $('a').each(function () {
