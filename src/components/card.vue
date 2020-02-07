@@ -104,6 +104,8 @@ export default {
         if ((this.active && oldVal && val.index !== oldVal.index) || (this.active === false && !oldVal)) this.$nextTick(() => this.$el.focus())
         this.stopRefresh()
         this.startRefresh()
+        if (!val || !oldVal) return
+        if ((!val.meta.expand && oldVal.meta.expand) || (val.meta.expand && !oldVal.meta.expand)) this.fullDesc = this.expandByDefault
       }
     },
     maxLines: {
