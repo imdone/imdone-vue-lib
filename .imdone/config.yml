@@ -42,10 +42,15 @@ meta:
   gh:
     icon: icon-octoface
     titleTemplate: View github issue %s
-    urlTemplate: https://github.com/imdone/imdone-vue-lib/issues/%s
+    urlTemplate: 'https://github.com/imdone/imdone-vue-lib/issues/%s'
 settings:
+  journalType: folder
+  journalPath: /notes
+  taskPrefix: '#'
+  maxLines: 6
+  addNewCardsToTop: false
+  newCardSyntax: MARKDOWN
   cards:
     colors:
       - color: red
         filter: +urgent
-  journalPath: /notes
