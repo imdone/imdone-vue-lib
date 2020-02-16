@@ -13,6 +13,8 @@ md.use(checkbox)
 md.use(emoji)
 
 const CONTENT_TOKEN = '__CONTENT__'
+let fs
+
 function formatDescription (task, description, mustache) {
   const emptyResult = {
     description: '',
@@ -85,7 +87,18 @@ export default {
     $('img').each(function () {
       const src = $(this).attr('src')
       if (!/\w+:\/\//.test(src)) {
-        const imgPath = path.join(task.repoId, src)
+        const taskImgPath = _.get(task, 'source.path')
+        const repoPath = task.repoId
+        let imgPath = path.join(repoPath, src)
+        if (taskImgPath) {
+          const taskFileDirAry = taskImgPath.split(path.sep)
+          taskFileDirAry.pop()
+          const taskFileDir = taskFileDirAry.join(path.sep)
+          const filePath = decodeURIComponent(path.join(taskFileDir, src))
+          const fullFilePath = path.join(repoPath, filePath)
+          console.log('**fullFilePath**:', fullFilePath)
+          if (fs.existsSync(fullFilePath)) imgPath = fullFilePath
+        }
         $(this).attr('src', `file://${imgPath}`)
       }
     })
@@ -102,5 +115,8 @@ export default {
   formatText (text, data) {
     return template(text)(data)
   },
-  formatDescription
+  formatDescription,
+  setFs (_fs) {
+    fs = _fs
+  }
 }
