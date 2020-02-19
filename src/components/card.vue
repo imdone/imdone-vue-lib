@@ -56,7 +56,9 @@ article.message.task-card(
     .tags.imdone-contexts(v-if="contexts.length > 0")
       b-tooltip(v-for="context in contexts" :key="context" :label="`Filter by '${context}'`" type="is-info" :delay="500" :animated="true")
         a.tag.is-info(@click.stop='contextClicked(context)') {{context}}
-    .tags.due(v-if="due")
+    .tags.completed(v-if="completed")
+      .tag(:class="completedClass") Completed {{completedDisplay}}
+    .tags.due(v-else-if="due")
       .tag(:class="dueClass") Due {{dueDisplay}}
 </template>
 <script>
@@ -116,10 +118,6 @@ export default {
     }
   },
   computed: {
-    dueClass () {
-      if (this.due > new Date()) return 'is-warning'
-      return 'is-danger'
-    },
     links () {
       let links = []
       if (!this.task) return links
@@ -156,6 +154,20 @@ export default {
     },
     dueDisplay () {
       return moment().to(moment(this.due))
+    },
+    dueClass () {
+      if (this.due > new Date()) return 'is-warning'
+      return 'is-danger'
+    },
+    completed () {
+      return this.task.completed && new Date(this.task.completed)
+    },
+    completedDisplay () {
+      return moment().to(moment(this.completed))
+    },
+    completedClass () {
+      if (this.due && (this.completed > this.due)) return 'is-danger'
+      return 'is-success'
     },
     description () {
       const task = this.task
