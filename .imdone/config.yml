@@ -44,7 +44,7 @@ meta:
     titleTemplate: View github issue %s
     urlTemplate: 'https://github.com/imdone/imdone-vue-lib/issues/%s'
 settings:
-  journalType: folder
+  journalType: Folder
   journalPath: /notes
   taskPrefix: '#'
   maxLines: 6
@@ -54,3 +54,5 @@ settings:
     colors:
       - color: red
         filter: +urgent
+  doneList: DONE
+  filteredLists: []

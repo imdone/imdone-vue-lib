@@ -84,7 +84,7 @@ export default {
   name: 'imdone-board',
   components: {List, Detail, Draggable, 'b-icon': Icon, TaskEditorModal},
   // components: {List, Detail, Draggable, 'b-icon': Icon, Multipane, MultipaneResizer, TaskEditorModal},
-  // TODO:60 Should accept a v-model **board** in the format `{config, lists}` where lists is a list of tasks in the format `{name, hidden, tasks}` id:40
+  //- TODO:60 Should accept a v-model **board** in the format `{config, lists}` where lists is a list of tasks in the format `{name, hidden, tasks}` id:40
   props: [
     'board',
     'allowUpdates',

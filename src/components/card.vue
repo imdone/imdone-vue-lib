@@ -48,8 +48,8 @@ article.message.task-card(
         a(@click.stop="fullDesc = true")
           octicon(:icon="Octicons.unfold")
     //- TODO:0 Display progress of task lists like [github](https://help.github.com/articles/about-task-lists/) id:37
-    // - [Issues · imdone/imdone-vue-lib](https://github.com/imdone/imdone-vue-lib/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
-    // - [ ] Create vue component
+    //- - [Issues · imdone/imdone-vue-lib](https://github.com/imdone/imdone-vue-lib/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
+    //- - [ ] Create vue component
     .tags.imdone-tags(v-if="tags.length > 0")
       b-tooltip(v-for="tag in tags" :key="tag" :label="`Filter by '${tag}'`" type="is-info" :delay="500" :animated="true")
         a.tag.is-imdone-primary(@click.stop='tagClicked(tag)') {{tag}}
@@ -137,7 +137,7 @@ export default {
     },
     clazz () {
       let clazz = this.task.customClass || 'is-info'
-      // DOING:5 Move this to imdone-settings as task.customClass
+      //- DOING:5 Move this to imdone-settings as task.customClass
       if (this.activeOrSelected) clazz += ' active'
       return clazz
     },
@@ -167,7 +167,7 @@ export default {
     },
     completedClass () {
       if (this.due && (this.completed > this.due)) return 'is-danger'
-      return 'is-success'
+      return 'is-imdone-primary'
     },
     description () {
       const task = this.task
@@ -303,12 +303,12 @@ img.gravatar {
       border-right: 1px solid;
       border-bottom: 1px solid;
     }
-    // DOING:10 Set border color same as left border
-    // border-color: #18a84f;
-    // filter: brightness(93%)// hue-rotate(-90deg);
-    // .tag {
-    //   filter: hue-rotate(90deg);
-    // }
+    //- DOING:10 Set border color same as left border
+    //- border-color: #18a84f;
+    //-  filter: brightness(93%)// hue-rotate(-90deg);
+    //- .tag {
+    //-   filter: hue-rotate(90deg);
+    //- }
   }
   .tags {
     color: #ffffff;

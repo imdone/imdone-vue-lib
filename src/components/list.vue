@@ -51,7 +51,7 @@ export default {
     Draggable,
     'b-icon': Icon
   },
-  // TODO:50 Should accept a v-model **list** in the format {name, hidden, tasks} id:41
+  //- TODO:50 Should accept a v-model **list** in the format {name, hidden, tasks} id:41
   props: ['value', 'selectedTask', 'repoURL', 'activeTask', 'allowUpdates', 'board', 'showFileLinks', 'maxLines'],
   data () {
     return {

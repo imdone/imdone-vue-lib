@@ -102,7 +102,7 @@ export default {
         $(this).attr('src', `file://${imgPath}`)
       }
     })
-    // TODO:10 Support sorting of tasks in list id:43 +feature
+    //- TODO:10 Support sorting of tasks in list id:43 +feature
     $('input[type=checkbox]').closest('li').css('list-style', 'none')
     // $('input[type=checkbox]').attr('disabled', 'true')
     return {
