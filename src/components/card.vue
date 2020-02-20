@@ -304,11 +304,11 @@ img.gravatar {
       border-bottom: 1px solid;
     }
     //- DOING:10 Set border color same as left border
-    //- border-color: #18a84f;
-    //-  filter: brightness(93%)// hue-rotate(-90deg);
-    //- .tag {
-    //-   filter: hue-rotate(90deg);
-    //- }
+    // - border-color: #18a84f;
+    // -  filter: brightness(93%)// hue-rotate(-90deg);
+    // - .tag {
+    // -   filter: hue-rotate(90deg);
+    // - }
   }
   .tags {
     color: #ffffff;
