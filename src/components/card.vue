@@ -91,6 +91,12 @@ export default {
   created () {
     this.fullDesc = this.expandByDefault
   },
+  mounted () {
+    if (window.Prism) window.Prism.highlightAllUnder(this.$refs.description)
+  },
+  updated () {
+    if (window.Prism) window.Prism.highlightAllUnder(this.$refs.description)
+  },
   watch: {
     active: {
       immediate: true,
@@ -444,6 +450,16 @@ img.gravatar {
 
     tr:nth-child(2n) {
         background-color: #f8f8f8
+    }
+    .number {
+      background-color: inherit !important;
+      border-radius: none !important;
+      font-size: inherit !important;
+      height: inherit !important;
+      padding: 0;
+      justify-content: baseline;
+      min-width: 0;
+      margin-right: 0;
     }
   } 
 }
