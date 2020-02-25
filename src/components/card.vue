@@ -461,6 +461,14 @@ img.gravatar {
       min-width: 0;
       margin-right: 0;
     }
+    .code-toolbar {
+      text-align: right;
+      font-size: .9em;
+    }
+    pre[class*="language-"]>code {
+      font-size: .9em;
+      margin: 0;
+    }
   } 
 }
 </style>

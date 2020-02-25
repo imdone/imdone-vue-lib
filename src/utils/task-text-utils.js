@@ -76,6 +76,7 @@ export default {
     let {encodedText, encodedMD} = formatDescription(task, textAndDescription, true)
     const html = md.render(description)
     const $ = cheerio.load(html)
+
     $('a').each(function () {
       const href = $(this).attr('href')
       if (/\w+:\/\//.test(href)) return $(this).attr('target', '_blank')
@@ -84,6 +85,16 @@ export default {
       $(this).attr('file-line', line)
       $(this).attr('href', '#')
     })
+
+    $('code[class*="language-"]').each(function () {
+      const codeEl = $(this)
+      const code = codeEl.text()
+      const $toolbar = cheerio.load(`<div class="code-toolbar"><a href="#" class="copy-code">Copy Code</a></div>`)
+      $toolbar('.copy-code').attr('data-code', code)
+      console.log($toolbar('body').html())
+      codeEl.parent().before($toolbar('body').html())
+    })
+
     $('img').each(function () {
       const src = $(this).attr('src')
       if (!/\w+:\/\//.test(src)) {

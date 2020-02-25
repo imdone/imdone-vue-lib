@@ -1,6 +1,6 @@
 {
   "name": "imdone-vue-lib",
-  "version": "0.4.46",
+  "version": "0.4.47",
   "description": "imdone vue components",
   "author": "Jesse <jesse@piascik.net>",
   "main": "dist/lib/imdone-vue-lib.min.js",
@@ -22,7 +22,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bulma": "^0.7.2",
-    "cheerio": "^1.0.0-rc.2",
+    "cheerio": "^1.0.0-rc.3",
     "eol": "^0.9.1",
     "gravatar": "^1.6.0",
     "imdone-core": "^1.6.44",
