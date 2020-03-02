@@ -6,7 +6,7 @@
           .tag.is-large.is-black.list-name {{listName}}
     codemirror.imdone-editor.is-small(
       @ready="onCmReady"
-      v-model="content"
+      v-model="localValue"
       :options="cmOptions")
     .level
       .level-left
@@ -27,18 +27,20 @@ import './autosuggest'
 
 export default {
   components: { codemirror },
-  props: [ 'task', 'list', 'repo', 'template' ],
+  props: ['task', 'list', 'repo', 'template', 'value'],
   data: function () {
     return {
-      content: '',
-      innerList: this.list
+      innerList: this.list,
+      localValue: null
     }
   },
-  mounted () {
-    if (this.task) this.content = this.task.getRawTextAndDescription()
-    else if (this.template) (this.content = this.template)
-    //- DOING:0 Add easter egg to display JSON
-    // console.log('Editing Task:', stringify(this.task))
+  watch: {
+    localValue () {
+      this.emitInput()
+    }
+  },
+  created () {
+    this.localValue = this.value.toString()
   },
   computed: {
     listName () {
@@ -50,7 +52,7 @@ export default {
       return this.task.line
     },
     noContent () {
-      return !this.content || this.content.trim() === ''
+      return !this.localValue || this.localValue.trim() === ''
     },
     cmOptions () {
       const saveFunc = this.task ? this.saveTask : this.newTask
@@ -95,19 +97,20 @@ export default {
   methods: {
     saveTask () {
       if (this.noContent) return
-      this.$emit('save-task', {task: this.task, content: this.content})
-      this.close()
+      this.$emit('save-task', {task: this.task, content: this.localValue})
     },
     newTask () {
       if (this.noContent) return
-      this.$emit('new-task', {list: this.innerList, content: this.content})
-      this.close()
+      this.$emit('new-task', {list: this.innerList, content: this.localValue})
     },
     close () {
       this.$emit('close')
     },
     onCmReady (cm) {
       cm.focus()
+    },
+    emitInput () {
+      this.$emit('input', this.localValue)
     }
   }
 }
