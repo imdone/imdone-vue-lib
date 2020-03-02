@@ -1,6 +1,7 @@
 import * as MarkdownIt from 'markdown-it'
 import * as cheerio from 'cheerio'
 import * as checkbox from 'markdown-it-checkbox'
+import * as imageSize from 'markdown-it-imsize'
 import * as emoji from 'markdown-it-emoji'
 import removeMD from 'remove-markdown'
 import eol from 'eol'
@@ -10,10 +11,29 @@ import _ from 'lodash'
 
 const md = new MarkdownIt({html: true, breaks: true})
 md.use(checkbox)
-md.use(emoji)
+.use(emoji)
+.use(imageSize)
 
 const CONTENT_TOKEN = '__CONTENT__'
 let fs
+
+function getEncodedDescription (description) {
+  const linkRegex = /\[([^[]+)\](\(.*\))/gm
+  let plainDescription = removeMD(description.replace(linkRegex, '$2'), {stripListLeaders: false})
+  plainDescription = plainDescription.replace(/:\w+:/g, match => {
+    const html = md.render(match)
+    const $ = cheerio.load(html)
+    return $.text().trim()
+  })
+  const encodedText = encodeURIComponent(plainDescription)
+  const encodedMD = encodeURIComponent(description)
+  description = description
+    .replace(CONTENT_TOKEN, encodedText)
+    .replace(/(?<!!)\[(.*?)\]\((.*?)\)/g, (match, p1, p2) => { // URI encode file links
+      return `[${p1}](${p2.replace(/ /g, '%20')})`
+    })
+  return {encodedMD, encodedText, description}
+}
 
 function formatDescription (task, description, mustache) {
   const emptyResult = {
@@ -26,35 +46,35 @@ function formatDescription (task, description, mustache) {
   const frontMatterComputed = _.get(task, 'frontMatter.computed') || {}
   const props = {...frontMatterProps, content: CONTENT_TOKEN}
   const computed = {...frontMatterComputed}
-  const taskProps = _.pick(task, 'due', 'created', 'tags', 'context', 'meta')
-  let encodedText
-  let encodedMD
+  const taskProps = _.pick(task, 'line', 'list', 'source', 'due', 'created', 'completed', 'tags', 'context', 'meta', 'allTags', 'allContext', 'allMeta')
   try {
     for (let [key, value] of Object.entries(computed)) {
       const computedTemplate = `\${${template(value)({...props, ...computed})}}`
       const computedValue = template(computedTemplate)({})
       computed[key] = computedValue
     }
-    const data = {...props, ...computed, ...taskProps}
-    description = template(description)(data)
-    if (mustache) {
-      const opts = { interpolate: /{{([\s\S]+?)}}/g }
-      description = template(description, opts)(data)
-    }
-    const linkRegex = /\[([^[]+)\](\(.*\))/gm
-    let plainDescription = removeMD(description.replace(linkRegex, '$2'), {stripListLeaders: false})
-    plainDescription = plainDescription.replace(/:\w+:/g, match => {
-      const html = md.render(match)
-      const $ = cheerio.load(html)
-      return $.text().trim()
-    })
-    encodedText = encodeURIComponent(plainDescription)
-    encodedMD = encodeURIComponent(description)
-    description = description.replace(CONTENT_TOKEN, encodedText)
   } catch (e) {
-    return emptyResult
+    return {...emptyResult, description}
   }
-  return { description, encodedText, encodedMD }
+
+  const data = {...props, ...computed, ...taskProps}
+  const opts = { interpolate: /(?<!`)\${([\s\S]+?)}/g }
+  try {
+    description = template(description, opts)(data)
+  } catch (e) {
+    description = description.replace(opts.interpolate, `~~\${${e}}~~`)
+  }
+
+  if (mustache) {
+    const opts = { interpolate: /(?<!`){{([\s\S]+?)}}/g }
+    try {
+      description = template(description, opts)(data)
+    } catch (e) {
+      description = description.replace(opts.interpolate, `~~{{${e}}}~~`)
+    }
+  }
+
+  return getEncodedDescription(description)
 }
 
 export default {
@@ -91,7 +111,6 @@ export default {
       const code = codeEl.text()
       const $toolbar = cheerio.load(`<div class="code-toolbar"><a href="#" class="copy-code">Copy Code</a></div>`)
       $toolbar('.copy-code').attr('data-code', code)
-      console.log($toolbar('body').html())
       codeEl.parent().before($toolbar('body').html())
     })
 
@@ -107,7 +126,6 @@ export default {
           const taskFileDir = taskFileDirAry.join(path.sep)
           const filePath = decodeURIComponent(path.join(taskFileDir, src))
           const fullFilePath = path.join(repoPath, filePath)
-          console.log('**fullFilePath**:', fullFilePath)
           if (fs.existsSync(fullFilePath)) imgPath = fullFilePath
         }
         $(this).attr('src', `file://${imgPath}`)

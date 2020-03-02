@@ -146,13 +146,13 @@ export default {
   methods: {
     closeNewCardEditor () {
       this.newCardEditorActive = false
+      this.closeEdit()
     },
     cardInFocus ({task}) {
       this.$emit('card-in-focus', {task})
     },
     addCard (list) {
-      this.innerNewCardList = list
-      this.newCardEditorActive = true
+      this.$emit('add-card', list)
     },
     textClicked (params) {
       this.$emit('text-clicked', params)
