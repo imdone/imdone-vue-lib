@@ -24,6 +24,13 @@ import 'codemirror/addon/hint/show-hint'
 import 'codemirror/mode/gfm/gfm'
 import './autosuggest'
 // import stringify from 'json-stringify-safe'
+function compareText (a, b) {
+  var nameA = a.text.toUpperCase()
+  var nameB = b.text.toUpperCase()
+  if (nameA < nameB) return -1
+  if (nameA > nameB) return 1
+  return 0
+}
 
 export default {
   components: { codemirror },
@@ -80,6 +87,7 @@ export default {
             startChar: '+',
             listCallback: () => {
               return this.repo.allTags.map(tag => ({text: tag, displayText: tag + ' '}))
+                .sort(compareText)
             }
           },
           {
@@ -87,6 +95,7 @@ export default {
             startChar: '@',
             listCallback: () => {
               return this.repo.allContext.map(context => ({text: context, displayText: context + ' '}))
+                .sort(compareText)
             }
           }
         ]
@@ -133,6 +142,10 @@ export default {
 }
 .CodeMirror-hints {
   z-index: 999;
+  background: #000;
+}
+.CodeMirror-hint {
+  color: #fff;
 }
 .task-editor-wrapper {
   .level {
