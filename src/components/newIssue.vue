@@ -17,9 +17,9 @@
         button.button.is-imdone-primary(:disabled="!this.title" v-on:click="createIssue") Submit new issue
 </template>
 <script>
-import { Field } from 'buefy/dist/components/Field'
-import { Input } from 'buefy/dist/components/Input'
-import { Notification } from 'buefy/dist/components/Notification'
+import { Field } from 'buefy/dist/components/field'
+import { Input } from 'buefy/dist/components/input'
+import { Notification } from 'buefy/dist/components/notification'
 import axios from 'axios'
 
 export default {

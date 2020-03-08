@@ -41,7 +41,7 @@
       span.button-text Add a card
 </template>
 <script>
-import { Icon } from 'buefy/dist/components/Icon'
+import { Icon } from 'buefy/dist/components/icon'
 import Draggable from 'vuedraggable'
 import Card from '@/components/card'
 export default {
@@ -49,7 +49,7 @@ export default {
   components: {
     Card,
     Draggable,
-    'b-icon': Icon
+    Icon
   },
   //- TODO:50 Should accept a v-model **list** in the format {name, hidden, tasks} id:41
   props: ['value', 'selectedTask', 'repoURL', 'activeTask', 'allowUpdates', 'board', 'showFileLinks', 'maxLines'],

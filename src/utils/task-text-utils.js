@@ -46,7 +46,7 @@ function formatDescription (task, description, mustache) {
   const frontMatterComputed = _.get(task, 'frontMatter.computed') || {}
   const props = {...frontMatterProps, content: CONTENT_TOKEN}
   const computed = {...frontMatterComputed}
-  const taskProps = _.pick(task, 'line', 'list', 'source', 'due', 'created', 'completed', 'tags', 'context', 'meta', 'allTags', 'allContext', 'allMeta')
+  const taskProps = _.pick(task, 'progress', 'line', 'list', 'source', 'due', 'created', 'completed', 'tags', 'context', 'meta', 'allTags', 'allContext', 'allMeta')
   try {
     for (let [key, value] of Object.entries(computed)) {
       const computedTemplate = `\${${template(value)({...props, ...computed})}}`

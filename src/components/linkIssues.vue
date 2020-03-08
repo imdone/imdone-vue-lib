@@ -63,14 +63,14 @@
 
 </template>
 <script>
-import { Icon } from 'buefy/dist/components/Icon'
-import { Table, TableColumn } from 'buefy/dist/components/Table'
-import { Tag } from 'buefy/dist/components/Tag'
-import { Field } from 'buefy/dist/components/Field'
-import { Select } from 'buefy/dist/components/Select'
-import { Input } from 'buefy/dist/components/Input'
-import { Pagination } from 'buefy/dist/components/Pagination'
-import { Loading } from 'buefy/dist/components/Loading'
+import { Icon } from 'buefy/dist/components/icon'
+import { Table, TableColumn } from 'buefy/dist/components/table'
+import { Tag } from 'buefy/dist/components/tag'
+import { Field } from 'buefy/dist/components/field'
+import { Select } from 'buefy/dist/components/select'
+import { Input } from 'buefy/dist/components/input'
+import { Pagination } from 'buefy/dist/components/pagination'
+import { Loading } from 'buefy/dist/components/loading'
 import axios from 'axios'
 import Octicon, { Octicons } from 'octicons-vue'
 import newIssue from '@/components/newIssue'

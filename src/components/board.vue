@@ -72,7 +72,7 @@ div
 </template>
 <script>
 import Draggable from 'vuedraggable'
-import { Icon } from 'buefy/dist/components/Icon'
+import { Icon } from 'buefy/dist/components/icon'
 import List from '@/components/list'
 import Detail from '@/components/detail'
 import TaskEditorModal from '@/components/taskEditorModal'
@@ -82,7 +82,7 @@ import taskTextUtils from '../utils/task-text-utils'
 
 export default {
   name: 'imdone-board',
-  components: {List, Detail, Draggable, 'b-icon': Icon, TaskEditorModal},
+  components: {List, Detail, Draggable, Icon, TaskEditorModal},
   // components: {List, Detail, Draggable, 'b-icon': Icon, Multipane, MultipaneResizer, TaskEditorModal},
   //- TODO:60 Should accept a v-model **board** in the format `{config, lists}` where lists is a list of tasks in the format `{name, hidden, tasks}` id:40
   props: [

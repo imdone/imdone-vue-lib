@@ -3,6 +3,7 @@
     .modal-background(@click="close")
     .board-modal-content.has-text-left
       taskEditor(
+        ref="editor"
         :repo='repo'
         :task="task"
         :list="list"
@@ -39,15 +40,22 @@ export default {
     },
     close () {
       if (this.isModified()) {
-        this.$buefy.dialog.confirm({
+        const dialog = this.$buefy.dialog.confirm({
           title: 'Content Has Changed',
           message: `What do you want to do?`,
           cancelText: 'Continue Editing',
           confirmText: 'Close Editor',
           type: 'is-success',
           canCancel: ['button'],
+          focusOn: 'cancel',
+          trapFocus: true,
           onConfirm: (evt) => {
             this.$emit('close')
+          },
+          onCancel: () => {
+            this.$refs.editor.focusEditor()
+            dialog.close()
+            return true
           }
         })
       } else {

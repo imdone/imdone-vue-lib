@@ -39,17 +39,6 @@ article.message.task-card(
       //-       img.gravatar(v-if="task.blame && task.blame.email" :src="gravatarURL" :title="name")
       //-       b-icon(v-else pack="fa" icon="user" size="is-small" title="No author found")
     .task-text.task-description.has-text-left(@click="textClicked" v-html="description.html" ref="description")
-    .toggle-full-desc(v-if="descIsOverMax && fullDesc")
-      b-tooltip(label="Collapse description" position="is-left" type="is-info" :delay="500" :animated="true")
-        a(@click.stop="fullDesc = false")
-          octicon(:icon="Octicons.fold")
-    .toggle-full-desc(v-if="descIsOverMax && !fullDesc")
-      b-tooltip(label="Expand description" position="is-left" type="is-info" :delay="500" :animated="true")
-        a(@click.stop="fullDesc = true")
-          octicon(:icon="Octicons.unfold")
-    //- TODO:0 Display progress of task lists like [github](https://help.github.com/articles/about-task-lists/) id:37
-    //- - [Issues · imdone/imdone-vue-lib](https://github.com/imdone/imdone-vue-lib/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
-    //- - [ ] Create vue component
     .tags.imdone-tags(v-if="tags.length > 0")
       b-tooltip(v-for="tag in tags" :key="tag" :label="`Filter by '${tag}'`" type="is-info" :delay="500" :animated="true")
         a.tag.is-imdone-primary(@click.stop='tagClicked(tag)') {{tag}}
@@ -60,11 +49,20 @@ article.message.task-card(
       .tag(:class="completedClass") Completed {{completedDisplay}}
     .tags.due(v-else-if="due")
       .tag(:class="dueClass") Due {{dueDisplay}}
+    .toggle-full-desc(v-if="descIsOverMax && fullDesc")
+      b-tooltip(label="Collapse description" position="is-left" type="is-info" :delay="500" :animated="true")
+        a(@click.stop="fullDesc = false")
+          octicon(:icon="Octicons.chevronUp")
+    .toggle-full-desc(v-if="descIsOverMax && !fullDesc")
+      b-tooltip(label="Expand description" position="is-left" type="is-info" :delay="500" :animated="true")
+        a(@click.stop="fullDesc = true")
+          octicon(:icon="Octicons.chevronDown")
+
 </template>
 <script>
 import * as gravatar from 'gravatar'
-import { Icon } from 'buefy/dist/components/Icon'
-import { Tooltip } from 'buefy/dist/components/ToolTip'
+import { Icon } from 'buefy/dist/components/icon'
+import { Tooltip } from 'buefy/dist/components/tooltip'
 import Octicon, { Octicons } from 'octicons-vue'
 import taskTextUtils from '../utils/task-text-utils'
 import moment from 'moment'
@@ -84,8 +82,8 @@ export default {
     }
   },
   components: {
-    'b-icon': Icon,
-    'b-tooltip': Tooltip,
+    Icon,
+    Tooltip,
     Octicon
   },
   created () {
@@ -377,13 +375,14 @@ img.gravatar {
       }
     }
     .toggle-full-desc {
+      text-align: center;
       position: relative;
-      height: 1.5rem;
-      span {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-      }
+      height: 1rem;
+      margin-top: -.4em;
+      // span {
+      //   position: absolute;
+      //   bottom: 0;
+      // }
     }
   }
   .task-text {
@@ -419,8 +418,8 @@ img.gravatar {
       list-style: disc;
       li {
         input[type=checkbox] {
-          margin-right: 1em;
-          margin-left: -2em;
+          margin-right: .6em;
+          margin-left: -1.6em;
         }
       }
     }

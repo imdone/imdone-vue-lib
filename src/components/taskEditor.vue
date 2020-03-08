@@ -116,7 +116,11 @@ export default {
       this.$emit('close')
     },
     onCmReady (cm) {
-      cm.focus()
+      this.cm = cm
+      this.focusEditor()
+    },
+    focusEditor () {
+      if (this.cm) this.cm.focus()
     },
     emitInput () {
       this.$emit('input', this.localValue)
