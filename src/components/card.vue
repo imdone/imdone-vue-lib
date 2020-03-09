@@ -23,7 +23,7 @@ article.message.task-card(
             octicon(:icon="Octicons.trashcan")
         b-tooltip(v-for='link in links' :label='link.title' :key='link.icon' position="is-left" type="is-info" :delay="500" :animated="true")
           a.action-link(@click="textClicked" :href='link.href' target='_blank')
-            b-icon.is-small(:pack='link.pack' :icon='link.icon')
+            b-icon.is-medium(:pack='link.pack' :icon='link.icon')
 
       //- .level
       //-   .level-left
@@ -334,6 +334,7 @@ img.gravatar {
         margin-right: 5px;
       }
       margin-bottom: .25rem;
+      padding-right:0;
     }
     .level {
       margin-top: 5px;
@@ -342,10 +343,12 @@ img.gravatar {
       }
     }
     .action-link {
-      width: 12px;
-      height: 18px;
-      padding-left: .5em;
-      padding-top: .10em;
+      // margin-top: -1em;
+      // margin-left: -1em;
+      // width: 12px;
+      // height: 18px;
+      // padding-left: .5em;
+      // padding-top: .10em;
     }
   }
   .message-body {
