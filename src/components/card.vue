@@ -7,8 +7,6 @@ article.message.task-card(
   @blur="inactivate"
   :class="clazz"
   v-bind="meta")
-  //- .message-header
-  //-   .task-text.has-text-left(v-html="text")
   .message-body.toggle-parent
     .tags.card-actions.is-size-6(v-show="isActive")
       .tag.is-white
@@ -24,20 +22,12 @@ article.message.task-card(
         b-tooltip(v-for='link in links' :label='link.title' :key='link.icon' position="is-left" type="is-info" :delay="500" :animated="true")
           a.action-link(@click="textClicked" :href='link.href' target='_blank')
             b-icon.is-medium(:pack='link.pack' :icon='link.icon')
-
-      //- .level
-      //-   .level-left
-      //-   .level-right.toggle-parent
-      //-     .level-item.is-info.toggle.actions(v-show="isActive")
-      //-       a(@click="emitFileLink" :href="fileLink" :target="target" :title="`${task.source.path}:${task.line}`")
-      //-         octicon(:icon="Octicons.link")
-      //-       a(@click.stop.prevent="showEdit" title="Edit")
-      //-         octicon(:icon="Octicons.pencil")
-      //-       a(@click.stop.prevent="showDelete" title="Delete")
-      //-         octicon(:icon="Octicons.trashcan")
-      //-     .level-item(v-if="task.blame && task.blame.email")
-      //-       img.gravatar(v-if="task.blame && task.blame.email" :src="gravatarURL" :title="name")
-      //-       b-icon(v-else pack="fa" icon="user" size="is-small" title="No author found")
+    .task-progress.columns(v-if="tasksTotal")
+      .column.is-2.progress-ratio
+        i.far.fa-check-square.is-small(style="color:gray;") 
+        | &nbsp;{{tasksCompleted}}/{{tasksTotal}}
+      .column
+        progress.progress.is-small(:class="progressClass" :value="tasksCompleted" :max="tasksTotal")
     .task-text.task-description.has-text-left(@click="textClicked" v-html="description.html" ref="description")
     .tags.imdone-tags(v-if="tags.length > 0")
       b-tooltip(v-for="tag in tags" :key="tag" :label="`Filter by '${tag}'`" type="is-info" :delay="500" :animated="true")
@@ -90,23 +80,21 @@ export default {
     this.fullDesc = this.expandByDefault
   },
   mounted () {
-    if (window.Prism) window.Prism.highlightAllUnder(this.$refs.description)
+    this.highlightCodeBlocks()
   },
   updated () {
-    if (window.Prism) window.Prism.highlightAllUnder(this.$refs.description)
+    this.highlightCodeBlocks()
   },
   watch: {
     active: {
       immediate: true,
       handler (val) {
-        // if (val) console.log('active:', {val, task: this.task, isMoved: this.task.isMoved})
         if (val && this.$el) this.$nextTick(() => this.$el.focus())
       }
     },
     task: {
       immediate: true,
       handler (val, oldVal) {
-        // console.log('task:', {val, oldVal, isMoved: val.isMoved})
         if ((this.active && oldVal && val.index !== oldVal.index) || (this.active === false && !oldVal)) this.$nextTick(() => this.$el.focus())
         this.stopRefresh()
         this.startRefresh()
@@ -122,6 +110,15 @@ export default {
     }
   },
   computed: {
+    progressClass () {
+      return (this.task.progress[0] === this.task.progress[1]) ? 'is-success' : 'is-info'
+    },
+    tasksCompleted () {
+      return this.task.progress[0]
+    },
+    tasksTotal () {
+      return this.task.progress[1]
+    },
     links () {
       let links = []
       if (!this.task) return links
@@ -224,6 +221,15 @@ export default {
     }
   },
   methods: {
+    highlightCodeBlocks () {
+      if (window.Prism) {
+        try {
+          window.Prism.highlightAllUnder(this.$refs.description)
+        } catch (e) {
+          console.error('Trouble highlighting code block', e)
+        }
+      }
+    },
     startRefresh () {
       if (this.task.meta.refresh) {
         this.refreshInterval = parseInt(this.task.meta.refresh[0])
@@ -307,12 +313,6 @@ img.gravatar {
       border-right: 1px solid;
       border-bottom: 1px solid;
     }
-    //- DOING:10 Set border color same as left border
-    // - border-color: #18a84f;
-    // -  filter: brightness(93%)// hue-rotate(-90deg);
-    // - .tag {
-    // -   filter: hue-rotate(90deg);
-    // - }
   }
   .tags {
     color: #ffffff;
@@ -342,24 +342,30 @@ img.gravatar {
         margin: 5px;
       }
     }
-    .action-link {
-      // margin-top: -1em;
-      // margin-left: -1em;
-      // width: 12px;
-      // height: 18px;
-      // padding-left: .5em;
-      // padding-top: .10em;
-    }
   }
   .message-body {
-    // border-top: 1px solid transparent;
-    // border-right: 1px solid transparent;
-    // border-bottom: 1px solid transparent;
     background: inherit;
     word-break: break-word;
     text-align: left;
     padding: 2px 1em .35em 1em;
     font-size: .9rem !important;
+    .task-progress {
+      margin: .5em 0 0 0;
+      padding: 0;
+      .progress-ratio {
+        font-size: .8em;
+        line-height: 2em;
+        width: 4em;
+      }
+      .column {
+        padding: 0;
+      }
+      .progress {
+        height: .5em;
+        margin-bottom: .5em;
+        margin-top: .5em;
+      }
+    }
     .tags {
       margin-top: .25rem;
       margin-bottom: 0;
@@ -382,14 +388,10 @@ img.gravatar {
       position: relative;
       height: 1rem;
       margin-top: -.4em;
-      // span {
-      //   position: absolute;
-      //   bottom: 0;
-      // }
     }
   }
   .task-text {
-    margin-top: .5rem;
+    margin-top: .25rem;
     margin-bottom: .5em;
     blockquote {
       margin-left: 1em;
@@ -467,9 +469,13 @@ img.gravatar {
       text-align: right;
       font-size: .9em;
     }
-    pre[class*="language-"]>code {
-      font-size: .9em;
-      margin: 0;
+    pre[class*="language-"] {
+      margin-bottom: .25em;
+      margin-top: .5em;
+      &>code {
+        font-size: .9em;
+        margin: 0;
+      }
     }
   } 
 }

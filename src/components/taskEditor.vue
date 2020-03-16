@@ -72,13 +72,20 @@ export default {
         lineNumbers: true,
         line: true,
         firstLineNumber: this.line,
+        indentWithTabs: false,
+        indentUnit: 2,
         extraKeys: {
+          'Shift-Tab': 'indentLess',
           'Cmd-S': saveFunc,
           'Ctrl-S': saveFunc,
           'Esc': this.close,
-          Tab: function (cm) {
-            var spaces = Array(cm.getOption('indentUnit') + 1).join(' ')
-            cm.replaceSelection(spaces)
+          'Tab': function betterTab (cm) {
+            if (cm.somethingSelected()) {
+              cm.indentSelection('add')
+            } else {
+              cm.replaceSelection(cm.getOption('indentWithTabs') ? '\t'
+                : Array(cm.getOption('indentUnit') + 1).join(' '), 'end', '+input')
+            }
           }
         },
         autoSuggest: [

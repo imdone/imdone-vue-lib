@@ -34,6 +34,9 @@ function getEncodedDescription (description) {
     })
   return {encodedMD, encodedText, description}
 }
+function removeDisplayComments (description) {
+  return description.replace(/<!--\s*\[([\s\S]*?)\]\s*-->/g, '$1')
+}
 
 function formatDescription (task, description, mustache) {
   const emptyResult = {
@@ -56,6 +59,8 @@ function formatDescription (task, description, mustache) {
   } catch (e) {
     return {...emptyResult, description}
   }
+
+  if (mustache) description = removeDisplayComments(description)
 
   const data = {...props, ...computed, ...taskProps}
   const opts = { interpolate: /(?<!`)\${([\s\S]+?)}/g }
@@ -111,7 +116,7 @@ export default {
       const code = codeEl.text()
       const $toolbar = cheerio.load(`<div class="code-toolbar"><a href="#" class="copy-code">Copy Code</a></div>`)
       $toolbar('.copy-code').attr('data-code', code)
-      codeEl.parent().before($toolbar('body').html())
+      codeEl.parent().after($toolbar('body').html())
     })
 
     $('img').each(function () {
@@ -147,5 +152,8 @@ export default {
   formatDescription,
   setFs (_fs) {
     fs = _fs
+  },
+  renderMarkdown (markdown) {
+    return md.render(markdown)
   }
 }
