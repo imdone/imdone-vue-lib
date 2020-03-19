@@ -155,5 +155,6 @@ export default {
   },
   renderMarkdown (markdown) {
     return md.render(markdown)
-  }
+  },
+  removeMD
 }
