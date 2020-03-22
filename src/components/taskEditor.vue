@@ -21,6 +21,7 @@
 // require component
 import { codemirror } from 'vue-codemirror'
 import 'codemirror/addon/hint/show-hint'
+import 'codemirror/addon/comment/comment'
 import 'codemirror/mode/gfm/gfm'
 import './autosuggest'
 // import stringify from 'json-stringify-safe'
@@ -76,6 +77,8 @@ export default {
         indentUnit: 2,
         extraKeys: {
           'Shift-Tab': 'indentLess',
+          'Cmd-/': 'toggleComment',
+          'Ctrl-/': 'toggleComment',
           'Cmd-S': saveFunc,
           'Ctrl-S': saveFunc,
           'Esc': this.close,
