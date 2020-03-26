@@ -63,7 +63,7 @@ export default {
       return !this.localValue || this.localValue.trim() === ''
     },
     theme () {
-      return this.editorTheme || 'eclipse'
+      return this.editorTheme || 'blackboard'
     },
     cmOptions () {
       const saveFunc = this.task ? this.saveTask : this.newTask
