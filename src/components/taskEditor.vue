@@ -9,7 +9,7 @@
       v-model="localValue"
       :options="cmOptions")
     .level
-      .level-left
+      .level-left.has-text-weight-semibold
         .level-item(v-if="task")
           button.button.is-info(@click.stop="saveTask") Save
         .level-item(v-else)
