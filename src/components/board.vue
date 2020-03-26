@@ -1,6 +1,7 @@
 <template lang="pug">
 div
   taskEditorModal(
+    :editorTheme="editorTheme"
     :repo="board"
     v-if="selectedTask" 
     :task="selectedTask" 
@@ -8,6 +9,7 @@ div
     v-on:save-task="saveTask"
   )
   taskEditorModal(
+    :editorTheme="editorTheme"
     :repo="board"
     v-if="newCardEditorActive" 
     :list="innerNewCardList" 
@@ -97,7 +99,8 @@ export default {
     'searchIssuesURL',
     'createIssueURL',
     'showFileLinks',
-    'frontMatter'
+    'frontMatter',
+    'editorTheme'
   ],
   data: function () {
     return {

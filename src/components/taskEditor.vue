@@ -3,7 +3,7 @@
     .level.task-editor-header
       .level-left
         .level-item
-          .tag.is-large.is-black.list-name {{listName}}
+          .tag.is-large.list-name.has-text-weight-semibold.CodeMirror(:class="`cm-s-${theme}`") {{listName}}
     codemirror.imdone-editor.is-small(
       @ready="onCmReady"
       v-model="localValue"
@@ -35,7 +35,7 @@ function compareText (a, b) {
 
 export default {
   components: { codemirror },
-  props: ['task', 'list', 'repo', 'template', 'value'],
+  props: ['task', 'list', 'repo', 'template', 'value', 'editorTheme'],
   data: function () {
     return {
       innerList: this.list,
@@ -62,13 +62,16 @@ export default {
     noContent () {
       return !this.localValue || this.localValue.trim() === ''
     },
+    theme () {
+      return this.editorTheme || 'eclipse'
+    },
     cmOptions () {
       const saveFunc = this.task ? this.saveTask : this.newTask
       return {
         // codemirror options
         tabSize: 2,
         mode: 'gfm',
-        theme: 'abcdef',
+        theme: this.theme,
         lineWrapping: true,
         lineNumbers: true,
         line: true,
@@ -142,6 +145,12 @@ export default {
 <style lang="scss">
 @import "../../node_modules/codemirror/lib/codemirror.css";
 @import "../../node_modules/codemirror/theme/abcdef.css";
+@import "../../node_modules/codemirror/theme/lesser-dark.css";
+@import "../../node_modules/codemirror/theme/material-ocean.css";
+@import "../../node_modules/codemirror/theme/midnight.css";
+@import "../../node_modules/codemirror/theme/blackboard.css";
+@import "../../node_modules/codemirror/theme/mdn-like.css";
+@import "../../node_modules/codemirror/theme/eclipse.css";
 @import "../../node_modules/codemirror/addon/hint/show-hint.css";
 .imdone-editor {
   width: calc(100vw - 400px);
@@ -171,6 +180,7 @@ export default {
   padding: 1em 0;
   .list-name {
     position: relative;
+    font-family: inherit;
   }
 }
 </style>

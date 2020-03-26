@@ -3,6 +3,7 @@
     .modal-background(@click="close")
     .board-modal-content.has-text-left
       taskEditor(
+        :editorTheme="editorTheme"
         ref="editor"
         :repo='repo'
         :task="task"
@@ -20,7 +21,7 @@
 import TaskEditor from '@/components/taskEditor'
 export default {
   components: { TaskEditor },
-  props: ['task', 'list', 'repo', 'template'],
+  props: ['task', 'list', 'repo', 'template', 'editorTheme'],
   data: function () {
     return {
       content: '',
