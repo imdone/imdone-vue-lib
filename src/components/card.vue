@@ -176,11 +176,8 @@ export default {
       desc.html += `<!-- Refresh count: ${this.count} -->`
       return desc
     },
-    descTruncated () {
-      return this.description.lines.length > this.maxDescLines
-    },
     descIsOverMax () {
-      return this.task && this.task.description && this.task.description.length + 1 > this.maxDescLines
+      return this.task && this.task.description && taskTextUtils.realDescriptionLength(this.task) > this.maxDescLines
     },
     expandByDefault () {
       return this.task && this.task.meta && this.task.meta.expand && this.task.meta.expand.length > 0
@@ -226,7 +223,7 @@ export default {
         try {
           window.Prism.highlightAllUnder(this.$refs.description)
         } catch (e) {
-          console.error('Trouble highlighting code block', e)
+          // console.error('Trouble highlighting code block', e)
         }
       }
     },

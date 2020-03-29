@@ -34,6 +34,7 @@ function getEncodedDescription (description) {
     })
   return {encodedMD, encodedText, description}
 }
+
 function removeDisplayComments (description) {
   return description.replace(/<!--\s*\[([\s\S]*?)\]\s*-->/g, '$1')
 }
@@ -82,6 +83,28 @@ function formatDescription (task, description, mustache) {
   return getEncodedDescription(description)
 }
 
+function getTaskAndDescArray (task, lines) {
+  const descArray = eol.split(task.getTextAndDescription())
+  if (lines) return descArray.slice(0, lines)
+  return descArray
+}
+
+function truncateCardMarkdown (task, lines) {
+  const noCommentsAry = getTaskAndDescArrayWithoutComments(task, lines)
+  const descAry = getTaskAndDescArray(task, lines)
+  const addLines = descAry.length - noCommentsAry.length
+  return getTaskAndDescArray(task).slice(0, lines + addLines).join(eol.lf)
+}
+
+function getTaskAndDescArrayWithoutComments (task, lines) {
+  const descAry = getTaskAndDescArray(task).filter(line => {
+    return /<!--\s*\[([\s\S]*?)\]\s*-->/.test(line) || (line.replace(/<!--.*?-->/g, '').trim() !== '')
+  })
+
+  if (lines) return descAry.slice(0, lines)
+  return descAry
+}
+
 export default {
   description (task, lines) {
     if (!task) {
@@ -95,7 +118,7 @@ export default {
     const textAndDescription = task.getTextAndDescription()
     const descAry = eol.split(textAndDescription)
     const truncDesc = lines
-                        ? eol.split(textAndDescription).slice(0, lines).join(eol.lf)
+                        ? truncateCardMarkdown(task, lines)
                         : textAndDescription
     let {description} = formatDescription(task, truncDesc, true)
     let {encodedText, encodedMD} = formatDescription(task, textAndDescription, true)
@@ -155,6 +178,9 @@ export default {
   },
   renderMarkdown (markdown) {
     return md.render(markdown)
+  },
+  realDescriptionLength (task) {
+    return getTaskAndDescArrayWithoutComments(task).length
   },
   removeMD
 }
