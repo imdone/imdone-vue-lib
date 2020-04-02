@@ -176,8 +176,11 @@ export default {
       desc.html += `<!-- Refresh count: ${this.count} -->`
       return desc
     },
+    cardMarkdown () {
+      return taskTextUtils.getCardMarkdown(this.task)
+    },
     descIsOverMax () {
-      return this.task && this.task.description && taskTextUtils.realDescriptionLength(this.task) > this.maxDescLines
+      return this.task && this.task.description && this.cardMarkdown.totalLines > this.maxDescLines
     },
     expandByDefault () {
       return this.task && this.task.meta && this.task.meta.expand && this.task.meta.expand.length > 0

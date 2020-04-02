@@ -83,26 +83,21 @@ function formatDescription (task, description, mustache) {
   return getEncodedDescription(description)
 }
 
-function getTaskAndDescArray (task, lines) {
-  const descArray = eol.split(task.getTextAndDescription())
-  if (lines) return descArray.slice(0, lines)
-  return descArray
-}
-
-function truncateCardMarkdown (task, lines) {
-  const noCommentsAry = getTaskAndDescArrayWithoutComments(task, lines)
-  const descAry = getTaskAndDescArray(task, lines)
-  const addLines = descAry.length - noCommentsAry.length
-  return getTaskAndDescArray(task).slice(0, lines + addLines).join(eol.lf)
-}
-
-function getTaskAndDescArrayWithoutComments (task, lines) {
-  const descAry = getTaskAndDescArray(task).filter(line => {
-    return /<!--\s*\[([\s\S]*?)\]\s*-->/.test(line) || (line.replace(/<!--.*?-->/g, '').trim() !== '')
+function getCardMarkdown (task, lines) {
+  // - eliminate <!--[ ]--> wrappers
+  const taskMD = task.getTextAndDescription().replace(/<!--\s*\[\s*([\s\S]*?)\s*\]\s*-->/gm, '$1')
+  // - Split on eol and append lines until visible line count equals lines
+  const taskMDArray = []
+  let commentTokens = 0
+  let totalLines = 0
+  eol.split(taskMD).forEach(line => {
+    if (/<!--/.test(line)) commentTokens++
+    if (commentTokens === 0) totalLines++
+    if (/-->/.test(line)) commentTokens--
+    if (lines && (totalLines > lines)) return
+    taskMDArray.push(line)
   })
-
-  if (lines) return descAry.slice(0, lines)
-  return descAry
+  return {totalLines, content: taskMDArray.join(eol.lf)}
 }
 
 export default {
@@ -115,13 +110,9 @@ export default {
         encodedMD: ''
       }
     }
-    const textAndDescription = task.getTextAndDescription()
-    const descAry = eol.split(textAndDescription)
-    const truncDesc = lines
-                        ? truncateCardMarkdown(task, lines)
-                        : textAndDescription
-    let {description} = formatDescription(task, truncDesc, true)
-    let {encodedText, encodedMD} = formatDescription(task, textAndDescription, true)
+
+    let {description} = formatDescription(task, getCardMarkdown(task, lines).content, true)
+    let {encodedText, encodedMD} = formatDescription(task, getCardMarkdown(task).content, true)
     const html = md.render(description)
     const $ = cheerio.load(html)
 
@@ -163,7 +154,6 @@ export default {
     $('input[type=checkbox]').closest('li').css('list-style', 'none')
     // $('input[type=checkbox]').attr('disabled', 'true')
     return {
-      lines: descAry,
       html: $.html(),
       encodedText,
       encodedMD
@@ -179,8 +169,6 @@ export default {
   renderMarkdown (markdown) {
     return md.render(markdown)
   },
-  realDescriptionLength (task) {
-    return getTaskAndDescArrayWithoutComments(task).length
-  },
-  removeMD
+  removeMD,
+  getCardMarkdown
 }
