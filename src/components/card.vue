@@ -391,6 +391,11 @@ img.gravatar {
     }
   }
   .task-text {
+    hr {
+      background-color: #dcdcdc;
+      height: 1px;
+      margin: .5rem 0;
+    }
     margin-top: .25rem;
     margin-bottom: .5em;
     blockquote {

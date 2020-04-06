@@ -1,6 +1,6 @@
 {
   "name": "imdone-vue-lib",
-  "version": "0.5.8",
+  "version": "0.5.9",
   "description": "imdone vue components",
   "author": "Jesse <jesse@piascik.net>",
   "main": "dist/lib/imdone-vue-lib.min.js",

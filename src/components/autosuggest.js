@@ -20,29 +20,62 @@
 })(function (CodeMirror) {
   'use strict';
 
-  CodeMirror.defineOption('autoSuggest', [], function (cm, value, old) {
-      cm.on('inputRead', function (cm, change) {
-          
+  function filterList(listCallback, searchString) {
+    var list = listCallback()
+    if (searchString.length > 1) {
+        return list.filter(value => value.text.includes(searchString.substring(1)))
+    }
+    return list
+  }
+  
+  CodeMirror.defineOption('autoSuggest', [], function (cm, configs) {
+    function showList (cm, change) {
+        
         //   var mode = cm.getModeAt(cm.getCursor());
-          for (var i = 0, len = value.length; i < len; i++) {
-            //   if (mode.name === value[i].mode && change.text[0] === value[i].startChar) {
-              if (change.text[0] === value[i].startChar) {
+          for (var i = 0, len = configs.length; i < len; i++) {
+            //   if (mode.name === configs[i].mode && change.text[0] === configs[i].startChar) {
+            //   console.log('cm:', cm.getValue())
+            //   console.log('change:', change)
+            //   console.log('configs:', configs)
+              var searchString = ''
+              var startChar = configs[i].startChar
+              var replaceFrom = change.from.ch
+              for (var ch = change.from.ch; ch >= 0; ch--) {
+                  var searchString = cm.getRange({...change.from, ch}, {...change.from, ch: change.from.ch + 1})
+                  if (searchString.startsWith(' ')) {
+                      searchString = searchString.substring(1)
+                      replaceFrom = ch + 2
+                      break
+                  }
+              }
+            //   console.log('searchString:', searchString)
+              if (searchString.startsWith(startChar)) {
                   cm.showHint({
                       completeSingle: false,
                       hint: function (cm, options) {
                           var cur = cm.getCursor(),
                               token = cm.getTokenAt(cur);
-                          var start = token.start + 1,
-                              end = token.end;
-                          if (value[i]) return {
-                              list: value[i].listCallback(),
-                              from: CodeMirror.Pos(cur.line, start),
+                          var end = token.end;
+                          if (configs[i]) return {
+                              list: filterList(configs[i].listCallback, searchString),
+                              from: CodeMirror.Pos(cur.line, replaceFrom),
                               to: CodeMirror.Pos(cur.line, end)
                           };
                       }
                   });
               }
           }
-      });
+      }
+          
+      cm.on("keyup", function (cm, event) {
+        if (event.key !== 'Backspace') return
+        // console.log('event:', event)
+        // console.log('cursor:', cm.getCursor())
+        var cur = cm.getCursor()
+        var change = {from: cur, to: cur}
+        showList(cm, change)
+      })
+
+      cm.on('inputRead', showList);
   });
 });
