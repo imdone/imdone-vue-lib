@@ -33,6 +33,96 @@ function compareText (a, b) {
   return 0
 }
 
+function onEnter (cm) {
+  let replaceWith = '\n'
+  const { line, ch } = cm.getCursor()
+  const lineContent = cm.getLine(line)
+  const bulletOrCheckRegex = /^(\s*([-*+]|\d+\.)(\s+\[[ x]\])?\s+).*/
+  const match = lineContent.match(bulletOrCheckRegex)
+  if (match && match[1] === lineContent) {
+    return cm.replaceRange('', {line, ch: 0}, {line})
+  }
+  if (match && lineContent.length === ch) {
+    let listPrefix = match[1]
+    if (listPrefix.trim().endsWith('.')) {
+      listPrefix = listPrefix.replace(/\d+/, match => (parseInt(match) + 1))
+    }
+
+    replaceWith = `\n${listPrefix}`
+  }
+  return cm.replaceSelection(replaceWith, 'end')
+}
+
+function adjustNumbering (cm) {
+  // const listRegex = () => /^\s*\d+\. /gm
+  // const selectedLines = getSelectedLines(cm)
+  // const listPos = selectedLines.content.search(listRegex())
+  // const listLine = selectedLines.content.substring(0, listPos).split('\n').length
+  // const line = selectedLines.start.line + listLine - 1
+  // var startLine = line
+  // for (let i = parseInt(line); i >= 0; i--) {
+  //   if (listRegex().test(cm.getLine(i))) startLine = i
+  // }
+  // const endLine = line + Array(cm.lineCount() - line).findIndex((el, i) => !listRegex().test(cm.getLine(i + line))) - 1
+  // const listLines = []
+  // for (let j = startLine; j <= endLine; j++) {
+  //   listLines.push({line: j, content: cm.getLine(j)})
+  // }
+
+  // replace in content
+}
+
+function getSelectedLines (cm) {
+  let content = ''
+  let start = {}
+  let end = {}
+  if (cm.somethingSelected()) {
+    const fromLine = cm.getCursor('from').line
+    let toLine = cm.getCursor('to').line
+    if (cm.getCursor('to').ch === 0) toLine--
+    const toLineCh = cm.getLine(toLine).length
+    start = {line: fromLine, ch: 0}
+    end = {line: toLine, ch: toLineCh}
+    content = cm.getRange({line: fromLine, ch: 0}, {line: toLine, ch: toLineCh})
+  } else {
+    const line = cm.getCursor('from').line
+    content = cm.getLine(line)
+    start = {line, ch: content.length}
+  }
+  return {content, start, end}
+}
+
+function isOrderedList (cm) {
+  return /^\s*\d+\. /gm.test(getSelectedLines(cm).content)
+}
+
+function onTab (cm) {
+  const indentUnit = cm.getOption('indentUnit')
+  if (isOrderedList(cm)) cm.setOption('indentUnit', 3)
+
+  if (cm.somethingSelected()) {
+    cm.indentSelection('add')
+  } else {
+    cm.replaceSelection(cm.getOption('indentWithTabs') ? '\t'
+      : Array(cm.getOption('indentUnit') + 1).join(' '), 'end', '+input')
+  }
+
+  if (isOrderedList(cm)) {
+    adjustNumbering(cm)
+    cm.setOption('indentUnit', indentUnit)
+  }
+}
+
+function onShiftTab (cm) {
+  const indentUnit = cm.getOption('indentUnit')
+  if (isOrderedList(cm)) cm.setOption('indentUnit', 3)
+  cm.indentSelection('subtract')
+  if (isOrderedList(cm)) {
+    adjustNumbering(cm)
+    cm.setOption('indentUnit', indentUnit)
+  }
+}
+
 export default {
   components: { codemirror },
   props: ['task', 'list', 'repo', 'template', 'value', 'editorTheme'],
@@ -79,27 +169,21 @@ export default {
         indentWithTabs: false,
         indentUnit: 2,
         extraKeys: {
-          'Shift-Tab': 'indentLess',
+          'Shift-Tab': onShiftTab, // cm.indentSelection("subtract")
           'Cmd-/': 'toggleComment',
           'Ctrl-/': 'toggleComment',
           'Cmd-S': saveFunc,
           'Ctrl-S': saveFunc,
           'Esc': this.close,
-          'Tab': function betterTab (cm) {
-            if (cm.somethingSelected()) {
-              cm.indentSelection('add')
-            } else {
-              cm.replaceSelection(cm.getOption('indentWithTabs') ? '\t'
-                : Array(cm.getOption('indentUnit') + 1).join(' '), 'end', '+input')
-            }
-          }
+          'Tab': onTab,
+          'Enter': onEnter
         },
         autoSuggest: [
           {
             mode: 'gfm',
             startChar: '+',
             listCallback: () => {
-              return this.repo.allTags.map(tag => ({text: tag, displayText: tag + ' '}))
+              return this.repo.allTags.map(tag => ({text: tag + ' ', displayText: tag + ' '}))
                 .sort(compareText)
             }
           },
@@ -107,7 +191,7 @@ export default {
             mode: 'gfm',
             startChar: '@',
             listCallback: () => {
-              return this.repo.allContext.map(context => ({text: context, displayText: context + ' '}))
+              return this.repo.allContext.map(context => ({text: context + ' ', displayText: context + ' '}))
                 .sort(compareText)
             }
           }
