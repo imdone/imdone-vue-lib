@@ -33,16 +33,22 @@ function compareText (a, b) {
   return 0
 }
 
+function listRegex () {
+  return /^(\s*([-*+]|\d+\.)(\s+\[[ x]\])?\s+).*/
+}
+
 function onEnter (cm) {
   let replaceWith = '\n'
   const { line, ch } = cm.getCursor()
   const lineContent = cm.getLine(line)
-  const bulletOrCheckRegex = /^(\s*([-*+]|\d+\.)(\s+\[[ x]\])?\s+).*/
-  const match = lineContent.match(bulletOrCheckRegex)
+  const match = lineContent.match(listRegex())
   if (match && match[1] === lineContent) {
     return cm.replaceRange('', {line, ch: 0}, {line})
   }
-  if (match && lineContent.length === ch) {
+  // console.log('match:', match)
+  // console.log('lineContent.length:', lineContent.length)
+  // console.log('ch:', ch)
+  if (match && lineContent.length - ch <= 1) {
     let listPrefix = match[1]
     if (listPrefix.trim().endsWith('.')) {
       listPrefix = listPrefix.replace(/\d+/, match => (parseInt(match) + 1))
@@ -96,11 +102,15 @@ function isOrderedList (cm) {
   return /^\s*\d+\. /gm.test(getSelectedLines(cm).content)
 }
 
+function isList (cm) {
+  return listRegex().test(getSelectedLines(cm).content)
+}
+
 function onTab (cm) {
   const indentUnit = cm.getOption('indentUnit')
   if (isOrderedList(cm)) cm.setOption('indentUnit', 3)
 
-  if (cm.somethingSelected()) {
+  if (cm.somethingSelected() || isList(cm)) {
     cm.indentSelection('add')
   } else {
     cm.replaceSelection(cm.getOption('indentWithTabs') ? '\t'

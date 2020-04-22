@@ -80,6 +80,10 @@ function formatDescription (task, description, mustache) {
     }
   }
 
+  // Fix list endings
+  // const listEndingRegex = /(\n\s*([-+*]{1}|\d+.)\s.*[\n\r])([^1-9-+* \t])/gm
+  // description = description.replace(listEndingRegex, '$1\n$3')
+
   return getEncodedDescription(description)
 }
 
