@@ -23,6 +23,7 @@ import { codemirror } from 'vue-codemirror'
 import 'codemirror/addon/hint/show-hint'
 import 'codemirror/addon/comment/comment'
 import 'codemirror/mode/gfm/gfm'
+import allEmoji from 'markdown-it-emoji/lib/data/full.json'
 import './autosuggest'
 // import stringify from 'json-stringify-safe'
 function compareText (a, b) {
@@ -202,6 +203,15 @@ export default {
             startChar: '@',
             listCallback: () => {
               return this.repo.allContext.map(context => ({text: context + ' ', displayText: context + ' '}))
+                .sort(compareText)
+            }
+          },
+          {
+            mode: 'gfm',
+            startChar: ':',
+            listCallback: () => {
+              console.log(allEmoji)
+              return Object.keys(allEmoji).map(name => ({text: name + ':', displayText: `${name}: ${allEmoji[name]}`}))
                 .sort(compareText)
             }
           }
