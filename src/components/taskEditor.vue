@@ -211,7 +211,7 @@ export default {
             startChar: ':',
             listCallback: () => {
               console.log(allEmoji)
-              return Object.keys(allEmoji).map(name => ({text: name + ':', displayText: `${name}: ${allEmoji[name]}`}))
+              return Object.keys(allEmoji).map(name => ({text: name + ': ', displayText: `${name}: ${allEmoji[name]}`}))
                 .sort(compareText)
             }
           }

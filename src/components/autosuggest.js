@@ -31,12 +31,7 @@
   CodeMirror.defineOption('autoSuggest', [], function (cm, configs) {
     function showList (cm, change) {
         
-        //   var mode = cm.getModeAt(cm.getCursor());
           for (var i = 0, len = configs.length; i < len; i++) {
-            //   if (mode.name === configs[i].mode && change.text[0] === configs[i].startChar) {
-            //   console.log('cm:', cm.getValue())
-            //   console.log('change:', change)
-            //   console.log('configs:', configs)
               var searchString = ''
               var startChar = configs[i].startChar
               var replaceFrom = change.from.ch
@@ -46,9 +41,12 @@
                       searchString = searchString.substring(1)
                       replaceFrom = ch + 2
                       break
+                  } else if (ch === 0) {
+                      replaceFrom = 1
+                      break
                   }
               }
-            //   console.log('searchString:', searchString)
+
               if (searchString.startsWith(startChar)) {
                   cm.showHint({
                       completeSingle: false,
