@@ -20,10 +20,10 @@
 })(function (CodeMirror) {
   'use strict';
 
-  function filterList(listCallback, searchString) {
+  function filterList({listCallback, startsWith}, searchString) {
     var list = listCallback()
     if (searchString.length > 1) {
-        return list.filter(value => value.text.includes(searchString.substring(1)))
+        return list.filter(value => value.text.includes(searchString.substring(startsWith.length)))
     }
     return list
   }
@@ -33,21 +33,26 @@
         
           for (var i = 0, len = configs.length; i < len; i++) {
               var searchString = ''
-              var startChar = configs[i].startChar
+              var startsWith = configs[i].startsWith
+              var startOfWord = configs[i].startOfWord
               var replaceFrom = change.from.ch
               for (var ch = change.from.ch; ch >= 0; ch--) {
                   var searchString = cm.getRange({...change.from, ch}, {...change.from, ch: change.from.ch + 1})
-                  if (searchString.startsWith(' ')) {
-                      searchString = searchString.substring(1)
-                      replaceFrom = ch + 2
-                      break
-                  } else if (ch === 0) {
-                      replaceFrom = 1
-                      break
+                  if (startOfWord) {
+                    if (searchString.startsWith(' ')) {
+                        searchString = searchString.substring(1)
+                        replaceFrom = ch + 2
+                        break
+                    } else if (ch === 0) {
+                        replaceFrom = 1
+                        break
+                    }
+                  } else if (searchString.startsWith(startsWith)) {
+                    replaceFrom = ch + startsWith.length
+                    break
                   }
               }
-
-              if (searchString.startsWith(startChar)) {
+              if (searchString.startsWith(startsWith)) {
                   cm.showHint({
                       completeSingle: false,
                       hint: function (cm, options) {
@@ -55,12 +60,13 @@
                               token = cm.getTokenAt(cur);
                           var end = token.end;
                           if (configs[i]) return {
-                              list: filterList(configs[i].listCallback, searchString),
+                              list: filterList(configs[i], searchString),
                               from: CodeMirror.Pos(cur.line, replaceFrom),
                               to: CodeMirror.Pos(cur.line, end)
                           };
                       }
                   });
+                  break
               }
           }
       }

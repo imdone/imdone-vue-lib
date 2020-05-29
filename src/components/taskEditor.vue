@@ -192,7 +192,8 @@ export default {
         autoSuggest: [
           {
             mode: 'gfm',
-            startChar: '+',
+            startsWith: '+',
+            startOfWord: true,
             listCallback: () => {
               return this.repo.allTags.map(tag => ({text: tag + ' ', displayText: tag + ' '}))
                 .sort(compareText)
@@ -200,7 +201,8 @@ export default {
           },
           {
             mode: 'gfm',
-            startChar: '@',
+            startsWith: '@',
+            startOfWord: true,
             listCallback: () => {
               return this.repo.allContext.map(context => ({text: context + ' ', displayText: context + ' '}))
                 .sort(compareText)
@@ -208,10 +210,19 @@ export default {
           },
           {
             mode: 'gfm',
-            startChar: ':',
+            startsWith: ':',
+            startOfWord: true,
             listCallback: () => {
-              console.log(allEmoji)
               return Object.keys(allEmoji).map(name => ({text: name + ': ', displayText: `${name}: ${allEmoji[name]}`}))
+                .sort(compareText)
+            }
+          },
+          {
+            mode: 'gfm',
+            startsWith: '](/',
+            startOfWord: false,
+            listCallback: () => {
+              return this.repo.files.map(name => ({text: `${name}) `, displayText: `/${name}`}))
                 .sort(compareText)
             }
           }
