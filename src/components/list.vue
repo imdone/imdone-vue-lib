@@ -27,7 +27,6 @@
           :allowUpdates="allowUpdates"
           :config="board.config"
           :maxLines="maxLines"
-          v-show="!ignored"
           v-on:show-edit="showEdit"
           v-on:show-delete="showDelete"
           v-on:file-link="fileLink"
@@ -62,7 +61,7 @@ export default {
   computed: {
     tasks: {
       get () {
-        return this.innerTasks
+        return this.ignored ? [] : this.innerTasks
       },
       set (value) {
         this.innerTasks = value
