@@ -27,6 +27,7 @@
           :allowUpdates="allowUpdates"
           :config="board.config"
           :maxLines="maxLines"
+          v-observe-visibility="visibilityChanged"
           v-on:show-edit="showEdit"
           v-on:show-delete="showDelete"
           v-on:file-link="fileLink"
@@ -43,8 +44,13 @@
 import { Icon } from 'buefy/dist/components/icon'
 import Draggable from 'vuedraggable'
 import Card from '@/components/card'
+import { ObserveVisibility } from 'vue-observe-visibility'
+
 export default {
   name: 'imdone-list',
+  directives: {
+    ObserveVisibility
+  },
   components: {
     Card,
     Draggable,
@@ -55,7 +61,11 @@ export default {
   data () {
     return {
       innerTasks: this.value.tasks,
-      filtered: false
+      taskIndexMap: this.getTaskIndexMap(),
+      visibleTaskIndexMap: {},
+      filtered: false,
+      firstIndex: 0,
+      lastIndex: 10
     }
   },
   computed: {
@@ -96,6 +106,7 @@ export default {
   watch: {
     value () {
       this.innerTasks = this.value.tasks
+      this.taskIndexMap = this.getTaskIndexMap()
     }
   },
   created () {
@@ -115,6 +126,37 @@ export default {
     }
   },
   methods: {
+    getTaskIndexMap () {
+      console.log('getting taskIndexMap')
+      const taskIndexMap = {}
+      this.value.tasks.forEach((task, index) => (taskIndexMap[task.id] = index))
+      return taskIndexMap
+    },
+    getTaskIndex (id) {
+      return this.taskIndexMap[id]
+    },
+    updateLoadedTasks () {
+      const sortedIndexes = Object.values(this.visibleTaskIndexMap).sort()
+      const firstIndex = sortedIndexes.shift()
+      const lastIndex = sortedIndexes.pop()
+      const allTasksLastIndex = this.value.tasks.length
+      this.firstIndex = firstIndex < 10 ? 0 : firstIndex - 10
+      this.lastIndex = lastIndex + 10  > allTasksLastIndex ? allTasksLastIndex : lastIndex + 10
+      const {firstIndex, lastIndex, listName} = this
+      console.log({firstIndex, lastIndex, listName})
+    },
+    visibilityChanged (isVisible, entry) {
+      // console.log('isVisible:', isVisible)
+      // console.log('target:', entry)
+      const id = entry.target.dataset.id
+      const index = this.getTaskIndex(id)
+      if (isVisible) {
+        this.visibleTaskIndexMap[id] = index
+      } else {
+        delete this.visibleTaskIndexMap[id]
+      }
+      this.updateLoadedTasks()
+    },
     filterClicked () {
       this.$emit('filter-clicked', this.filter)
     },
