@@ -46,6 +46,8 @@ import Draggable from 'vuedraggable'
 import Card from '@/components/card'
 import { ObserveVisibility } from 'vue-observe-visibility'
 
+const taskBuffer = 20
+
 export default {
   name: 'imdone-list',
   directives: {
@@ -137,13 +139,13 @@ export default {
     },
     updateLoadedTasks () {
       const sortedIndexes = Object.values(this.visibleTaskIndexMap).sort()
+      console.log('sortedIndexes:', sortedIndexes)
       const firstIndex = sortedIndexes.shift()
-      const lastIndex = sortedIndexes.pop()
-      const allTasksLastIndex = this.value.tasks.length
-      this.firstIndex = firstIndex < 10 ? 0 : firstIndex - 10
-      this.lastIndex = lastIndex + 10  > allTasksLastIndex ? allTasksLastIndex : lastIndex + 10
-      const {firstIndex, lastIndex, listName} = this
-      console.log({firstIndex, lastIndex, listName})
+      const lastIndex = sortedIndexes.length === 0 ? firstIndex : sortedIndexes.pop()
+      const allTasksLastIndex = this.value.tasks.length - 1
+      this.firstIndex = firstIndex < taskBuffer ? 0 : firstIndex - taskBuffer
+      this.lastIndex = lastIndex + taskBuffer > allTasksLastIndex ? allTasksLastIndex : lastIndex + taskBuffer
+      console.log({firstIndex: this.firstIndex, lastIndex: this.lastIndex, listName: this.listName})
     },
     visibilityChanged (isVisible, entry) {
       // console.log('isVisible:', isVisible)
