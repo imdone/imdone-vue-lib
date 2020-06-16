@@ -10,18 +10,6 @@ import * as Task from 'imdone-core/lib/task'
 
 Vue.use(Router)
 
-const lists = {}
-tasks.forEach(task => {
-  const list = task.list
-  if (!lists[list]) lists[list] = []
-  lists[list].push(new Task(task, true))
-})
-const task = new Task(tasks[7], true)
-const list = {
-  name: 'TODO',
-  tasks: lists['TODO']
-}
-
 function listsOfTasks () {
   const listsOfTasks = []
   const listsMap = new Map()
@@ -45,6 +33,10 @@ const board = {
   lists: listsOfTasks()
 }
 
+const list = board.lists[0]
+
+const task = list.tasks[0]
+
 export default new Router({
   routes: [
     {
@@ -58,7 +50,8 @@ export default new Router({
       path: '/list',
       component: List,
       props: {
-        value: list
+        value: list,
+        board: board
       }
     },
     {

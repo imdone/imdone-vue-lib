@@ -4,6 +4,8 @@
 </template>
 
 <script>
+window.CodeMirror = require('codemirror')
+
 export default {
   name: 'app'
 }
