@@ -46,7 +46,7 @@ div
           v-on:add-card="addCard"
           v-on:card-in-focus="cardInFocus")
         .column.new-list(slot="footer" v-if="allowUpdates")
-          button#new-list-button.button.is-white.has-text-left.block(v-if="!addListFormShown" @click="showAddListForm")
+          button#new-list-button.button.is-primary.has-text-left.block(v-if="!addListFormShown" @click="showAddListForm")
             b-icon(pack="fa" icon="plus" size="is-small")
             | &nbsp;&nbsp;Add another list
           .card(v-if="addListFormShown")
@@ -246,37 +246,36 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.layout-v > .multipane-resizer {
-  margin: 0; left: 0;
-  position: relative;
-  width: 12px;
-  &:before {
-    display: block;
-    content: "";
-    width: 3px;
-    height: 40px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -20px;
-    margin-left: -1.5px;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-  }
-  &:hover {
-    &:before {
-      border-color: #999;
-    }
-  }
-}
-.imdone-pane {
-  text-align: left;
-  padding: 15px;
-  overflow: hidden;
-  border: 1px solid #ccc;
-}
+// .layout-v > .multipane-resizer {
+//   margin: 0; left: 0;
+//   position: relative;
+//   width: 12px;
+//   &:before {
+//     display: block;
+//     content: "";
+//     width: 3px;
+//     height: 40px;
+//     position: absolute;
+//     top: 50%;
+//     left: 50%;
+//     margin-top: -20px;
+//     margin-left: -1.5px;
+//     border-left: 1px solid #ccc;
+//     border-right: 1px solid #ccc;
+//   }
+//   &:hover {
+//     &:before {
+//       border-color: #999;
+//     }
+//   }
+// }
+// .imdone-pane {
+//   text-align: left;
+//   padding: 15px;
+//   overflow: hidden;
+//   border: 1px solid #ccc;
+// }
 .board-main {
-  border: 1px solid #F0F0F0;
   position: absolute;
   top: 0;
   bottom: 0;

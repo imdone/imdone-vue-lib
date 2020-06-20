@@ -314,10 +314,7 @@ img.gravatar {
       border-bottom: 1px solid;
     }
   }
-  .tags {
-    color: #ffffff;
-  }
-  .toggle {
+ .toggle {
     background: inherit;
     opacity: 0.8;
   }
@@ -392,7 +389,6 @@ img.gravatar {
   }
   .task-text {
     hr {
-      background-color: #dcdcdc;
       height: 1px;
       margin: .5rem 0;
     }
@@ -449,17 +445,9 @@ img.gravatar {
     }
 
     td, th {
-        border: 1px solid #ddd;
         padding: 6px 13px
     }
 
-    tr {
-        border-top: 1px solid #ccc
-    }
-
-    tr:nth-child(2n) {
-        background-color: #f8f8f8
-    }
     .number {
       background-color: inherit !important;
       border-radius: none !important;

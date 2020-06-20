@@ -35,7 +35,7 @@
           v-on:context-clicked='contextClicked'
           v-on:card-in-focus="cardInFocus")
   .card-footer(v-if="!filter")
-    button.button.is-white.has-text-left.is-smaller(@click.stop="addCard")
+    button.button.is-primary.has-text-left.is-smaller(@click.stop="addCard")
       b-icon.has-text-left(pack="fa" icon="plus" size="is-small")
       span.button-text Add a card
 </template>
@@ -174,7 +174,6 @@ export default {
     display: -webkit-inline-box;
     border-top: 0px;
     button.button {
-      color:gray;
       width: 100%;
       display: inherit;
       .button-text {
