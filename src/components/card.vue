@@ -9,7 +9,7 @@ article.message.task-card(
   v-bind="meta")
   .message-body.toggle-parent
     .tags.card-actions.is-size-6(v-show="isActive")
-      .tag.is-white
+      .tag
         b-tooltip(label="Open file" position="is-left" type="is-info" :delay="500" :animated="true")
           a(@click="emitFileLink" :href="fileLink" :target="target")
             octicon(:icon="Octicons.link")
