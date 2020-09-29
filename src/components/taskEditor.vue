@@ -222,6 +222,7 @@ export default {
             startsWith: '](/',
             startOfWord: false,
             listCallback: () => {
+              debugger
               return this.repo.files.map(name => ({text: `${name}) `, displayText: `/${name}`}))
                 .sort(compareText)
             }
@@ -269,7 +270,8 @@ export default {
 @import "../../node_modules/codemirror/addon/hint/show-hint.css";
 .imdone-editor {
   width: calc(100vw - 400px);
-  min-width: 200px;
+  min-width: 400px;
+  max-width: 1300px;
   .CodeMirror {
     height: calc(100vh - 400px) !important;
     min-height: 400px;

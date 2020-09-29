@@ -2,6 +2,8 @@
 
 # imdone-vue-lib
 
+- Use node 11.15.0
+
 > imdone vue components
 
 ## Build Setup
