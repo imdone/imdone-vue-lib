@@ -29,6 +29,12 @@ article.message.task-card(
       .column
         progress.progress.is-small(:class="progressClass" :value="tasksCompleted" :max="tasksTotal")
     .task-text.task-description.has-text-left(@click="textClicked" v-html="description.html" ref="description")
+    .tags.imdone-meta(v-if="meta.length > 0")
+      span(v-for="pair in meta" :key="`${task.id}-${pair.key}`")
+        b-tooltip(v-for="value, index in pair.values" :key="`${task.id}-${pair.key}-${index}`" :label="`Filter by '${pair.key}:${value}'`" type="is-info" :delay="500" :animated="true")
+          a.tags.has-addons(@click.stop='metaClicked(pair.key, value)')
+            span.tag.is-grey {{pair.key}}
+            span.tag {{displayMeta(pair.key, value)}}
     .tags.imdone-tags(v-if="tags.length > 0")
       b-tooltip(v-for="tag in tags" :key="tag" :label="`Filter by '${tag}'`" type="is-info" :delay="500" :animated="true")
         a.tag.is-imdone-primary(@click.stop='tagClicked(tag)') {{tag}}
@@ -38,7 +44,7 @@ article.message.task-card(
     .tags.completed(v-if="completed")
       .tag(:class="completedClass") Completed {{completedDisplay}}
     .tags.due(v-else-if="due")
-      .tag(:class="dueClass") Due {{dueDisplay}}
+      .tag(:class="dueClass") Due {{dateDisplay(due)}}
     .toggle-full-desc(v-if="descIsOverMax && fullDesc")
       b-tooltip(label="Collapse description" position="is-left" type="is-info" :delay="500" :animated="true")
         a(@click.stop="fullDesc = false")
@@ -89,7 +95,7 @@ export default {
     active: {
       immediate: true,
       handler (val) {
-        if (val && this.$el) this.$nextTick(() => this.$el.focus())
+        if (val && this.$el) this.$el.focus()
       }
     },
     task: {
@@ -111,13 +117,13 @@ export default {
   },
   computed: {
     progressClass () {
-      return (this.task.progress[0] === this.task.progress[1]) ? 'is-success' : 'is-info'
+      return (this.tasksCompleted === this.taskTotal) ? 'is-success' : 'is-info'
     },
     tasksCompleted () {
-      return this.task.progress[0]
+      return this.task.progress.completed
     },
     tasksTotal () {
-      return this.task.progress[1]
+      return this.task.progress.total
     },
     links () {
       let links = []
@@ -143,18 +149,13 @@ export default {
       return clazz
     },
     meta () {
-      const att = {}
-      const meta = this.task.allMeta
-      for (const key in meta) {
-        att[`data-meta-${key}`] = meta[key].join(',')
-      }
-      return att
+      return Object.keys(this.task.allMeta)
+        .filter(key => key !== 'due')
+        .sort()
+        .map(key => ({key, values: this.task.allMeta[key]}))
     },
     due () {
       return this.task.due && new Date(this.task.due)
-    },
-    dueDisplay () {
-      return moment().to(moment(this.due))
     },
     dueClass () {
       if (this.due > new Date()) return 'is-warning'
@@ -221,6 +222,13 @@ export default {
     }
   },
   methods: {
+    dateDisplay (date) {
+      return moment().to(moment(date))
+    },
+    displayMeta (key, value) {
+      if (['created', 'completed'].includes(key)) return (new Date(value)).toLocaleString()
+      return value
+    },
     highlightCodeBlocks () {
       if (window.Prism) {
         try {
@@ -261,6 +269,9 @@ export default {
     },
     inactivateUnlessInFocus () {
       if (!this.isActive) this.inactivate()
+    },
+    metaClicked (key, value) {
+      this.$emit('meta-clicked', {task: this.task, meta: {key, value}})
     },
     tagClicked (tag) {
       this.$emit('tag-clicked', {task: this.task, tag})
@@ -309,6 +320,7 @@ img.gravatar {
   &.active {
     padding: 0;
     .message-body {
+      outline: none;
       border-top: 1px solid;
       border-right: 1px solid;
       border-bottom: 1px solid;
@@ -333,7 +345,10 @@ img.gravatar {
       margin-bottom: .25rem;
       padding-right:0;
     }
-    .level {
+    a.tags {
+      text-decoration: none;
+    }
+  .level {
       margin-top: 5px;
       .level-item {
         margin: 5px;

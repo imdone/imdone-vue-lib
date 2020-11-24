@@ -31,6 +31,7 @@
           v-on:show-delete="showDelete"
           v-on:file-link="fileLink"
           v-on:text-clicked="textClicked"
+          v-on:meta-clicked='metaClicked'
           v-on:tag-clicked='tagClicked'
           v-on:context-clicked='contextClicked'
           v-on:card-in-focus="cardInFocus")
@@ -134,6 +135,9 @@ export default {
     },
     textClicked (params) {
       this.$emit('text-clicked', params)
+    },
+    metaClicked (data) {
+      this.$emit('meta-clicked', data)
     },
     tagClicked (data) {
       this.$emit('tag-clicked', data)

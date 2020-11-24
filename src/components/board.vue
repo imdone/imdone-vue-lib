@@ -40,6 +40,7 @@ div
           v-on:file-link="emitFileLink"
           v-on:delete-list="deleteList"
           v-on:text-clicked="textClicked"
+          v-on:meta-clicked='metaClicked'
           v-on:tag-clicked='tagClicked'
           v-on:context-clicked='contextClicked'
           v-on:filter-clicked="filterClicked"
@@ -159,6 +160,9 @@ export default {
     },
     textClicked (params) {
       this.$emit('text-clicked', params)
+    },
+    metaClicked (data) {
+      this.$emit('meta-clicked', data)
     },
     tagClicked (data) {
       this.$emit('tag-clicked', data)
