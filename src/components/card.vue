@@ -29,12 +29,6 @@ article.message.task-card(
       .column
         progress.progress.is-small(:class="progressClass" :value="tasksCompleted" :max="tasksTotal")
     .task-text.task-description.has-text-left(@click="textClicked" v-html="description.html" ref="description")
-    .tags.imdone-meta(v-if="meta.length > 0")
-      span(v-for="pair in meta" :key="`${task.id}-${pair.key}`")
-        b-tooltip(v-for="value, index in pair.values" :key="`${task.id}-${pair.key}-${index}`" :label="`Filter by '${pair.key}:${value}'`" type="is-info" :delay="500" :animated="true")
-          a.tags.has-addons(@click.stop='metaClicked(pair.key, value)')
-            span.tag.is-grey {{pair.key}}
-            span.tag {{displayMeta(pair.key, value)}}
     .tags.imdone-tags(v-if="tags.length > 0")
       b-tooltip(v-for="tag in tags" :key="tag" :label="`Filter by '${tag}'`" type="is-info" :delay="500" :animated="true")
         a.tag.is-imdone-primary(@click.stop='tagClicked(tag)') {{tag}}
@@ -45,6 +39,12 @@ article.message.task-card(
       .tag(:class="completedClass") Completed {{completedDisplay}}
     .tags.due(v-else-if="due")
       .tag(:class="dueClass") Due {{dateDisplay(due)}}
+    .tags.imdone-meta(v-if="meta.length > 0")
+      span(v-for="pair in meta" :key="`${task.id}-${pair.key}`")
+        b-tooltip(v-for="value, index in pair.values" :key="`${task.id}-${pair.key}-${index}`" :label="`Filter by '${pair.key}:${value}'`" type="is-info" :delay="500" :animated="true")
+          a.tags.has-addons(@click.stop='metaClicked(pair.key, value)')
+            span.tag.is-grey {{pair.key}}
+            span.tag {{displayMeta(pair.key, value)}}
     .toggle-full-desc(v-if="descIsOverMax && fullDesc")
       b-tooltip(label="Collapse description" position="is-left" type="is-info" :delay="500" :animated="true")
         a(@click.stop="fullDesc = false")
