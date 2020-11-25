@@ -39,7 +39,7 @@ article.message.task-card(
       .tag(:class="completedClass") Completed {{completedDisplay}}
     .tags.due(v-else-if="due")
       .tag(:class="dueClass") Due {{dateDisplay(due)}}
-    .tags.imdone-meta(v-if="meta.length > 0")
+    .imdone-meta(v-if="meta.length > 0")
       span(v-for="pair in meta" :key="`${task.id}-${pair.key}`")
         b-tooltip(v-for="value, index in pair.values" :key="`${task.id}-${pair.key}-${index}`" :label="`Filter by '${pair.key}:${value}'`" type="is-info" :delay="500" :animated="true")
           a.tags.has-addons(@click.stop='metaClicked(pair.key, value)')
@@ -387,12 +387,16 @@ img.gravatar {
         a {
           text-decoration: none;
         }
+      }
+      .tag {
         margin-right: 5px;
         margin-bottom: .25rem;
       }
-
-      .tag {
-        margin-bottom: .25rem;
+      span.tag {
+        margin-right: 0;
+      }
+      &.has-addons {
+        margin-right: 5px;
       }
     }
     .toggle-full-desc {
