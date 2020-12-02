@@ -19,8 +19,8 @@ article.message.task-card(
         b-tooltip(label="Delete card" position="is-left" type="is-info" :delay="500" :animated="true")
           a(@click.stop.prevent="showDelete")
             octicon(:icon="Octicons.trashcan")
-        b-tooltip(v-for='link in links' :label='link.title' :key='link.icon' position="is-left" type="is-info" :delay="500" :animated="true")
-          a.action-link(@click="textClicked" :href='link.href' target='_blank')
+        b-tooltip(v-for='link, i in links' :label='link.title' :key='link.icon + i' position="is-left" type="is-info" :delay="500" :animated="true")
+          a.action-link(@click="textClicked" :href='link.href || null' :data-action='link.action || null' :target='link.href ? "_blank" : null')
             b-icon.is-medium(:pack='link.pack' :icon='link.icon')
     .task-progress.columns(v-if="tasksTotal")
       .column.is-2.progress-ratio
@@ -130,14 +130,16 @@ export default {
       if (!this.task) return links
       const frontMatter = this.task.frontMatter
       if (frontMatter && frontMatter.links) {
-        links = frontMatter.links.map(({pack, icon, title, href}) => {
+        links = frontMatter.links.map(({pack, icon, title, href, action}) => {
           const { encodedText, encodedMD } = this.description
           const frontMatterCopy = {...frontMatter}
           frontMatterCopy.props.encodedText = encodedText
           frontMatterCopy.props.encodedMD = encodedMD
           // frontMatterCopy.props.task = this.task
           href = taskTextUtils.formatDescription({frontMatter: frontMatterCopy}, href).description
-          return {pack, icon, title, href}
+          action = taskTextUtils.formatDescription({...this.task, frontMatter: frontMatterCopy}, action).description
+          title = taskTextUtils.formatDescription({...this.task, frontMatter: frontMatterCopy}, title).description
+          return {pack, icon, title, href, action}
         })
       }
       return links
@@ -341,6 +343,11 @@ img.gravatar {
       a {
         text-decoration: none;
         margin-right: 5px;
+        .icon {
+          &.is-medium {
+            width: 1.5rem;
+          }
+        }
       }
       margin-bottom: .25rem;
       padding-right:0;
