@@ -1,6 +1,6 @@
 {
   "name": "imdone-vue-lib",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "description": "imdone vue components",
   "author": "Jesse <jesse@piascik.net>",
   "main": "dist/lib/imdone-vue-lib.min.js",
@@ -36,7 +36,7 @@
     "moment": "^2.22.2",
     "octicons-vue": "^0.17.2",
     "remove-markdown": "^0.3.0",
-    "vue": "^2.5.17",
+    "vue": "2.6.12",
     "vue-codemirror": "^4.0.6",
     "vue-multipane": "^0.9.5",
     "vuedraggable": "^2.16.0"
@@ -107,7 +107,7 @@
     "vue-loader": "^12.1.0",
     "vue-router": "^2.8.1",
     "vue-style-loader": "^3.0.1",
-    "vue-template-compiler": "^2.5.17",
+    "vue-template-compiler": "2.6.12",
     "webpack": "^2.6.1",
     "webpack-bundle-analyzer": "^2.2.1",
     "webpack-dev-middleware": "^1.10.0",
