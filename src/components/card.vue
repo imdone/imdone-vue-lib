@@ -136,7 +136,6 @@ export default {
           frontMatterCopy.props.encodedText = encodedText
           frontMatterCopy.props.encodedMD = encodedMD
           href = taskTextUtils.formatDescription({frontMatter: frontMatterCopy}, href).description
-          action = taskTextUtils.formatDescription({...this.task, frontMatter: frontMatterCopy}, action).description
           title = taskTextUtils.formatDescription({...this.task, frontMatter: frontMatterCopy}, title).description
           return {pack, icon, title, href, action}
         })

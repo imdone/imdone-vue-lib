@@ -39,13 +39,7 @@ function removeDisplayComments (description) {
   return description.replace(/<!--\s*\[([\s\S]*?)\]\s*-->/g, '$1')
 }
 
-function formatDescription (task, description, mustache) {
-  const emptyResult = {
-    description: '',
-    encodedText: '',
-    encodedMD: ''
-  }
-  if (!task) return emptyResult
+function getTaskProperties (task) {
   const frontMatterProps = _.get(task, 'frontMatter.props') || {}
   const frontMatterComputed = _.get(task, 'frontMatter.computed') || {}
   const props = {...frontMatterProps, content: CONTENT_TOKEN}
@@ -53,18 +47,44 @@ function formatDescription (task, description, mustache) {
   const taskProps = _.pick(task, 'progress', 'line', 'list', 'source', 'due', 'created', 'completed', 'tags', 'context', 'meta', 'allTags', 'allContext', 'allMeta')
   try {
     for (let [key, value] of Object.entries(computed)) {
-      const computedTemplate = `\${${template(value)({...props, ...computed})}}`
-      const computedValue = template(computedTemplate)({})
+      let computedValue
+      if (_.isFunction(value) && !_.isEmpty(props) && props.totals) {
+        try {
+          computedValue = value.apply({...props})
+        } catch (e) {
+          console.error(e)
+          console.log('props:', props)
+        }
+      } else {
+        const computedTemplate = `\${${template(value)({...props, ...computed})}}`
+        computedValue = template(computedTemplate)({})
+      }
       computed[key] = computedValue
     }
   } catch (e) {
-    return {...emptyResult, description}
+    console.error(e)
+    return
   }
+
+  return {...props, ...computed, ...taskProps}
+}
+
+function formatDescription (task, description, mustache) {
+  const emptyResult = {
+    description: '',
+    encodedText: '',
+    encodedMD: ''
+  }
+  if (!task) return emptyResult
+
+  const data = getTaskProperties(task)
+
+  if (!data) return {...emptyResult, description}
+
+  const opts = { interpolate: /(?<!`)\${([\s\S]+?)}/g }
 
   if (mustache) description = removeDisplayComments(description)
 
-  const data = {...props, ...computed, ...taskProps}
-  const opts = { interpolate: /(?<!`)\${([\s\S]+?)}/g }
   try {
     description = template(description, opts)(data)
   } catch (e) {
@@ -167,6 +187,7 @@ export default {
     return template(text)(data)
   },
   formatDescription,
+  getTaskProperties,
   setFs (_fs) {
     fs = _fs
   },
