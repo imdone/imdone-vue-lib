@@ -128,15 +128,16 @@ export default {
     links () {
       let links = []
       if (!this.task) return links
-      const frontMatter = this.task.frontMatter
+      const frontMatter = {...this.task.frontMatter}
       if (frontMatter && frontMatter.links) {
         links = frontMatter.links.map(({pack, icon, title, href, action}) => {
           const { encodedText, encodedMD } = this.description
           const frontMatterCopy = {props: {}, ...frontMatter}
           frontMatterCopy.props.encodedText = encodedText
           frontMatterCopy.props.encodedMD = encodedMD
-          href = taskTextUtils.formatDescription({frontMatter: frontMatterCopy}, href).description
-          title = taskTextUtils.formatDescription({...this.task, frontMatter: frontMatterCopy}, title).description
+          const task = {...this.task, frontMatter: frontMatterCopy}
+          href = taskTextUtils.formatDescription(task, href).description
+          title = taskTextUtils.formatDescription(task, title).description
           return {pack, icon, title, href, action}
         })
       }

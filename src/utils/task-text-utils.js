@@ -65,8 +65,8 @@ function getTaskProperties (task) {
     console.error(e)
     return
   }
-
-  return {...props, ...computed, ...taskProps}
+  const interpolationProperties = {...props, ...computed, ...taskProps}
+  return interpolationProperties
 }
 
 function formatDescription (task, description, mustache) {
@@ -134,7 +134,6 @@ export default {
         encodedMD: ''
       }
     }
-
     let {description} = formatDescription(task, getCardMarkdown(task, lines).content, true)
     let {encodedText, encodedMD} = formatDescription(task, getCardMarkdown(task).content, true)
     const html = md.render(description)
