@@ -16,7 +16,8 @@
     .overflow-container(ref="tasksEl")
       p.ignore-text(v-if="ignored") Cards dropped here will be ignored
       draggable.tasks(:data-list="listName" v-model="tasks" :group="group" @end="onEnd" :draggable="draggable")
-        card(v-for="task in tasks"
+        card(v-for="(task, index) in tasks"
+          :board="board"
           :showFileLinks="showFileLinks"
           :selectedTask="selectedTask"
           :activeTask="activeTask"

@@ -65,7 +65,7 @@ import moment from 'moment'
 
 export default {
   name: 'imdone-card',
-  props: ['task', 'selectedTask', 'activeTask', 'repoURL', 'allowUpdates', 'showFileLinks', 'config', 'maxLines'],
+  props: ['board', 'task', 'selectedTask', 'activeTask', 'repoURL', 'allowUpdates', 'showFileLinks', 'config', 'maxLines'],
   data () {
     return {
       maxDescLines: 6,
