@@ -192,10 +192,10 @@ export default {
       return this.task.blame.name
     },
     tags () {
-      return this.task.allTags.filter(tag => !!tag)
+      return this.task.allTags.filter(tag => !!tag).sort()
     },
     contexts () {
-      return this.task.allContext.filter(context => !!context)
+      return this.task.allContext.filter(context => !!context).sort()
     },
     selected () {
       return (this.selectedTask && this.selectedTask.id === this.task.id)
