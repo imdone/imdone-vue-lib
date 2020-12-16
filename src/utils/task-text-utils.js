@@ -50,13 +50,14 @@ function getTaskProperties (task) {
       let computedValue
       if (_.isFunction(value) && !_.isEmpty(props) && props.totals) {
         try {
-          computedValue = value.apply({...props, ...taskProps})
+          computedValue = value.apply({...props, ...computed, ...taskProps})
         } catch (e) {
           console.error(e)
           console.log('props:', props)
         }
       } else {
-        const computedTemplate = `\${${template(value)({...props, ...taskProps})}}`
+        const interpolatedComputed = template(value)({...props, ...computed, ...taskProps})
+        const computedTemplate = `\${${interpolatedComputed}}`
         computedValue = template(computedTemplate)({})
       }
       computed[key] = computedValue
