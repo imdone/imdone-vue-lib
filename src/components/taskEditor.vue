@@ -222,7 +222,6 @@ export default {
             startsWith: '](/',
             startOfWord: false,
             listCallback: () => {
-              debugger
               return this.repo.files.map(name => ({text: `${name}) `, displayText: `/${name}`}))
                 .sort(compareText)
             }
