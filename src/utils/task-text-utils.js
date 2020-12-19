@@ -47,18 +47,19 @@ function getTaskProperties (task) {
   const taskProps = _.pick(task, 'progress', 'line', 'list', 'source', 'due', 'created', 'completed', 'tags', 'context', 'meta', 'allTags', 'allContext', 'allMeta')
   try {
     for (let [key, value] of Object.entries(computed)) {
-      let computedValue
+      let computedValue = value.toString()
       if (_.isFunction(value) && !_.isEmpty(props) && props.totals) {
         try {
           computedValue = value.apply({...props, ...computed, ...taskProps})
         } catch (e) {
-          console.error(e)
-          console.log('props:', props)
+          console.error(`Unable to compute key: ${key}`, e)
         }
       } else {
-        const interpolatedComputed = template(value)({...props, ...computed, ...taskProps})
-        const computedTemplate = `\${${interpolatedComputed}}`
-        computedValue = template(computedTemplate)({})
+        try {
+          computedValue = template(value)({...props, ...computed, ...taskProps})
+        } catch (e) {
+          console.error(`Unable to compute key: ${key}`, e)
+        }
       }
       computed[key] = computedValue
     }
