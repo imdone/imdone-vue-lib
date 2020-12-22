@@ -30,7 +30,8 @@ function getEncodedDescription (description) {
   description = description
     .replace(CONTENT_TOKEN, encodedText)
     .replace(/(?<!!)\[(.*?)\]\((.*?)\)/g, (match, p1, p2) => { // URI encode file links
-      return `[${p1}](${p2.replace(/\s/g, '%20')})`
+      const link = `[${p1}](${p2.replace(/\s/g, '%20')})`
+      return link.replace(/%20(".*?"\))$/, ' $1')
     })
   return {encodedMD, encodedText, description}
 }
@@ -52,13 +53,13 @@ function getTaskProperties (task) {
         try {
           computedValue = value.apply({...props, ...computed, ...taskProps})
         } catch (e) {
-          console.error(`Unable to compute key: ${key}`, e)
+          console.error(`Unable to compute key: ${key} with value: ${computedValue}`, e)
         }
       } else {
         try {
           computedValue = template(value)({...props, ...computed, ...taskProps})
         } catch (e) {
-          console.error(`Unable to compute key: ${key}`, e)
+          console.error(`Unable to compute key: ${key} with value: ${computedValue}`, e)
         }
       }
       computed[key] = computedValue
