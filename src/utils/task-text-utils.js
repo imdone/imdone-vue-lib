@@ -144,7 +144,7 @@ export default {
 
     $('a').each(function () {
       const href = $(this).attr('href')
-      if (/\w+:\/\//.test(href)) return $(this).attr('target', '_blank')
+      if (/\w+:\/\/|mailto:.*@.*/.test(href)) return $(this).attr('target', '_blank')
       const [filePath, line] = href.split(':')
       $(this).attr('file-path', filePath)
       $(this).attr('file-line', line)
