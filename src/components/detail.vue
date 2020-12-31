@@ -130,10 +130,10 @@
 <script>
 import * as moment from 'moment'
 import LinkIssues from '@/components/linkIssues'
-import { Icon } from 'buefy/dist/components/icon'
-import { Tabs, TabItem } from 'buefy/dist/components/tabs'
-import { Tag } from 'buefy/dist/components/tag'
-import { Loading } from 'buefy/dist/components/loading'
+import { BIcon } from 'buefy/dist/esm/icon'
+import { BTabs, BTabItem } from 'buefy/dist/esm/tabs'
+import { BTag } from 'buefy/dist/esm/tag'
+import { BLoading } from 'buefy/dist/esm/loading'
 import * as _ from 'lodash'
 import axios from 'axios'
 import InputTag from '@/components/InputTag'
@@ -144,11 +144,11 @@ import TaskEditor from '@/components/taskEditor'
 export default {
   name: 'imdone-detail',
   components: {
-    'b-icon': Icon,
-    'b-tabs': Tabs,
-    'b-tab-item': TabItem,
-    'b-tag': Tag,
-    'b-loading': Loading,
+    'b-icon': BIcon,
+    'b-tabs': BTabs,
+    'b-tab-item': BTabItem,
+    'b-tag': BTag,
+    'b-loading': BLoading,
     LinkIssues,
     InputTag,
     TaskEditor

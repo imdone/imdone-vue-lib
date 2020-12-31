@@ -14,7 +14,7 @@
       .tag.is-light {{tasks.length}}
   .card-content
     .overflow-container(ref="tasksEl")
-      p.ignore-text(v-if="ignored") Cards dropped here will be ignored
+      p.ignore-text(v-if="ignored") Cards dropped here will not be displayed
       draggable.tasks(:data-list="listName" v-model="tasks" :group="group" @end="onEnd" :draggable="draggable")
         card(v-for="(task, index) in tasks"
           :board="board"
@@ -42,7 +42,7 @@
       span.button-text Add a card
 </template>
 <script>
-import { Icon } from 'buefy/dist/components/icon'
+import { BIcon } from 'buefy/dist/esm/icon'
 import Draggable from 'vuedraggable'
 import Card from '@/components/card'
 export default {
@@ -50,7 +50,7 @@ export default {
   components: {
     Card,
     Draggable,
-    Icon
+    BIcon
   },
   //- TODO:50 Should accept a v-model **list** in the format {name, hidden, tasks} id:41
   props: ['value', 'selectedTask', 'repoURL', 'activeTask', 'allowUpdates', 'board', 'showFileLinks', 'maxLines'],

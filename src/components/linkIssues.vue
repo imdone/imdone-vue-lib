@@ -63,14 +63,14 @@
 
 </template>
 <script>
-import { Icon } from 'buefy/dist/components/icon'
-import { Table, TableColumn } from 'buefy/dist/components/table'
-import { Tag } from 'buefy/dist/components/tag'
-import { Field } from 'buefy/dist/components/field'
-import { Select } from 'buefy/dist/components/select'
-import { Input } from 'buefy/dist/components/input'
-import { Pagination } from 'buefy/dist/components/pagination'
-import { Loading } from 'buefy/dist/components/loading'
+import { BIcon } from 'buefy/dist/esm/icon'
+import { BTable, BTableColumn } from 'buefy/dist/esm/table'
+import { BTag } from 'buefy/dist/esm/tag'
+import { BField } from 'buefy/dist/esm/field'
+import { BSelect } from 'buefy/dist/esm/select'
+import { BInput } from 'buefy/dist/esm/input'
+import { BPagination } from 'buefy/dist/esm/pagination'
+import { BLoading } from 'buefy/dist/esm/loading'
 import axios from 'axios'
 import Octicon, { Octicons } from 'octicons-vue'
 import newIssue from '@/components/newIssue'
@@ -79,15 +79,15 @@ import _ from 'lodash'
 export default {
   name: 'imdone-link-issues',
   components: {
-    'b-table': Table,
-    'b-table-column': TableColumn,
-    'b-icon': Icon,
-    'b-tag': Tag,
-    'b-field': Field,
-    'b-select': Select,
-    'b-input': Input,
-    'b-pagination': Pagination,
-    'b-loading': Loading,
+    'b-table': BTable,
+    'b-table-column': BTableColumn,
+    'b-icon': BIcon,
+    'b-tag': BTag,
+    'b-field': BField,
+    'b-select': BSelect,
+    'b-input': BInput,
+    'b-pagination': BPagination,
+    'b-loading': BLoading,
     Octicon,
     newIssue
   },

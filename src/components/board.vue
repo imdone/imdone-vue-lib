@@ -54,7 +54,7 @@ div
             .card-content
               .control
                 input.input(type="text" placeholder="Enter list name..." v-model="newListName" ref="newListInput" @keyup.enter="addList" @keyup.esc="hideAddListForm")
-              .control
+              .control.has-text-left
                 button.button.is-imdone-primary.is-small.add-list-btn(@click="addList") Add List
                 a(@click="hideAddListForm")
                   b-icon(pack="fa" icon="times" size="is-small")
@@ -75,7 +75,7 @@ div
 </template>
 <script>
 import Draggable from 'vuedraggable'
-import { Icon } from 'buefy/dist/components/icon'
+import { BIcon } from 'buefy/dist/esm/icon'
 import List from '@/components/list'
 import Detail from '@/components/detail'
 import TaskEditorModal from '@/components/taskEditorModal'
@@ -85,7 +85,7 @@ import taskTextUtils from '../utils/task-text-utils'
 
 export default {
   name: 'imdone-board',
-  components: {List, Detail, Draggable, Icon, TaskEditorModal},
+  components: {List, Detail, Draggable, BIcon, TaskEditorModal},
   // components: {List, Detail, Draggable, 'b-icon': Icon, Multipane, MultipaneResizer, TaskEditorModal},
   //- TODO:60 Should accept a v-model **board** in the format `{config, lists}` where lists is a list of tasks in the format `{name, hidden, tasks}` id:40
   props: [

@@ -17,17 +17,17 @@
         button.button.is-imdone-primary(:disabled="!this.title" v-on:click="createIssue") Submit new issue
 </template>
 <script>
-import { Field } from 'buefy/dist/components/field'
-import { Input } from 'buefy/dist/components/input'
-import { Notification } from 'buefy/dist/components/notification'
+import { BField } from 'buefy/dist/esm/field'
+import { BInput } from 'buefy/dist/esm/input'
+import { BNotification } from 'buefy/dist/esm/notification'
 import axios from 'axios'
 
 export default {
   name: 'imdone-new-issue',
   components: {
-    'b-field': Field,
-    'b-input': Input,
-    'b-notification': Notification
+    'b-field': BField,
+    'b-input': BInput,
+    'b-notification': BNotification
   },
   props: ['task', 'repoURL', 'baseURL', 'allowUpdates', 'createIssueURL'],
   data () {

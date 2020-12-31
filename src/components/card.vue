@@ -57,8 +57,8 @@ article.message.task-card(
 </template>
 <script>
 import * as gravatar from 'gravatar'
-import { Icon } from 'buefy/dist/components/icon'
-import { Tooltip } from 'buefy/dist/components/tooltip'
+import { BIcon } from 'buefy/dist/esm/icon'
+import { BTooltip } from 'buefy/dist/esm/tooltip'
 import Octicon, { Octicons } from 'octicons-vue'
 import taskTextUtils from '../utils/task-text-utils'
 import moment from 'moment'
@@ -78,8 +78,8 @@ export default {
     }
   },
   components: {
-    Icon,
-    Tooltip,
+    BIcon,
+    BTooltip,
     Octicon
   },
   created () {
