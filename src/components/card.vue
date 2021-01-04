@@ -45,13 +45,13 @@ article.message.task-card(
           a.tags.has-addons(@click.stop='metaClicked(pair.key, value)')
             span.tag.is-grey {{pair.key}}
             span.tag {{displayMeta(pair.key, value)}}
-    .toggle-full-desc(v-if="descIsOverMax && fullDesc")
-      b-tooltip(label="Collapse description" position="is-left" type="is-info" :delay="500" :animated="true")
-        a(@click.stop="fullDesc = false")
+    .toggle-full-desc.is-block(v-if="descIsOverMax && fullDesc")
+      b-tooltip.is-block(label="Collapse description" position="is-top" type="is-info" :delay="500" :animated="true")
+        a.is-block(@click.stop="fullDesc = false")
           octicon(:icon="Octicons.chevronUp")
-    .toggle-full-desc(v-if="descIsOverMax && !fullDesc")
-      b-tooltip(label="Expand description" position="is-left" type="is-info" :delay="500" :animated="true")
-        a(@click.stop="fullDesc = true")
+    .toggle-full-desc.is-block(v-if="descIsOverMax && !fullDesc")
+      b-tooltip.is-block(label="Expand description" position="is-top" type="is-info" :delay="500" :animated="true")
+        a.is-block(@click.stop="fullDesc = true")
           octicon(:icon="Octicons.chevronDown")
 
 </template>
@@ -409,7 +409,7 @@ img.gravatar {
       text-align: center;
       position: relative;
       height: 1rem;
-      margin-top: -.4em;
+      margin-top: -.2em;
     }
   }
   .task-text {
