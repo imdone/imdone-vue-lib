@@ -45,7 +45,7 @@ function getTaskProperties (task) {
   const frontMatterComputed = _.get(task, 'frontMatter.computed') || {}
   const props = {...frontMatterProps, content: CONTENT_TOKEN}
   const computed = {...frontMatterComputed}
-  const taskProps = _.pick(task, 'progress', 'line', 'list', 'source', 'due', 'created', 'completed', 'tags', 'context', 'meta', 'allTags', 'allContext', 'allMeta')
+  const taskProps = _.pick(task, 'text', 'description', 'progress', 'line', 'list', 'source', 'due', 'created', 'completed', 'tags', 'context', 'meta', 'allTags', 'allContext', 'allMeta')
   try {
     for (let [key, value] of Object.entries(computed)) {
       let computedValue = value.toString()
@@ -137,9 +137,8 @@ export default {
         encodedMD: ''
       }
     }
-    let {description} = formatDescription(task, getCardMarkdown(task, lines).content, true)
-    let {encodedText, encodedMD} = formatDescription(task, getCardMarkdown(task).content, true)
-    const html = md.render(description)
+    let {encodedText, encodedMD, description} = formatDescription(task, getCardMarkdown(task).content, true)
+    const html = md.render(formatDescription(task, getCardMarkdown(task, lines).content, true).description)
     const $ = cheerio.load(html)
 
     $('a').each(function () {
@@ -182,7 +181,8 @@ export default {
     return {
       html: $.html(),
       encodedText,
-      encodedMD
+      encodedMD,
+      markdown: description
     }
   },
   formatText (text, data) {
