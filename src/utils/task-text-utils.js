@@ -29,8 +29,9 @@ function getEncodedDescription (description) {
   const encodedMD = encodeURIComponent(description)
   description = description
     .replace(CONTENT_TOKEN, encodedText)
-    .replace(/(?<!!)\[(.*?)\]\((.*?)\)/g, (match, p1, p2) => { // URI encode file links
-      const link = `[${p1}](${p2.replace(/\s/g, '%20')})`
+    .replace(/(?<!!)\[(.*?)\]\((.*?)( ".*?")?\)/g, (match, p1, p2, p3) => { // URI encode file links
+      const title = p3 || ''
+      const link = `[${p1}](${p2.replace(/\s/g, '%20')}${title})`
       return link.replace(/%20(".*?"\))$/, ' $1')
     })
   return {encodedMD, encodedText, description}
